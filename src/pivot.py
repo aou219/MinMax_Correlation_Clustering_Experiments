@@ -11,9 +11,8 @@ def run_pivot(S, seed=None):
     pivots = []
 
     while active_nodes:
-        pivot = rng.choice(list(active_nodes))
+        pivot = int(rng.choice(list(active_nodes)))
         cluster = {pivot}
-
         for v in list(active_nodes):
             if v == pivot:
                 continue
@@ -44,8 +43,6 @@ def draw_clustered_graph(graph, clusters, pivots, seed=42):
 
     node_colors = [node_to_cluster[node] for node in graph.nodes()]
 
-    # Only label pivots:
-    # first pivot = A, second pivot = B, third pivot = C, etc.
     pivot_labels = {
         pivot: chr(ord("A") + pivot_index)
         for pivot_index, pivot in enumerate(pivots)
@@ -60,12 +57,12 @@ def draw_clustered_graph(graph, clusters, pivots, seed=42):
         edgecolors="black",
     )
 
+    node_labels = {node: str(node) for node in graph.nodes()}
     nx.draw_networkx_labels(
         graph,
         pos,
-        labels=pivot_labels,
-        font_weight="bold",
-        font_size=12,
+        labels=node_labels,
+        font_size=10,
     )
 
     nx.draw_networkx_edges(
@@ -83,6 +80,19 @@ def draw_clustered_graph(graph, clusters, pivots, seed=42):
         alpha=0.6,
     )
 
+    pivot_label_pos = {
+        pivot: (pos[pivot][0], pos[pivot][1] + 0.2)
+        for pivot in pivots
+    }
+
+    nx.draw_networkx_labels(
+        graph,
+        pivot_label_pos,
+        labels=pivot_labels,
+        font_weight="bold",
+        font_size=12,
+        font_color="red",
+    )
+
     plt.axis("off")
     plt.show()
-

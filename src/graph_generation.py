@@ -7,7 +7,7 @@ def generate_signed_complete_graph(n, seed = None, p_positive=0.5):
     rng = np.random.default_rng(seed)
     matrix = np.zeros((n , n), dtype=int)
     for i in range(n):
-        for j in range(i+1,n):
+        for j in range(i+1,n): # the graph is symmetrical
             if rng.random() < p_positive:
                 sign = 1
             else:
