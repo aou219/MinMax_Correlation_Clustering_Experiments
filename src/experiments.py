@@ -13,8 +13,8 @@ if __name__ == "__main__":
 
     bad_triangles = find_bad_triangles(S)
     num_bad_triangles = count_bad_triangles(bad_triangles)
-    bad_triangles_with_edge_01 = bad_triangles_containing_edge(bad_triangles, 3, 1) # Change these parameters if you want
-    
+    bad_triangles_with_edge_01 = bad_triangles_containing_edge(bad_triangles, n1 =3, n2= 1) # Change these parameters if you want
+
     print("Clusters:", clusters)
     print("Pivots:", pivots)
     print("Cost:", cost)
