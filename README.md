@@ -45,3 +45,62 @@ After generating the graph, the code:
 3. computes the clustering cost;
 4. prints the clusters, selected pivots, and cost and bad-triangle information;
 5. draws the clustered signed graph.
+
+## Running the code
+
+It is recommended to work in a virtual environment.
+
+### macOS / Linux
+
+Create and activate a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+
+```
+
+Install the required packages:
+
+```bash
+
+pip install -r requirements.txt
+
+```
+
+Run the current experiment:
+
+```bash
+
+python src/experiments.py
+
+```
+
+### Windows
+
+Create and activate a virtual environment:
+
+```bash
+
+python -m venv .venv
+.venv\Scripts\activate
+
+```
+
+Install the required packages:
+
+```bash
+
+pip install -r requirements.txt
+
+```
+
+Run the current experiment:
+
+```bash
+
+python src\experiments.py
+
+```
+
+The main experiment settings can be changed in src/experiments.py.
