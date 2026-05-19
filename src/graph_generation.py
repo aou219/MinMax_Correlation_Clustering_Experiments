@@ -4,6 +4,11 @@ import networkx as nx
 
 
 def generate_signed_complete_graph(n, seed = None, p_positive=0.5):
+    """
+    The randomness causes a lot of bad triangles.
+    Think of starting with just plus edges and then later on flipping a certain amount of edges randomly.
+    Or give give each edge a certain probability of being flipped to -1.
+    """
     rng = np.random.default_rng(seed)
     matrix = np.zeros((n , n), dtype=int)
     for i in range(n):
@@ -18,6 +23,7 @@ def generate_signed_complete_graph(n, seed = None, p_positive=0.5):
 
     return matrix
 
+## This is only used for the graph representation
 def matrix_to_graph(matrix):
     graph = nx.Graph()
     n = matrix.shape[0]

@@ -4,7 +4,10 @@ def is_bad_triangle(S, i, j, k):
         or (S[i,j] == 1 and S[i,k]==-1 and S[j,k]== 1)
         or (S[i,j] == -1 and S[i,k]==1 and S[j,k]==1)
     )
-
+"""
+Right now, you search for all bad triangles, including those that share edges with other bad triangles.
+This does not make a good lower bound. Try searching for all edge disjoint bad triangles.
+"""
 def find_bad_triangles(S):
     n = S.shape[0]
     bad_triangle_list = []
@@ -20,9 +23,9 @@ def find_bad_triangles(S):
 def count_bad_triangles(bad_triangle_list):
     return len(bad_triangle_list)
 
-def bad_triangles_containing_edge(bad_triangle_list, u, v):
+def bad_triangles_containing_edge(bad_triangle_list,  n1, n2):
     triangles_with_edge = []
-    edge = {u,v}
+    edge = { n1,n2}
     for triangle in bad_triangle_list:
         i,j,k = triangle #unpacking
         triangle_edges = [

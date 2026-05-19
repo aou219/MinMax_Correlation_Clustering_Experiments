@@ -26,6 +26,8 @@ def run_pivot(S, seed=None):
 
     return clusters, pivots
 
+
+## only used for representation
 def draw_clustered_graph(graph, clusters, pivots, seed=42):
     pos = nx.spring_layout(graph, seed=seed)
 
