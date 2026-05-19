@@ -2,22 +2,22 @@ import gurobipy as gp
 from gurobipy import GRB
 import networkx as nx
 
-# Actually not needed because the way I iterate already forces it to be on order.
+# Actually not needed because the way I iterate already forces it to be on order
 def pair(i, j):
     return (min(i, j), max(i, j))
 
 
 def solve_correlation_clustering_ilp(S, time_limit=None, verbose=True):
-    """
-    Solve the exact correlation clustering ILP.
-
-    x[i,j] = 0 means i and j are in the same cluster
-    x[i,j] = 1 means i and j are in different clusters
-
-    Cost:
-    - positive edge cut: x[i,j]
-    - negative edge inside cluster: 1 - x[i,j]
-    """
+    '''
+    1. Create new Gurobi variables for every edge in the adjacency matrix.
+    2. Initialize the objective terms list.
+    3. Iterate over all edges:
+    - If the edge is positive, append x[i,j] as is to the objective.
+    - If the edge is negative, append (1 - x[i,j]) to the objective.
+    4. Set the objective to minimize the sum of all objective terms.
+    This encourages assigning 0 for positive edges and 1 for negative edges, reducing disagreements.
+    5. Add triangle constraints to enforce transitivity in the clustering.
+    '''
     n = S.shape[0]
 
     model = gp.Model("correlation_clustering_ilp")
@@ -80,3 +80,30 @@ def solve_correlation_clustering_ilp(S, time_limit=None, verbose=True):
     }
 
     return objective_value, x_values
+
+def find_ilp_clusters(x_values, n):
+    """
+    Given ILP x_values (dict with keys=(i,j), values=0 or 1),
+    returns a list of sets representing clusters.
+    x[i,j] = 0 means i and j are in the same cluster.
+    """
+    # Initially, each node is its own cluster
+    clusters = [{i} for i in range(n)]
+
+    # Merge clusters if x[i,j] == 0
+    for (i, j), val in x_values.items():
+        if val == 0:
+            # Find clusters containing i and j
+            ci = cj = None
+            for cluster in clusters:
+                if i in cluster:
+                    ci = cluster
+                if j in cluster:
+                    cj = cluster
+            # Merge if different
+            if ci is not cj:
+                merged = ci.union(cj)
+                clusters.remove(ci)
+                clusters.remove(cj)
+                clusters.append(merged)
+    return clusters
