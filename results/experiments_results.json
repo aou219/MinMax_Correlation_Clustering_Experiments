@@ -1,0 +1,69 @@
+[
+    {
+        "num_nodes": 30,
+        "p_positive": 0.5,
+        "seed": 2,
+        "Pivot cluster_count": 5,
+        "pivots": [
+            25,
+            4,
+            1,
+            9,
+            11
+        ],
+        "pivot_cost": 193,
+        "ilp_cost": 149.0,
+        "min_bad_triangles_count": 101,
+        "max_bad_triangles_count": 121
+    },
+    {
+        "num_nodes": 30,
+        "p_positive": 0.5,
+        "seed": 1,
+        "Pivot cluster_count": 5,
+        "pivots": [
+            14,
+            12,
+            17,
+            26,
+            7
+        ],
+        "pivot_cost": 198,
+        "ilp_cost": 153.0,
+        "min_bad_triangles_count": 105,
+        "max_bad_triangles_count": 115
+    },
+    {
+        "num_nodes": 30,
+        "p_positive": 0.5,
+        "seed": 3,
+        "Pivot cluster_count": 4,
+        "pivots": [
+            24,
+            4,
+            14,
+            15
+        ],
+        "pivot_cost": 198,
+        "ilp_cost": 144.0,
+        "min_bad_triangles_count": 97,
+        "max_bad_triangles_count": 129
+    },
+    {
+        "num_nodes": 30,
+        "p_positive": 0.5,
+        "seed": 4,
+        "Pivot cluster_count": 5,
+        "pivots": [
+            21,
+            27,
+            26,
+            11,
+            25
+        ],
+        "pivot_cost": 174,
+        "ilp_cost": 133.0,
+        "min_bad_triangles_count": 84,
+        "max_bad_triangles_count": 166
+    }
+]

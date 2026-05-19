@@ -6,7 +6,7 @@ from cost import calculate_clustering_cost
 from ilp_solver import solve_correlation_clustering_ilp
 from ilp_solver import find_ilp_clusters
 from draw_graphs import draw_multiple_clustered_graphs
-from bad_triangles import find_bad_triangles, count_bad_triangles, make_edge_to_triangle_map, find_edge_disjoint_bad_triangles
+from bad_triangles import find_bad_triangles, count_bad_triangles, find_edge_disjoint_bad_triangles_min, make_edge_to_triangle_map, find_edge_disjoint_bad_triangles_max
 RESULTS_FILE = "results/experiments_results.json"
 
 def save_results_append(filename, new_results):
@@ -25,10 +25,9 @@ def save_results_append(filename, new_results):
 if __name__ == "__main__":
 
     # Parameters
-    n = 10
+    n = 30
     p_positive = 0.5
-    seed = 2
-    edge_to_check = (3, 1)  # Example edge to check bad triangles
+    seed = 4
 
     # Generate signed complete graph
     S = generate_signed_complete_graph(n, p_positive, seed)
@@ -46,9 +45,14 @@ if __name__ == "__main__":
     ilp_clusters = find_ilp_clusters(x_values, n)
     ilp_cluster_count = len(ilp_clusters)
 
-    # Find bad triangles
-    bad_triangles = find_edge_disjoint_bad_triangles(S)
-    num_bad_triangles = count_bad_triangles(bad_triangles)
+    # Find  bad triangles
+    all_bad_triangles = find_bad_triangles(S)
+    edge_to_triangles = make_edge_to_triangle_map(all_bad_triangles)
+    min_disjoint_bad_triangles = find_edge_disjoint_bad_triangles_min( edge_to_triangles)
+    min_num_bad_triangles = count_bad_triangles(min_disjoint_bad_triangles)
+
+    max_disjoint_bad_triangles =  find_edge_disjoint_bad_triangles_max( edge_to_triangles)
+    max_num_bad_triangles = count_bad_triangles(max_disjoint_bad_triangles)
 
     print("Amount of pivot clusters:", pivot_cluster_count)
     print("Pivots:", pivots)
@@ -56,7 +60,9 @@ if __name__ == "__main__":
     # print("ILP clusters:", ilp_clusters)
     print("Amount of ILP clusters:", ilp_cluster_count)
     print("ILP optimal cost:", ilp_cost)
-    print("Amount of bad_triangles", num_bad_triangles)
+    print("Minimum amount of disjoint bad triangles", min_num_bad_triangles)
+    print("Maximum amount of disjoint bad triangles", max_num_bad_triangles)
+
 
     # Draw clustered graph
     draw_multiple_clustered_graphs(
@@ -77,7 +83,8 @@ if __name__ == "__main__":
         "pivot_cost": pivot_cost,
         "ilp_cost": ilp_cost,
         # "x_values": {f"{k}": v for k, v in x_values.items()},
-        "bad_triangles_count": num_bad_triangles,
+        "min_bad_triangles_count": min_num_bad_triangles,
+        "max_bad_triangles_count": max_num_bad_triangles,
         # "bad_triangles_with_edge": [list(bt) for bt in bad_triangles_with_edge_01],
         # "num_bad_triangles_edge_01": num_bad_triangles_with_edge_01
     }
