@@ -1,14 +1,13 @@
 import os
 import json
-from graph_generation import generate_signed_complete_graph, matrix_to_graph
-from pivot import run_pivot
-from cost import calculate_clustering_cost
-from ilp_solver import find_ilp_clusters
-from draw_graphs import draw_multiple_clustered_graphs
-from bad_triangles import find_bad_triangles, count_bad_triangles, find_edge_disjoint_bad_triangles_min, make_edge_to_triangle_map, find_edge_disjoint_bad_triangles_max
-from ilp_solver import solve_correlation_clustering_ilp
-from lp_formulations import solve_correlation_clustering_primal, solve_correlation_clustering_dual
-
+from src.graph_generation import generate_signed_complete_graph, matrix_to_graph
+from src.pivot import run_pivot
+from src.cost import calculate_clustering_cost
+from src.ilp_solver import find_ilp_clusters
+from src.draw_graphs import draw_multiple_clustered_graphs
+from src.bad_triangles import find_bad_triangles, count_bad_triangles, find_edge_disjoint_bad_triangles_min, make_edge_to_triangle_map, find_edge_disjoint_bad_triangles_max
+from src.ilp_solver import solve_correlation_clustering_ilp
+from src.lp_formulations import solve_correlation_clustering_primal, solve_correlation_clustering_dual
 
 RESULTS_FILE = "results/experiments_results.json"
 
