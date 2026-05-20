@@ -1,6 +1,5 @@
 import gurobipy as gp
 from gurobipy import GRB
-import networkx as nx
 
 # Actually not needed because the way I iterate already forces it to be on order
 def pair(i, j):
