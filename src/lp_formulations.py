@@ -1,6 +1,6 @@
 import gurobipy as gp
 from gurobipy import GRB
-from .bad_triangles import find_bad_triangles
+from bad_triangles import find_bad_triangles
 
 
 def solve_correlation_clustering_primal(S, bad_triangles, time_limit=None, verbose=True):
