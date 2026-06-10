@@ -13,7 +13,7 @@ def draw_graphs(G_complete, pivot_clusters, ilp_clusters,
     graphs = [G_complete, G_complete, G_new, G_new]
     clusterings = [pivot_clusters, ilp_clusters, pivot_clusters_new, ilp_clusters_new]
     pivots_list = [pivots, set(), pivots_new, set()]
-    titles = ["Pivot (Complete)", "ILP (Complete)", "Pivot (New)", "ILP (New)"]
+    titles = ["Pivot", "ILP", "Pivot (New)", "ILP (New)"]
 
     # Fix positions using the complete graph
     pos = nx.spring_layout(G_complete, seed=42)

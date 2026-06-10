@@ -3,10 +3,10 @@ from gurobipy import GRB
 from bad_triangles import find_bad_triangles
 
 
-def solve_correlation_clustering_primal(S, bad_triangles, time_limit=None, verbose=True):
+def solve_primal(S, bad_triangles, time_limit=None, verbose=True):
     n = S.shape[0]
 
-    model = gp.Model("correlation_clustering_ilp")
+    model = gp.Model("lp_bad_triangle")
 
     if not verbose:
         model.Params.OutputFlag = 0
@@ -37,10 +37,10 @@ def solve_correlation_clustering_primal(S, bad_triangles, time_limit=None, verbo
 
     return model.ObjVal, x_values
 
-def solve_correlation_clustering_dual(S, bad_triangles, time_limit=None, verbose=True):
+def solve_dual(S, bad_triangles, time_limit=None, verbose=True):
     n = S.shape[0]
 
-    model = gp.Model("correlation_clustering_lp_dual")
+    model = gp.Model("lp_dual")
 
     if not verbose:
         model.Params.OutputFlag = 0
