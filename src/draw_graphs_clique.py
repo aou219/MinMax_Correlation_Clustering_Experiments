@@ -17,25 +17,12 @@ def get_node_to_cluster(clusters):
     return node_to_cluster
 
 
-def get_cluster_colors(clusters):
-    """
-    Assign a color index to each node based on the clustering.
-    """
-    node_to_cluster = get_node_to_cluster(clusters)
-
-    colors = []
-    for node in sorted(node_to_cluster.keys()):
-        colors.append(node_to_cluster[node])
-
-    return node_to_cluster
-
-
 def create_clique_layout(true_clusters, radius=1.2, spacing=4.0):
     """
-    Create fixed positions where every  clique/community is drawn
+    Create fixed positions where every clique/community is drawn
     as a separate circle.
 
-    This makes the  clique structure visible.
+    This makes the clique/community structure visible.
     """
     positions = {}
 
@@ -63,14 +50,15 @@ def draw_single_clique_graph(
     clusters,
     title,
     pivots=None,
-    show_pivot_order=False
+    show_pivot_order=False,
+    show_negative_edges=True
 ):
     """
-    Draw one signed graph using the  clique layout.
+    Draw one signed graph using the clique layout.
 
     Node colors show the clustering found by Pivot or ILP.
     Positive edges are solid black.
-    Negative edges are dashed gray.
+    Negative edges are dashed gray, but can be hidden.
     """
 
     node_to_cluster = get_node_to_cluster(clusters)
@@ -92,6 +80,7 @@ def draw_single_clique_graph(
         if data.get("sign") == -1
     ]
 
+    # Draw real positive connections
     nx.draw_networkx_edges(
         graph,
         positions,
@@ -103,16 +92,18 @@ def draw_single_clique_graph(
         alpha=0.8
     )
 
-    nx.draw_networkx_edges(
-        graph,
-        positions,
-        edgelist=negative_edges,
-        ax=ax,
-        edge_color="gray",
-        width=1.0,
-        style="dashed",
-        alpha=0.6
-    )
+    # Draw negative edges only when wanted
+    if show_negative_edges:
+        nx.draw_networkx_edges(
+            graph,
+            positions,
+            edgelist=negative_edges,
+            ax=ax,
+            edge_color="gray",
+            width=0.6,
+            style="dashed",
+            alpha=0.25
+        )
 
     nx.draw_networkx_nodes(
         graph,
@@ -120,16 +111,16 @@ def draw_single_clique_graph(
         ax=ax,
         node_color=node_colors,
         cmap=plt.cm.Set3,
-        node_size=700,
+        node_size=450,
         edgecolors="black",
-        linewidths=1.0
+        linewidths=0.8
     )
 
     nx.draw_networkx_labels(
         graph,
         positions,
         ax=ax,
-        font_size=9,
+        font_size=7,
         font_color="black"
     )
 
@@ -141,9 +132,9 @@ def draw_single_clique_graph(
             x, y = positions[pivot]
             ax.text(
                 x,
-                y + 0.35,
+                y + 0.28,
                 chr(65 + order),
-                fontsize=11,
+                fontsize=10,
                 color="red",
                 fontweight="bold",
                 ha="center"
@@ -165,10 +156,13 @@ def draw_clique_graphs(
     pivots_new=None
 ):
     """
-    Draw complete and edge-deleted  clique graphs.
+    Draw complete and edge-deleted clique/Facebook-circle graphs.
 
-    The layout is based on the  true clusters, not on a spring layout.
-    This makes the clique/community structure much easier to see.
+    For the complete graph, negative edges are hidden so that only
+    real positive Facebook connections are visible.
+
+    For the edge-deleted graph, negative edges are shown because the graph
+    is no longer complete and the missing/deleted structure matters more.
     """
 
     positions = create_clique_layout(true_clusters)
@@ -180,9 +174,10 @@ def draw_clique_graphs(
         graph=G_complete,
         positions=positions,
         clusters=pivot_clusters,
-        title="Pivot on clique graph",
+        title="Pivot on complete graph",
         pivots=pivots,
-        show_pivot_order=True
+        show_pivot_order=True,
+        show_negative_edges=False
     )
 
     draw_single_clique_graph(
@@ -190,7 +185,8 @@ def draw_clique_graphs(
         graph=G_complete,
         positions=positions,
         clusters=ilp_clusters,
-        title="ILP on clique graph"
+        title="ILP on complete graph",
+        show_negative_edges=False
     )
 
     draw_single_clique_graph(
@@ -198,9 +194,10 @@ def draw_clique_graphs(
         graph=G_new,
         positions=positions,
         clusters=pivot_clusters_new,
-        title="Pivot on new clique graph",
+        title="Pivot on edge-deleted graph",
         pivots=pivots_new,
-        show_pivot_order=True
+        show_pivot_order=True,
+        show_negative_edges=True
     )
 
     draw_single_clique_graph(
@@ -208,7 +205,8 @@ def draw_clique_graphs(
         graph=G_new,
         positions=positions,
         clusters=ilp_clusters_new,
-        title="ILP on new clique graph"
+        title="ILP on edge-deleted graph",
+        show_negative_edges=True
     )
 
     plt.tight_layout()
