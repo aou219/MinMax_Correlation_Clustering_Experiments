@@ -7,7 +7,7 @@ from graph_generation import matrix_to_graph
 from pivot import run_pivot
 from cost import calculate_clustering_cost
 from edge_deletion import delete_edges
-from ilp_solver import solve_ilp, find_ilp_clusters
+from ilp_solver import solve_ilp, find_ilp_clusters, same_clustering
 from lp_formulations import solve_primal, solve_dual
 
 from bad_triangles import (
@@ -39,8 +39,131 @@ def json_converter(obj):
     raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
 
 
+def safe_ratio(numerator, denominator):
+    """Return numerator / denominator, unless denominator is zero or missing."""
+    if numerator is None or denominator is None:
+        return None
+
+    if denominator == 0:
+        return None
+
+    return numerator / denominator
+
+
+def remove_key(d, key):
+    """Remove a key from a dictionary if it exists."""
+    if isinstance(d, dict):
+        d.pop(key, None)
+
+
+def make_json_safe(obj):
+    """Convert NumPy objects to normal Python objects."""
+    return json.loads(json.dumps(obj, default=json_converter))
+
+
+def expand_shared_results(data):
+    """
+    Convert saved JSON data to a normal list of experiments.
+
+    Supports:
+    - old format: [experiment, experiment, ...]
+    - new format: {"shared_graph_params": ..., "experiments": [...]}
+    """
+    if isinstance(data, list):
+        return data
+
+    if isinstance(data, dict) and "experiments" in data:
+        shared_graph_params = data.get("shared_graph_params", {})
+        experiments = []
+
+        for exp in data["experiments"]:
+            full_exp = make_json_safe(exp)
+
+            full_graph_params = {}
+            full_graph_params.update(shared_graph_params)
+            full_graph_params.update(full_exp.get("graph_params", {}))
+
+            full_exp["graph_params"] = full_graph_params
+            experiments.append(full_exp)
+
+        return experiments
+
+    return []
+
+
+def compress_shared_results(experiments):
+    """
+    Move graph parameters that are the same for every experiment to shared_graph_params.
+    Only varying parameters, such as seed, stay inside each experiment.
+    """
+    experiments = make_json_safe(experiments)
+
+    full_params_per_exp = []
+
+    for exp in experiments:
+        graph_params = exp.get("graph_params", {})
+
+        remove_key(graph_params, "num_edges_deleted")
+        remove_key(graph_params, "num_true_clusters")
+        remove_key(graph_params, "true_cluster_sizes")
+
+        full_params_per_exp.append(graph_params)
+
+    all_keys = set()
+
+    for graph_params in full_params_per_exp:
+        all_keys.update(graph_params.keys())
+
+    shared_graph_params = {}
+    varying_keys = set()
+
+    for key in all_keys:
+        values = [graph_params.get(key) for graph_params in full_params_per_exp]
+
+        if key == "seed":
+            varying_keys.add(key)
+        elif all(value == values[0] for value in values):
+            shared_graph_params[key] = values[0]
+        else:
+            varying_keys.add(key)
+
+    final_experiments = []
+
+    for exp, full_graph_params in zip(experiments, full_params_per_exp):
+        exp_without_full_params = make_json_safe(exp)
+        exp_without_full_params.pop("graph_params", None)
+
+        per_experiment_params = {}
+
+        for key in sorted(varying_keys):
+            if key in full_graph_params:
+                per_experiment_params[key] = full_graph_params[key]
+
+        final_exp = {
+            "graph_params": per_experiment_params
+        }
+
+        for key, value in exp_without_full_params.items():
+            final_exp[key] = value
+
+        final_experiments.append(final_exp)
+
+    return {
+        "shared_graph_params": shared_graph_params,
+        "experiments": final_experiments
+    }
+
+
 def save_results_append(filename, new_results):
-    """Append new experiment results to a JSON file."""
+    """
+    Append new experiment results to a JSON file.
+
+    The file is saved in this structure:
+    {
+        "shared_graph_params": {...},
+        "experiments": [...]
+    }
+    """
     directory = os.path.dirname(filename)
 
     if directory != "":
@@ -48,14 +171,19 @@ def save_results_append(filename, new_results):
 
     if os.path.exists(filename):
         with open(filename, "r") as f:
-            all_results = json.load(f)
+            data = json.load(f)
+
+        all_results = expand_shared_results(data)
     else:
         all_results = []
 
     all_results.append(new_results)
 
+    compact_results = compress_shared_results(all_results)
+
     with open(filename, "w") as f:
-        json.dump(all_results, f, indent=4, default=json_converter)
+        json.dump(compact_results, f, indent=4, default=json_converter)
+
 
 
 def print_section(title):
@@ -342,7 +470,10 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
         lp_x_values_new_no4,
         bad_cycles_lp_new_with4
     )
-
+    # =========================================================================================
+    # Incomplete graph: Check whether with and without 4 cycle clustering is the same
+    # =========================================================================================
+    same_clustering_4_cycle = same_clustering(ilp_clusters_new_no4, ilp_clusters_new_with4)
     # ============================================================
     # Incomplete graph: bad-triangle LP bounds
     # ============================================================
@@ -418,6 +549,7 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
 
         "violated_cycles_ilp_new": violated_cycles_ilp_new,
         "violated_cycles_lp_new": violated_cycles_lp_new,
+        "same_clustering_4_cycle": same_clustering_4_cycle,
 
         "primal_cost_new": primal_cost_new,
         "dual_cost_new": dual_cost_new,
@@ -430,35 +562,40 @@ def build_saveable_results(graph_params, experiment_data):
     """
     Build the dictionary that will be saved to JSON.
 
-    This removes graphs/matrices and only stores useful numeric results.
+    This matches the compact JSON structure:
+    - complete_graph
+    - edge_deleted_graph
+    - approximations
+    - runtime_seconds
     """
 
+    cleaned_graph_params = dict(graph_params)
+
+    remove_key(cleaned_graph_params, "num_edges_deleted")
+    remove_key(cleaned_graph_params, "num_true_clusters")
+    remove_key(cleaned_graph_params, "true_cluster_sizes")
+
     results = {
-        "graph_params": graph_params,
+        "graph_params": cleaned_graph_params,
 
         "complete_graph": {
             "pivot": {
                 "best_cost": experiment_data["pivot_results"]["best_cost"],
-                "average_cost": experiment_data["pivot_results"]["average_cost"],
-                "best_cluster_count": experiment_data["pivot_results"]["best_cluster_count"],
-                "average_cluster_count": experiment_data["pivot_results"]["average_cluster_count"],
-                "runs": experiment_data["pivot_results"]["runs"]
+                "average_cost": experiment_data["pivot_results"]["average_cost"]
             },
 
             "bad_triangles": {
+                "total_count": len(experiment_data["all_bad_triangles"]),
                 "min_edge_disjoint_count": experiment_data["min_num_bad_triangles"],
                 "max_edge_disjoint_count": experiment_data["max_num_bad_triangles"]
             },
 
             "ilp": {
-                "cost": experiment_data["ilp_cost"],
-                "cluster_count": experiment_data["ilp_cluster_count"],
-                "bad_4_cycles_count": len(experiment_data["bad_cycles_ilp"])
+                "cost": experiment_data["ilp_cost"]
             },
 
             "lp_relaxation": {
-                "cost": experiment_data["lp_cost"],
-                "bad_4_cycles_count": len(experiment_data["bad_cycles_lp"])
+                "cost": experiment_data["lp_cost"]
             },
 
             "bad_triangle_lp_bounds": {
@@ -472,38 +609,32 @@ def build_saveable_results(graph_params, experiment_data):
 
             "pivot": {
                 "best_cost": experiment_data["pivot_results_new"]["best_cost"],
-                "average_cost": experiment_data["pivot_results_new"]["average_cost"],
-                "best_cluster_count": experiment_data["pivot_results_new"]["best_cluster_count"],
-                "average_cluster_count": experiment_data["pivot_results_new"]["average_cluster_count"],
-                "runs": experiment_data["pivot_results_new"]["runs"]
+                "average_cost": experiment_data["pivot_results_new"]["average_cost"]
             },
 
             "bad_triangles": {
+                "total_count": len(experiment_data["all_bad_triangles_new"]),
                 "min_edge_disjoint_count": experiment_data["min_num_bad_triangles_new"],
                 "max_edge_disjoint_count": experiment_data["max_num_bad_triangles_new"]
             },
 
             "ilp": {
                 "without_4_cycles": {
-                    "cost": experiment_data["ilp_cost_new_no4"],
-                    "cluster_count": experiment_data["ilp_cluster_count_new_no4"],
-                    "violated_bad_4_cycles_count": len(experiment_data["violated_cycles_ilp_new"])
+                    "cost": experiment_data["ilp_cost_new_no4"]
                 },
                 "with_4_cycles": {
                     "cost": experiment_data["ilp_cost_new_with4"],
-                    "cluster_count": experiment_data["ilp_cluster_count_new_with4"],
                     "bad_4_cycles_count": len(experiment_data["bad_cycles_ilp_new_with4"])
-                }
+                },
+                "same_clustering_4_cycle": experiment_data["same_clustering_4_cycle"]
             },
 
             "lp_relaxation": {
                 "without_4_cycles": {
-                    "cost": experiment_data["lp_cost_new_no4"],
-                    "violated_bad_4_cycles_count": len(experiment_data["violated_cycles_lp_new"])
+                    "cost": experiment_data["lp_cost_new_no4"]
                 },
                 "with_4_cycles": {
-                    "cost": experiment_data["lp_cost_new_with4"],
-                    "bad_4_cycles_count": len(experiment_data["bad_cycles_lp_new_with4"])
+                    "cost": experiment_data["lp_cost_new_with4"]
                 }
             },
 
@@ -513,15 +644,90 @@ def build_saveable_results(graph_params, experiment_data):
             }
         },
 
+        "approximations": {
+            "complete_graph": {
+                "best_pivot_approximation": safe_ratio(
+                    experiment_data["pivot_results"]["best_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "average_pivot_approximation": safe_ratio(
+                    experiment_data["pivot_results"]["average_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "lp_relaxation_ratio": safe_ratio(
+                    experiment_data["lp_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "bad_triangle_primal_ratio": safe_ratio(
+                    experiment_data["primal_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "bad_triangle_dual_ratio": safe_ratio(
+                    experiment_data["dual_cost"],
+                    experiment_data["ilp_cost"]
+                )
+            },
+
+            "edge_deleted_graph": {
+                "best_pivot_approximation_without_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["best_cost"],
+                    experiment_data["ilp_cost_new_no4"]
+                ),
+                "average_pivot_approximation_without_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["average_cost"],
+                    experiment_data["ilp_cost_new_no4"]
+                ),
+                "best_pivot_approximation_with_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["best_cost"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "average_pivot_approximation_with_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["average_cost"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "lp_relaxation_ratio_without_4_cycles": safe_ratio(
+                    experiment_data["lp_cost_new_no4"],
+                    experiment_data["ilp_cost_new_no4"]
+                ),
+                "lp_relaxation_ratio_with_4_cycles": safe_ratio(
+                    experiment_data["lp_cost_new_with4"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "bad_triangle_primal_ratio": safe_ratio(
+                    experiment_data["primal_cost_new"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "bad_triangle_dual_ratio": safe_ratio(
+                    experiment_data["dual_cost_new"],
+                    experiment_data["ilp_cost_new_with4"]
+                )
+            }
+        },
+
         "runtime_seconds": experiment_data["total_runtime"]
     }
 
     return results
 
 
+
+def print_ratio(label, value):
+    """Print a ratio cleanly."""
+    if value is None:
+        print(f"{label}: None")
+    else:
+        print(f"{label}: {value:.4f}")
+
+
 def print_standard_results(graph_type, graph_params, experiment_data):
     """
-    Print standard experiment results for clique, random and facebook experiments.
+    Print standard experiment results.
+
+    The print structure matches the saved JSON:
+    - complete_graph
+    - edge_deleted_graph
+    - approximations
+    - runtime_seconds
     """
 
     print_section(f"{graph_type.upper()} Graph Parameters")
@@ -535,52 +741,113 @@ def print_standard_results(graph_type, graph_params, experiment_data):
             print(f"{key}:", value)
 
     print_section(f"Complete {graph_type} Graph")
+
+    print_subsection("Pivot")
     print("Best Pivot cost:", experiment_data["pivot_results"]["best_cost"])
     print("Average Pivot cost:", experiment_data["pivot_results"]["average_cost"])
-    print("Best Pivot cluster count:", experiment_data["pivot_results"]["best_cluster_count"])
-    print("Average Pivot cluster count:", experiment_data["pivot_results"]["average_cluster_count"])
+
+    print_subsection("Bad triangles")
     print("Total number of bad triangles:", len(experiment_data["all_bad_triangles"]))
     print("Minimum amount of disjoint bad triangles:", experiment_data["min_num_bad_triangles"])
     print("Maximum amount of disjoint bad triangles:", experiment_data["max_num_bad_triangles"])
+
+    print_subsection("ILP")
+    print("ILP optimal cost:", experiment_data["ilp_cost"])
+
+    print_subsection("LP relaxation")
+    print("LP relaxation cost:", experiment_data["lp_cost"])
 
     print_subsection("Bad-triangle LP bounds")
     print("LP-primal optimal cost:", experiment_data["primal_cost"])
     print("LP-dual optimal cost:", experiment_data["dual_cost"])
 
-    print_subsection("ILP")
-    print("ILP optimal cost:", experiment_data["ilp_cost"])
-    print("ILP cluster count:", experiment_data["ilp_cluster_count"])
-
-    print_subsection("LP relaxation")
-    print("LP relaxation cost:", experiment_data["lp_cost"])
-
     print_section(f"Edge-Deleted {graph_type} Graph")
     print("Number of edges deleted:", experiment_data["num_edges_deleted"])
+
+    print_subsection("Pivot")
     print("Best Pivot cost:", experiment_data["pivot_results_new"]["best_cost"])
     print("Average Pivot cost:", experiment_data["pivot_results_new"]["average_cost"])
-    print("Best Pivot cluster count:", experiment_data["pivot_results_new"]["best_cluster_count"])
-    print("Average Pivot cluster count:", experiment_data["pivot_results_new"]["average_cluster_count"])
+
+    print_subsection("Bad triangles")
     print("Total number of bad triangles:", len(experiment_data["all_bad_triangles_new"]))
     print("Minimum amount of disjoint bad triangles:", experiment_data["min_num_bad_triangles_new"])
     print("Maximum amount of disjoint bad triangles:", experiment_data["max_num_bad_triangles_new"])
+
+    print_subsection("ILP")
+    print("ILP cost without 4-cycles:", experiment_data["ilp_cost_new_no4"])
+    print("ILP cost with 4-cycles:", experiment_data["ilp_cost_new_with4"])
+    print("Bad 4-cycles detected ILP:", len(experiment_data["bad_cycles_ilp_new_with4"]))
+    print(
+        "With and without 4-cycle same clusters:",
+        experiment_data["same_clustering_4_cycle"]
+    )
+
+    print_subsection("LP relaxation")
+    print("LP relaxation cost without 4-cycles:", experiment_data["lp_cost_new_no4"])
+    print("LP relaxation cost with 4-cycles:", experiment_data["lp_cost_new_with4"])
 
     print_subsection("Bad-triangle LP bounds")
     print("LP-primal optimal cost:", experiment_data["primal_cost_new"])
     print("LP-dual optimal cost:", experiment_data["dual_cost_new"])
 
-    print_subsection("ILP")
-    print("ILP cost without 4-cycles:", experiment_data["ilp_cost_new_no4"])
-    print("ILP cost with 4-cycles:", experiment_data["ilp_cost_new_with4"])
-    print("ILP cluster count without 4-cycles:", experiment_data["ilp_cluster_count_new_no4"])
-    print("ILP cluster count with 4-cycles:", experiment_data["ilp_cluster_count_new_with4"])
-    print("Bad 4-cycles detected ILP:", len(experiment_data["bad_cycles_ilp_new_with4"]))
-    print("Violated bad 4-cycles in ILP no-4 solution:", len(experiment_data["violated_cycles_ilp_new"]))
+    print_section("Approximations")
 
-    print_subsection("LP relaxation")
-    print("LP relaxation cost without 4-cycles:", experiment_data["lp_cost_new_no4"])
-    print("LP relaxation cost with 4-cycles:", experiment_data["lp_cost_new_with4"])
-    print("Bad 4-cycles detected LP:", len(experiment_data["bad_cycles_lp_new_with4"]))
-    print("Violated bad 4-cycles in LP no-4 solution:", len(experiment_data["violated_cycles_lp_new"]))
+    print_subsection("Complete graph")
+    print_ratio(
+        "Best Pivot approximation",
+        safe_ratio(experiment_data["pivot_results"]["best_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Average Pivot approximation",
+        safe_ratio(experiment_data["pivot_results"]["average_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "LP relaxation ratio",
+        safe_ratio(experiment_data["lp_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Bad-triangle primal ratio",
+        safe_ratio(experiment_data["primal_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Bad-triangle dual ratio",
+        safe_ratio(experiment_data["dual_cost"], experiment_data["ilp_cost"])
+    )
+
+    print_subsection("Edge-deleted graph")
+    print_ratio(
+        "Best Pivot approximation without 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["best_cost"], experiment_data["ilp_cost_new_no4"])
+    )
+    print_ratio(
+        "Average Pivot approximation without 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["average_cost"], experiment_data["ilp_cost_new_no4"])
+    )
+    print_ratio(
+        "Best Pivot approximation with 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["best_cost"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Average Pivot approximation with 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["average_cost"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "LP relaxation ratio without 4-cycles",
+        safe_ratio(experiment_data["lp_cost_new_no4"], experiment_data["ilp_cost_new_no4"])
+    )
+    print_ratio(
+        "LP relaxation ratio with 4-cycles",
+        safe_ratio(experiment_data["lp_cost_new_with4"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Bad-triangle primal ratio",
+        safe_ratio(experiment_data["primal_cost_new"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Bad-triangle dual ratio",
+        safe_ratio(experiment_data["dual_cost_new"], experiment_data["ilp_cost_new_with4"])
+    )
 
     print_section("Runtime")
     print("Total runtime:", round(experiment_data["total_runtime"], 2), "seconds")
+

@@ -65,24 +65,14 @@ def load_facebook_circles(circles_file):
 
     return circles
 
+import random
 
-def sample_nodes_from_circles(
-    circles,
-    num_circles=4,
-    nodes_per_circle=25,
-    seed=None
-):
-    """
-    Sample nodes from multiple Facebook circles.
-
-    The function tries to avoid overlapping nodes, so that the sampled
-    circles are clearer as communities.
-    """
+def sample_nodes_from_circles(circles, cluster_sizes, seed=None):
     rng = random.Random(seed)
 
     circles_sorted = sorted(
         circles,
-        key=lambda circle: len(circle["nodes"]),
+        key=lambda c: len(c["nodes"]),
         reverse=True
     )
 
@@ -90,33 +80,43 @@ def sample_nodes_from_circles(
     sampled_nodes = []
     used_nodes = set()
 
-    for circle in circles_sorted:
-        available_nodes = [
-            node for node in circle["nodes"]
-            if node not in used_nodes
-        ]
+    circle_idx = 0
 
-        if len(available_nodes) < nodes_per_circle:
-            continue
+    for n_nodes in cluster_sizes:
 
-        chosen_nodes = rng.sample(available_nodes, nodes_per_circle)
+        # zoek best matching circle (greedy, but realistic)
+        found = False
 
-        selected_circles.append({
-            "name": circle["name"],
-            "nodes": chosen_nodes
-        })
+        for _ in range(len(circles_sorted)):
 
-        sampled_nodes.extend(chosen_nodes)
-        used_nodes.update(chosen_nodes)
+            circle = circles_sorted[circle_idx % len(circles_sorted)]
+            circle_idx += 1
 
-        if len(selected_circles) == num_circles:
+            available_nodes = circle["nodes"]
+
+            # kleine overlap toegestaan → alleen soft filtering
+            candidate_nodes = list(set(available_nodes))
+
+            if len(candidate_nodes) < n_nodes:
+                continue
+
+            chosen = rng.sample(candidate_nodes, n_nodes)
+
+            selected_circles.append({
+                "name": circle["name"],
+                "nodes": chosen
+            })
+
+            sampled_nodes.extend(chosen)
+            used_nodes.update(chosen)
+
+            found = True
             break
 
-    if len(selected_circles) < num_circles:
-        raise ValueError("Not enough large non-overlapping circles found.")
+        if not found:
+            raise ValueError(f"Could not sample {n_nodes} nodes realistically")
 
     return sampled_nodes, selected_circles
-
 
 def build_complete_signed_matrix_from_facebook_sample(sampled_nodes, facebook_edges):
     """

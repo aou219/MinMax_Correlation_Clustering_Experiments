@@ -1,7 +1,6 @@
 import gurobipy as gp
 from gurobipy import GRB
 
-
 def pair(i, j):
     return (min(i, j), max(i, j))
 
@@ -259,3 +258,16 @@ def find_ilp_clusters(x_values, n):
                 clusters.append(merged)
 
     return clusters
+
+def same_clustering(clusters1, clusters2):
+    normalized_1 = {
+        frozenset(cluster)
+        for cluster in clusters1
+    }
+
+    normalized_2 = {
+        frozenset(cluster)
+        for cluster in clusters2
+    }
+
+    return normalized_1 == normalized_2
