@@ -22,7 +22,7 @@ if __name__ == "__main__":
     p_positive = 0.5
     p_delete = 0.15
 
-    seeds = [41,42,43,44,45,46,47,48,49,50]
+    seeds = [1, 2]
     pivot_seeds = [1,2,3,4,5,6,7,8,9,10]
     draw_graph = False
 

@@ -665,18 +665,18 @@ def build_saveable_results(graph_params, experiment_data):
                 "bad_triangle_dual_ratio": safe_ratio(
                     experiment_data["dual_cost"],
                     experiment_data["ilp_cost"]
-                ),
-                "min_disjoint_bad_triangle_ratio": safe_ratio(
-                    experiment_data["min_num_bad_triangles"],
-                    experiment_data["ilp_cost"]
-                ),
-                "max_disjoint_bad_triangle_ratio": safe_ratio(
-                    experiment_data["max_num_bad_triangles"],
-                    experiment_data["ilp_cost"]
                 )
             },
 
             "edge_deleted_graph": {
+                "best_pivot_approximation_without_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["best_cost"],
+                    experiment_data["ilp_cost_new_no4"]
+                ),
+                "average_pivot_approximation_without_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["average_cost"],
+                    experiment_data["ilp_cost_new_no4"]
+                ),
                 "best_pivot_approximation_with_4_cycles": safe_ratio(
                     experiment_data["pivot_results_new"]["best_cost"],
                     experiment_data["ilp_cost_new_with4"]
@@ -684,6 +684,10 @@ def build_saveable_results(graph_params, experiment_data):
                 "average_pivot_approximation_with_4_cycles": safe_ratio(
                     experiment_data["pivot_results_new"]["average_cost"],
                     experiment_data["ilp_cost_new_with4"]
+                ),
+                "lp_relaxation_ratio_without_4_cycles": safe_ratio(
+                    experiment_data["lp_cost_new_no4"],
+                    experiment_data["ilp_cost_new_no4"]
                 ),
                 "lp_relaxation_ratio_with_4_cycles": safe_ratio(
                     experiment_data["lp_cost_new_with4"],
@@ -695,14 +699,6 @@ def build_saveable_results(graph_params, experiment_data):
                 ),
                 "bad_triangle_dual_ratio": safe_ratio(
                     experiment_data["dual_cost_new"],
-                    experiment_data["ilp_cost_new_with4"]
-                ),
-                "min_disjoint_bad_triangle_ratio": safe_ratio(
-                    experiment_data["min_num_bad_triangles_new"],
-                    experiment_data["ilp_cost_new_with4"]
-                ),
-                "max_disjoint_bad_triangle_ratio": safe_ratio(
-                    experiment_data["max_num_bad_triangles_new"],
                     experiment_data["ilp_cost_new_with4"]
                 )
             }
@@ -817,16 +813,16 @@ def print_standard_results(graph_type, graph_params, experiment_data):
         "Bad-triangle dual ratio",
         safe_ratio(experiment_data["dual_cost"], experiment_data["ilp_cost"])
     )
-    print_ratio(
-        "Min disjoint bad triangle ratio",
-        safe_ratio(experiment_data["min_num_bad_triangles"], experiment_data["ilp_cost"])
-    )
-    print_ratio(
-        "Max disjoint bad triangle ratio",
-        safe_ratio(experiment_data["max_num_bad_triangles"], experiment_data["ilp_cost"])
-    )
 
     print_subsection("Edge-deleted graph")
+    print_ratio(
+        "Best Pivot approximation without 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["best_cost"], experiment_data["ilp_cost_new_no4"])
+    )
+    print_ratio(
+        "Average Pivot approximation without 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["average_cost"], experiment_data["ilp_cost_new_no4"])
+    )
     print_ratio(
         "Best Pivot approximation with 4-cycles",
         safe_ratio(experiment_data["pivot_results_new"]["best_cost"], experiment_data["ilp_cost_new_with4"])
@@ -834,6 +830,10 @@ def print_standard_results(graph_type, graph_params, experiment_data):
     print_ratio(
         "Average Pivot approximation with 4-cycles",
         safe_ratio(experiment_data["pivot_results_new"]["average_cost"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "LP relaxation ratio without 4-cycles",
+        safe_ratio(experiment_data["lp_cost_new_no4"], experiment_data["ilp_cost_new_no4"])
     )
     print_ratio(
         "LP relaxation ratio with 4-cycles",
@@ -846,14 +846,6 @@ def print_standard_results(graph_type, graph_params, experiment_data):
     print_ratio(
         "Bad-triangle dual ratio",
         safe_ratio(experiment_data["dual_cost_new"], experiment_data["ilp_cost_new_with4"])
-    )
-    print_ratio(
-        "Min disjoint bad triangle ratio",
-        safe_ratio(experiment_data["min_num_bad_triangles_new"], experiment_data["ilp_cost_new_with4"])
-    )
-    print_ratio(
-        "Max disjoint bad triangle ratio",
-        safe_ratio(experiment_data["max_num_bad_triangles_new"], experiment_data["ilp_cost_new_with4"])
     )
 
     print_section("Runtime")
