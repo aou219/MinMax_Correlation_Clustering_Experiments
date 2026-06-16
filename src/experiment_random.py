@@ -9,7 +9,7 @@ from experiment_helpers import (
 )
 
 
-RESULTS_FILE = "results/experiments_results_random.json"
+RESULTS_FILE = "results/experiments_results_random/random_n5_p08.json"
 
 
 if __name__ == "__main__":
@@ -18,11 +18,11 @@ if __name__ == "__main__":
     # Parameters for random signed graph
     # ============================================================
 
-    n = 30
-    p_positive = 0.5
+    n = 5
+    p_positive = 0.8
     p_delete = 0.15
 
-    seeds = [1, 2]
+    seeds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50]
     pivot_seeds = [1,2,3,4,5,6,7,8,9,10]
     draw_graph = False
 
