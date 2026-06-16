@@ -37,92 +37,100 @@ def make_edge_to_triangle_map(bad_triangles):
             edge_to_triangles[edge].add(tri)
     return edge_to_triangles
 
-def find_edge_disjoint_bad_triangles_min(edge_to_triangles):
+def _triangle_edges(triangle):
+    """Return the three sorted edges of a triangle."""
+    i, j, k = triangle
+
+    return [
+        tuple(sorted((i, j))),
+        tuple(sorted((i, k))),
+        tuple(sorted((j, k))),
+    ]
+
+
+def _greedy_edge_disjoint_bad_triangles(edge_to_triangles, choose="most"):
     """
-    Search for edge-disjoint bad triangles by selecting edges with the MOST
-    bad triangles first. Once a triangle is selected, all triangles sharing
-    its edges are removed. This typically produces a lower bound on the
-    number of edge-disjoint bad triangles.
+    Greedy construction of an edge-disjoint set of bad triangles.
 
-    Note: It can be a bit counter-intuitive — if you pick edges with the most
-    bad triangles first, you tend to end up with the **minimum number of
-    edge-disjoint triangles**. Conversely, picking edges with the fewest
-    bad triangles first tends to give a higher count of disjoint triangles.
+    choose="most":
+        Pick an edge that is contained in the most remaining bad triangles.
+
+    choose="least":
+        Pick an edge that is contained in the fewest remaining bad triangles.
+
+    The returned triangles are edge-disjoint.
+    The input edge_to_triangles is not modified.
     """
+    local_edge_to_triangles = {
+        edge: set(triangles)
+        for edge, triangles in edge_to_triangles.items()
+    }
 
-    # Max-heap: (-num_triangles, edge)
-    heap = [(-len(tris), edge) for edge, tris in edge_to_triangles.items()]
-    heapq.heapify(heap)
+    remaining_triangles = set()
 
-    disjoint_triangles = set()
-    used_triangles = set()
+    for triangles in local_edge_to_triangles.values():
+        remaining_triangles.update(triangles)
 
-    while heap:
-        neg_count, edge = heapq.heappop(heap)
-        if -neg_count == 0:
-            continue
-        # Pick any triangle using this edge
-        candidates = [tri for tri in edge_to_triangles[edge] if tri not in used_triangles]
+    selected_triangles = []
+
+    while remaining_triangles:
+        edge_counts = []
+
+        for edge, triangles in local_edge_to_triangles.items():
+            count = len(triangles & remaining_triangles)
+
+            if count > 0:
+                edge_counts.append((count, edge))
+
+        if not edge_counts:
+            break
+
+        if choose == "most":
+            _, selected_edge = max(edge_counts, key=lambda x: (x[0], x[1]))
+        elif choose == "least":
+            _, selected_edge = min(edge_counts, key=lambda x: (x[0], x[1]))
+        else:
+            raise ValueError("choose must be 'most' or 'least'")
+
+        candidates = sorted(
+            local_edge_to_triangles[selected_edge] & remaining_triangles
+        )
+
         if not candidates:
             continue
-        tri = candidates[0]
-        disjoint_triangles.add(tri)
-        used_triangles.add(tri)
-        # Remove this triangle from all edges it touches
-        i, j, k = tri
-        for u, v in [(i,j), (i,k), (j,k)]:
-            e = tuple(sorted((u,v)))
-            for t in edge_to_triangles[e]:
-                if t != tri:
-                    used_triangles.add(t)
-            edge_to_triangles[e] = set()  # all triangles touching this edge are now "used"
 
-        # Rebuild heap
-        heap = [(-len(tris), e) for e, tris in edge_to_triangles.items() if len(tris) > 0]
-        heapq.heapify(heap)
+        triangle = candidates[0]
+        selected_triangles.append(triangle)
 
-    return list(disjoint_triangles)
+        # Remove every remaining bad triangle that shares an edge
+        # with the selected triangle.
+        for edge in _triangle_edges(triangle):
+            remaining_triangles -= local_edge_to_triangles.get(edge, set())
+
+    return selected_triangles
+
+
+def find_edge_disjoint_bad_triangles_min(edge_to_triangles):
+    """
+    Greedy low edge-disjoint bad-triangle bound.
+
+    It starts with edges that occur in many bad triangles.
+    This often gives a smaller edge-disjoint set.
+    """
+    return _greedy_edge_disjoint_bad_triangles(
+        edge_to_triangles,
+        choose="most"
+    )
+
 
 def find_edge_disjoint_bad_triangles_max(edge_to_triangles):
     """
-    Search for edge-disjoint bad triangles by selecting edges with the LEAST
-    bad triangles first. Once a triangle is selected, all triangles sharing
-    its edges are removed. This typically produces a lower bound on the
-    number of edge-disjoint bad triangles.
+    Greedy high edge-disjoint bad-triangle bound.
 
-    Note: It can be a bit counter-intuitive — if you pick edges with the most
-    bad triangles first, you tend to end up with the **minimum number of
-    edge-disjoint triangles**. Conversely, picking edges with the fewest
-    bad triangles first tends to give a higher count of disjoint triangles.
+    It starts with edges that occur in few bad triangles.
+    This often gives a larger edge-disjoint set.
     """
-    # Min-heap: (num_triangles, edge)
-    heap = [(len(tris), edge) for edge, tris in edge_to_triangles.items()]
-    heapq.heapify(heap)
-
-    disjoint_triangles = set()
-    used_triangles = set()
-
-    while heap:
-        count, edge = heapq.heappop(heap)
-        if count == 0:
-            continue
-        # Pick any triangle using this edge that hasn't been used yet
-        candidates = [tri for tri in edge_to_triangles[edge] if tri not in used_triangles]
-        if not candidates:
-            continue
-        tri = candidates[0]
-        disjoint_triangles.add(tri)
-        used_triangles.add(tri)
-        # Mark all triangles touching this edge as used
-        i, j, k = tri
-        for u, v in [(i, j), (i, k), (j, k)]:
-            e = tuple(sorted((u, v)))
-            for t in edge_to_triangles[e]:
-                used_triangles.add(t)
-            edge_to_triangles[e] = set()  # clear triangles for this edge
-
-        # Rebuild heap with updated counts
-        heap = [(len(tris), e) for e, tris in edge_to_triangles.items() if len(tris) > 0]
-        heapq.heapify(heap)
-
-    return list(disjoint_triangles)
+    return _greedy_edge_disjoint_bad_triangles(
+        edge_to_triangles,
+        choose="least"
+    )

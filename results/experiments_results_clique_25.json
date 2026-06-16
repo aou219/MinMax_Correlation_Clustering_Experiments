@@ -36,8 +36,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19350,
-                    "min_edge_disjoint_count": 496,
-                    "max_edge_disjoint_count": 2976
+                    "min_edge_disjoint_count": 390,
+                    "max_edge_disjoint_count": 487
                 },
                 "ilp": {
                     "cost": 540.0
@@ -58,8 +58,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 12053,
-                    "min_edge_disjoint_count": 420,
-                    "max_edge_disjoint_count": 2408
+                    "min_edge_disjoint_count": 352,
+                    "max_edge_disjoint_count": 423
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -91,8 +91,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9185185185185185,
-                    "max_disjoint_bad_triangle_ratio": 5.511111111111111
+                    "min_disjoint_bad_triangle_ratio": 0.7222222222222222,
+                    "max_disjoint_bad_triangle_ratio": 0.9018518518518519
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.1058315334773217,
@@ -100,8 +100,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9071274298056156,
-                    "max_disjoint_bad_triangle_ratio": 5.20086393088553
+                    "min_disjoint_bad_triangle_ratio": 0.7602591792656588,
+                    "max_disjoint_bad_triangle_ratio": 0.9136069114470843
                 }
             },
             "runtime_seconds": 98.5444860458374
@@ -117,8 +117,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19350,
-                    "min_edge_disjoint_count": 496,
-                    "max_edge_disjoint_count": 2976
+                    "min_edge_disjoint_count": 390,
+                    "max_edge_disjoint_count": 487
                 },
                 "ilp": {
                     "cost": 540.0
@@ -139,8 +139,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 12053,
-                    "min_edge_disjoint_count": 420,
-                    "max_edge_disjoint_count": 2408
+                    "min_edge_disjoint_count": 352,
+                    "max_edge_disjoint_count": 423
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -172,8 +172,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9185185185185185,
-                    "max_disjoint_bad_triangle_ratio": 5.511111111111111
+                    "min_disjoint_bad_triangle_ratio": 0.7222222222222222,
+                    "max_disjoint_bad_triangle_ratio": 0.9018518518518519
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.1058315334773217,
@@ -181,8 +181,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9071274298056156,
-                    "max_disjoint_bad_triangle_ratio": 5.20086393088553
+                    "min_disjoint_bad_triangle_ratio": 0.7602591792656588,
+                    "max_disjoint_bad_triangle_ratio": 0.9136069114470843
                 }
             },
             "runtime_seconds": 97.50136399269104
@@ -198,8 +198,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18635,
-                    "min_edge_disjoint_count": 454,
-                    "max_edge_disjoint_count": 2991
+                    "min_edge_disjoint_count": 373,
+                    "max_edge_disjoint_count": 464
                 },
                 "ilp": {
                     "cost": 495.0
@@ -220,8 +220,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11236,
-                    "min_edge_disjoint_count": 384,
-                    "max_edge_disjoint_count": 2427
+                    "min_edge_disjoint_count": 310,
+                    "max_edge_disjoint_count": 393
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -253,8 +253,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9171717171717172,
-                    "max_disjoint_bad_triangle_ratio": 6.042424242424242
+                    "min_disjoint_bad_triangle_ratio": 0.7535353535353535,
+                    "max_disjoint_bad_triangle_ratio": 0.9373737373737374
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.154589371980676,
@@ -262,8 +262,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.927536231884058,
-                    "max_disjoint_bad_triangle_ratio": 5.86231884057971
+                    "min_disjoint_bad_triangle_ratio": 0.748792270531401,
+                    "max_disjoint_bad_triangle_ratio": 0.9492753623188406
                 }
             },
             "runtime_seconds": 95.12011790275574
@@ -279,8 +279,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19901,
-                    "min_edge_disjoint_count": 480,
-                    "max_edge_disjoint_count": 2976
+                    "min_edge_disjoint_count": 388,
+                    "max_edge_disjoint_count": 482
                 },
                 "ilp": {
                     "cost": 525.0
@@ -301,8 +301,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11670,
-                    "min_edge_disjoint_count": 402,
-                    "max_edge_disjoint_count": 2425
+                    "min_edge_disjoint_count": 326,
+                    "max_edge_disjoint_count": 407
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -334,8 +334,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9142857142857143,
-                    "max_disjoint_bad_triangle_ratio": 5.668571428571428
+                    "min_disjoint_bad_triangle_ratio": 0.7390476190476191,
+                    "max_disjoint_bad_triangle_ratio": 0.9180952380952381
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.1927437641723357,
@@ -343,8 +343,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9115646258503401,
-                    "max_disjoint_bad_triangle_ratio": 5.498866213151928
+                    "min_disjoint_bad_triangle_ratio": 0.7392290249433107,
+                    "max_disjoint_bad_triangle_ratio": 0.9229024943310657
                 }
             },
             "runtime_seconds": 94.32012486457825
@@ -360,8 +360,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18680,
-                    "min_edge_disjoint_count": 443,
-                    "max_edge_disjoint_count": 2982
+                    "min_edge_disjoint_count": 360,
+                    "max_edge_disjoint_count": 443
                 },
                 "ilp": {
                     "cost": 482.0
@@ -382,8 +382,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11022,
-                    "min_edge_disjoint_count": 375,
-                    "max_edge_disjoint_count": 2377
+                    "min_edge_disjoint_count": 308,
+                    "max_edge_disjoint_count": 371
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -415,8 +415,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9190871369294605,
-                    "max_disjoint_bad_triangle_ratio": 6.186721991701245
+                    "min_disjoint_bad_triangle_ratio": 0.7468879668049793,
+                    "max_disjoint_bad_triangle_ratio": 0.9190871369294605
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.938118811881188,
@@ -424,8 +424,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9282178217821783,
-                    "max_disjoint_bad_triangle_ratio": 5.883663366336633
+                    "min_disjoint_bad_triangle_ratio": 0.7623762376237624,
+                    "max_disjoint_bad_triangle_ratio": 0.9183168316831684
                 }
             },
             "runtime_seconds": 93.84531497955322
@@ -441,8 +441,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19310,
-                    "min_edge_disjoint_count": 464,
-                    "max_edge_disjoint_count": 2991
+                    "min_edge_disjoint_count": 368,
+                    "max_edge_disjoint_count": 454
                 },
                 "ilp": {
                     "cost": 512.0
@@ -463,8 +463,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11216,
-                    "min_edge_disjoint_count": 381,
-                    "max_edge_disjoint_count": 2402
+                    "min_edge_disjoint_count": 308,
+                    "max_edge_disjoint_count": 375
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -496,8 +496,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.90625,
-                    "max_disjoint_bad_triangle_ratio": 5.841796875
+                    "min_disjoint_bad_triangle_ratio": 0.71875,
+                    "max_disjoint_bad_triangle_ratio": 0.88671875
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.214975845410628,
@@ -505,8 +505,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9202898550724637,
-                    "max_disjoint_bad_triangle_ratio": 5.8019323671497585
+                    "min_disjoint_bad_triangle_ratio": 0.7439613526570048,
+                    "max_disjoint_bad_triangle_ratio": 0.9057971014492754
                 }
             },
             "runtime_seconds": 94.21411991119385
@@ -522,8 +522,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18178,
-                    "min_edge_disjoint_count": 452,
-                    "max_edge_disjoint_count": 3003
+                    "min_edge_disjoint_count": 367,
+                    "max_edge_disjoint_count": 445
                 },
                 "ilp": {
                     "cost": 484.0
@@ -544,8 +544,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11321,
-                    "min_edge_disjoint_count": 383,
-                    "max_edge_disjoint_count": 2425
+                    "min_edge_disjoint_count": 313,
+                    "max_edge_disjoint_count": 383
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -577,8 +577,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9338842975206612,
-                    "max_disjoint_bad_triangle_ratio": 6.204545454545454
+                    "min_disjoint_bad_triangle_ratio": 0.7582644628099173,
+                    "max_disjoint_bad_triangle_ratio": 0.9194214876033058
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.2121951219512197,
@@ -586,8 +586,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999999,
-                    "min_disjoint_bad_triangle_ratio": 0.9341463414634147,
-                    "max_disjoint_bad_triangle_ratio": 5.914634146341464
+                    "min_disjoint_bad_triangle_ratio": 0.7634146341463415,
+                    "max_disjoint_bad_triangle_ratio": 0.9341463414634147
                 }
             },
             "runtime_seconds": 95.02976989746094
@@ -603,8 +603,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18416,
-                    "min_edge_disjoint_count": 468,
-                    "max_edge_disjoint_count": 3002
+                    "min_edge_disjoint_count": 372,
+                    "max_edge_disjoint_count": 465
                 },
                 "ilp": {
                     "cost": 505.0
@@ -625,8 +625,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11024,
-                    "min_edge_disjoint_count": 391,
-                    "max_edge_disjoint_count": 2439
+                    "min_edge_disjoint_count": 316,
+                    "max_edge_disjoint_count": 397
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -658,8 +658,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9267326732673268,
-                    "max_disjoint_bad_triangle_ratio": 5.9445544554455445
+                    "min_disjoint_bad_triangle_ratio": 0.7366336633663366,
+                    "max_disjoint_bad_triangle_ratio": 0.9207920792079208
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.040380047505938,
@@ -667,8 +667,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9287410926365796,
-                    "max_disjoint_bad_triangle_ratio": 5.793349168646081
+                    "min_disjoint_bad_triangle_ratio": 0.7505938242280285,
+                    "max_disjoint_bad_triangle_ratio": 0.9429928741092637
                 }
             },
             "runtime_seconds": 96.02295923233032
@@ -684,8 +684,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17544,
-                    "min_edge_disjoint_count": 442,
-                    "max_edge_disjoint_count": 2999
+                    "min_edge_disjoint_count": 369,
+                    "max_edge_disjoint_count": 448
                 },
                 "ilp": {
                     "cost": 484.0
@@ -706,8 +706,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11359,
-                    "min_edge_disjoint_count": 384,
-                    "max_edge_disjoint_count": 2449
+                    "min_edge_disjoint_count": 329,
+                    "max_edge_disjoint_count": 396
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -739,8 +739,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.9132231404958677,
-                    "max_disjoint_bad_triangle_ratio": 6.196280991735537
+                    "min_disjoint_bad_triangle_ratio": 0.762396694214876,
+                    "max_disjoint_bad_triangle_ratio": 0.9256198347107438
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.052380952380952,
@@ -748,8 +748,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.9142857142857143,
-                    "max_disjoint_bad_triangle_ratio": 5.830952380952381
+                    "min_disjoint_bad_triangle_ratio": 0.7833333333333333,
+                    "max_disjoint_bad_triangle_ratio": 0.9428571428571428
                 }
             },
             "runtime_seconds": 96.0935549736023
@@ -765,8 +765,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18551,
-                    "min_edge_disjoint_count": 476,
-                    "max_edge_disjoint_count": 2989
+                    "min_edge_disjoint_count": 371,
+                    "max_edge_disjoint_count": 458
                 },
                 "ilp": {
                     "cost": 506.0
@@ -787,8 +787,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11922,
-                    "min_edge_disjoint_count": 399,
-                    "max_edge_disjoint_count": 2451
+                    "min_edge_disjoint_count": 322,
+                    "max_edge_disjoint_count": 409
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -820,8 +820,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9407114624505929,
-                    "max_disjoint_bad_triangle_ratio": 5.907114624505929
+                    "min_disjoint_bad_triangle_ratio": 0.733201581027668,
+                    "max_disjoint_bad_triangle_ratio": 0.9051383399209486
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.094252873563218,
@@ -829,8 +829,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9172413793103448,
-                    "max_disjoint_bad_triangle_ratio": 5.63448275862069
+                    "min_disjoint_bad_triangle_ratio": 0.7402298850574712,
+                    "max_disjoint_bad_triangle_ratio": 0.9402298850574713
                 }
             },
             "runtime_seconds": 97.08320999145508
@@ -846,8 +846,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18227,
-                    "min_edge_disjoint_count": 443,
-                    "max_edge_disjoint_count": 3008
+                    "min_edge_disjoint_count": 351,
+                    "max_edge_disjoint_count": 440
                 },
                 "ilp": {
                     "cost": 482.0
@@ -868,8 +868,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10803,
-                    "min_edge_disjoint_count": 364,
-                    "max_edge_disjoint_count": 2397
+                    "min_edge_disjoint_count": 297,
+                    "max_edge_disjoint_count": 368
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -901,8 +901,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9190871369294605,
-                    "max_disjoint_bad_triangle_ratio": 6.240663900414938
+                    "min_disjoint_bad_triangle_ratio": 0.7282157676348547,
+                    "max_disjoint_bad_triangle_ratio": 0.9128630705394191
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.210526315789474,
@@ -910,8 +910,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9122807017543859,
-                    "max_disjoint_bad_triangle_ratio": 6.007518796992481
+                    "min_disjoint_bad_triangle_ratio": 0.7443609022556391,
+                    "max_disjoint_bad_triangle_ratio": 0.9223057644110275
                 }
             },
             "runtime_seconds": 95.1747031211853
@@ -927,8 +927,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18783,
-                    "min_edge_disjoint_count": 446,
-                    "max_edge_disjoint_count": 3003
+                    "min_edge_disjoint_count": 359,
+                    "max_edge_disjoint_count": 447
                 },
                 "ilp": {
                     "cost": 485.0
@@ -949,8 +949,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11719,
-                    "min_edge_disjoint_count": 376,
-                    "max_edge_disjoint_count": 2458
+                    "min_edge_disjoint_count": 303,
+                    "max_edge_disjoint_count": 384
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -982,8 +982,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9195876288659793,
-                    "max_disjoint_bad_triangle_ratio": 6.191752577319588
+                    "min_disjoint_bad_triangle_ratio": 0.7402061855670103,
+                    "max_disjoint_bad_triangle_ratio": 0.9216494845360824
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.1840193704600486,
@@ -991,8 +991,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.910411622276029,
-                    "max_disjoint_bad_triangle_ratio": 5.951573849878935
+                    "min_disjoint_bad_triangle_ratio": 0.7336561743341404,
+                    "max_disjoint_bad_triangle_ratio": 0.9297820823244553
                 }
             },
             "runtime_seconds": 155.51833820343018
@@ -1008,8 +1008,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17802,
-                    "min_edge_disjoint_count": 439,
-                    "max_edge_disjoint_count": 3025
+                    "min_edge_disjoint_count": 353,
+                    "max_edge_disjoint_count": 431
                 },
                 "ilp": {
                     "cost": 475.0
@@ -1030,8 +1030,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10907,
-                    "min_edge_disjoint_count": 366,
-                    "max_edge_disjoint_count": 2430
+                    "min_edge_disjoint_count": 295,
+                    "max_edge_disjoint_count": 371
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1063,8 +1063,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.9242105263157895,
-                    "max_disjoint_bad_triangle_ratio": 6.368421052631579
+                    "min_disjoint_bad_triangle_ratio": 0.7431578947368421,
+                    "max_disjoint_bad_triangle_ratio": 0.9073684210526316
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.159090909090909,
@@ -1072,8 +1072,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9242424242424242,
-                    "max_disjoint_bad_triangle_ratio": 6.136363636363637
+                    "min_disjoint_bad_triangle_ratio": 0.7449494949494949,
+                    "max_disjoint_bad_triangle_ratio": 0.9368686868686869
                 }
             },
             "runtime_seconds": 199.70843410491943
@@ -1089,8 +1089,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18501,
-                    "min_edge_disjoint_count": 457,
-                    "max_edge_disjoint_count": 2999
+                    "min_edge_disjoint_count": 345,
+                    "max_edge_disjoint_count": 441
                 },
                 "ilp": {
                     "cost": 488.0
@@ -1111,8 +1111,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10950,
-                    "min_edge_disjoint_count": 373,
-                    "max_edge_disjoint_count": 2416
+                    "min_edge_disjoint_count": 294,
+                    "max_edge_disjoint_count": 370
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1144,8 +1144,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9364754098360656,
-                    "max_disjoint_bad_triangle_ratio": 6.145491803278689
+                    "min_disjoint_bad_triangle_ratio": 0.7069672131147541,
+                    "max_disjoint_bad_triangle_ratio": 0.9036885245901639
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.234256926952141,
@@ -1153,8 +1153,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9395465994962217,
-                    "max_disjoint_bad_triangle_ratio": 6.085642317380352
+                    "min_disjoint_bad_triangle_ratio": 0.7405541561712846,
+                    "max_disjoint_bad_triangle_ratio": 0.9319899244332494
                 }
             },
             "runtime_seconds": 166.94606590270996
@@ -1170,8 +1170,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18750,
-                    "min_edge_disjoint_count": 466,
-                    "max_edge_disjoint_count": 2999
+                    "min_edge_disjoint_count": 377,
+                    "max_edge_disjoint_count": 459
                 },
                 "ilp": {
                     "cost": 506.0
@@ -1192,8 +1192,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11621,
-                    "min_edge_disjoint_count": 399,
-                    "max_edge_disjoint_count": 2452
+                    "min_edge_disjoint_count": 329,
+                    "max_edge_disjoint_count": 406
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1225,8 +1225,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9209486166007905,
-                    "max_disjoint_bad_triangle_ratio": 5.926877470355731
+                    "min_disjoint_bad_triangle_ratio": 0.7450592885375494,
+                    "max_disjoint_bad_triangle_ratio": 0.9071146245059288
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.7889908256880733,
@@ -1234,8 +1234,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9151376146788991,
-                    "max_disjoint_bad_triangle_ratio": 5.623853211009174
+                    "min_disjoint_bad_triangle_ratio": 0.7545871559633027,
+                    "max_disjoint_bad_triangle_ratio": 0.9311926605504587
                 }
             },
             "runtime_seconds": 110.71411681175232
@@ -1251,8 +1251,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18572,
-                    "min_edge_disjoint_count": 472,
-                    "max_edge_disjoint_count": 2998
+                    "min_edge_disjoint_count": 366,
+                    "max_edge_disjoint_count": 461
                 },
                 "ilp": {
                     "cost": 512.0
@@ -1273,8 +1273,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11402,
-                    "min_edge_disjoint_count": 404,
-                    "max_edge_disjoint_count": 2434
+                    "min_edge_disjoint_count": 326,
+                    "max_edge_disjoint_count": 397
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1306,8 +1306,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.921875,
-                    "max_disjoint_bad_triangle_ratio": 5.85546875
+                    "min_disjoint_bad_triangle_ratio": 0.71484375,
+                    "max_disjoint_bad_triangle_ratio": 0.900390625
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.073394495412844,
@@ -1315,8 +1315,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.926605504587156,
-                    "max_disjoint_bad_triangle_ratio": 5.58256880733945
+                    "min_disjoint_bad_triangle_ratio": 0.7477064220183486,
+                    "max_disjoint_bad_triangle_ratio": 0.9105504587155964
                 }
             },
             "runtime_seconds": 125.57848072052002
@@ -1332,8 +1332,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19300,
-                    "min_edge_disjoint_count": 458,
-                    "max_edge_disjoint_count": 2980
+                    "min_edge_disjoint_count": 371,
+                    "max_edge_disjoint_count": 465
                 },
                 "ilp": {
                     "cost": 512.0
@@ -1354,8 +1354,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 12185,
-                    "min_edge_disjoint_count": 402,
-                    "max_edge_disjoint_count": 2444
+                    "min_edge_disjoint_count": 331,
+                    "max_edge_disjoint_count": 399
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1387,8 +1387,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.89453125,
-                    "max_disjoint_bad_triangle_ratio": 5.8203125
+                    "min_disjoint_bad_triangle_ratio": 0.724609375,
+                    "max_disjoint_bad_triangle_ratio": 0.908203125
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.759090909090909,
@@ -1396,8 +1396,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.9136363636363637,
-                    "max_disjoint_bad_triangle_ratio": 5.554545454545455
+                    "min_disjoint_bad_triangle_ratio": 0.7522727272727273,
+                    "max_disjoint_bad_triangle_ratio": 0.9068181818181819
                 }
             },
             "runtime_seconds": 198.82135796546936
@@ -1413,8 +1413,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18675,
-                    "min_edge_disjoint_count": 444,
-                    "max_edge_disjoint_count": 3002
+                    "min_edge_disjoint_count": 347,
+                    "max_edge_disjoint_count": 448
                 },
                 "ilp": {
                     "cost": 485.0
@@ -1435,8 +1435,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11617,
-                    "min_edge_disjoint_count": 373,
-                    "max_edge_disjoint_count": 2467
+                    "min_edge_disjoint_count": 306,
+                    "max_edge_disjoint_count": 388
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1468,8 +1468,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9154639175257732,
-                    "max_disjoint_bad_triangle_ratio": 6.189690721649485
+                    "min_disjoint_bad_triangle_ratio": 0.7154639175257732,
+                    "max_disjoint_bad_triangle_ratio": 0.9237113402061856
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.211031175059952,
@@ -1477,8 +1477,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.894484412470024,
-                    "max_disjoint_bad_triangle_ratio": 5.916067146282973
+                    "min_disjoint_bad_triangle_ratio": 0.7338129496402878,
+                    "max_disjoint_bad_triangle_ratio": 0.9304556354916067
                 }
             },
             "runtime_seconds": 155.84130811691284
@@ -1494,8 +1494,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18048,
-                    "min_edge_disjoint_count": 454,
-                    "max_edge_disjoint_count": 2985
+                    "min_edge_disjoint_count": 363,
+                    "max_edge_disjoint_count": 442
                 },
                 "ilp": {
                     "cost": 489.0
@@ -1516,8 +1516,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10928,
-                    "min_edge_disjoint_count": 383,
-                    "max_edge_disjoint_count": 2431
+                    "min_edge_disjoint_count": 312,
+                    "max_edge_disjoint_count": 383
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1549,8 +1549,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9284253578732107,
-                    "max_disjoint_bad_triangle_ratio": 6.104294478527607
+                    "min_disjoint_bad_triangle_ratio": 0.7423312883435583,
+                    "max_disjoint_bad_triangle_ratio": 0.9038854805725971
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.0239808153477217,
@@ -1558,8 +1558,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9184652278177458,
-                    "max_disjoint_bad_triangle_ratio": 5.829736211031175
+                    "min_disjoint_bad_triangle_ratio": 0.7482014388489209,
+                    "max_disjoint_bad_triangle_ratio": 0.9184652278177458
                 }
             },
             "runtime_seconds": 143.7443859577179
@@ -1575,8 +1575,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18035,
-                    "min_edge_disjoint_count": 447,
-                    "max_edge_disjoint_count": 2999
+                    "min_edge_disjoint_count": 361,
+                    "max_edge_disjoint_count": 447
                 },
                 "ilp": {
                     "cost": 480.0
@@ -1597,8 +1597,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11201,
-                    "min_edge_disjoint_count": 385,
-                    "max_edge_disjoint_count": 2357
+                    "min_edge_disjoint_count": 317,
+                    "max_edge_disjoint_count": 390
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1630,8 +1630,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.93125,
-                    "max_disjoint_bad_triangle_ratio": 6.247916666666667
+                    "min_disjoint_bad_triangle_ratio": 0.7520833333333333,
+                    "max_disjoint_bad_triangle_ratio": 0.93125
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.07673860911271,
@@ -1639,8 +1639,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9232613908872902,
-                    "max_disjoint_bad_triangle_ratio": 5.652278177458034
+                    "min_disjoint_bad_triangle_ratio": 0.7601918465227818,
+                    "max_disjoint_bad_triangle_ratio": 0.935251798561151
                 }
             },
             "runtime_seconds": 93.72938990592957
@@ -1656,8 +1656,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18530,
-                    "min_edge_disjoint_count": 464,
-                    "max_edge_disjoint_count": 2980
+                    "min_edge_disjoint_count": 359,
+                    "max_edge_disjoint_count": 452
                 },
                 "ilp": {
                     "cost": 493.0
@@ -1678,8 +1678,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10890,
-                    "min_edge_disjoint_count": 384,
-                    "max_edge_disjoint_count": 2395
+                    "min_edge_disjoint_count": 300,
+                    "max_edge_disjoint_count": 381
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1711,8 +1711,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.9411764705882353,
-                    "max_disjoint_bad_triangle_ratio": 6.044624746450304
+                    "min_disjoint_bad_triangle_ratio": 0.7281947261663286,
+                    "max_disjoint_bad_triangle_ratio": 0.9168356997971603
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.034313725490196,
@@ -1720,8 +1720,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9411764705882353,
-                    "max_disjoint_bad_triangle_ratio": 5.870098039215686
+                    "min_disjoint_bad_triangle_ratio": 0.7352941176470589,
+                    "max_disjoint_bad_triangle_ratio": 0.9338235294117647
                 }
             },
             "runtime_seconds": 94.7894778251648
@@ -1739,8 +1739,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17956,
-                    "min_edge_disjoint_count": 423,
-                    "max_edge_disjoint_count": 2995
+                    "min_edge_disjoint_count": 354,
+                    "max_edge_disjoint_count": 435
                 },
                 "ilp": {
                     "cost": 472.0
@@ -1761,8 +1761,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11724,
-                    "min_edge_disjoint_count": 370,
-                    "max_edge_disjoint_count": 2384
+                    "min_edge_disjoint_count": 307,
+                    "max_edge_disjoint_count": 390
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1794,8 +1794,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.8961864406779662,
-                    "max_disjoint_bad_triangle_ratio": 6.345338983050848
+                    "min_disjoint_bad_triangle_ratio": 0.75,
+                    "max_disjoint_bad_triangle_ratio": 0.9216101694915254
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.048076923076923,
@@ -1803,8 +1803,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.8894230769230769,
-                    "max_disjoint_bad_triangle_ratio": 5.730769230769231
+                    "min_disjoint_bad_triangle_ratio": 0.7379807692307693,
+                    "max_disjoint_bad_triangle_ratio": 0.9375
                 }
             },
             "runtime_seconds": 169.67370223999023
@@ -1822,8 +1822,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18814,
-                    "min_edge_disjoint_count": 456,
-                    "max_edge_disjoint_count": 2985
+                    "min_edge_disjoint_count": 356,
+                    "max_edge_disjoint_count": 455
                 },
                 "ilp": {
                     "cost": 495.0
@@ -1844,8 +1844,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10664,
-                    "min_edge_disjoint_count": 362,
-                    "max_edge_disjoint_count": 2382
+                    "min_edge_disjoint_count": 301,
+                    "max_edge_disjoint_count": 376
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1877,8 +1877,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9212121212121213,
-                    "max_disjoint_bad_triangle_ratio": 6.03030303030303
+                    "min_disjoint_bad_triangle_ratio": 0.7191919191919192,
+                    "max_disjoint_bad_triangle_ratio": 0.9191919191919192
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.2379746835443037,
@@ -1886,8 +1886,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9164556962025316,
-                    "max_disjoint_bad_triangle_ratio": 6.030379746835443
+                    "min_disjoint_bad_triangle_ratio": 0.7620253164556962,
+                    "max_disjoint_bad_triangle_ratio": 0.9518987341772152
                 }
             },
             "runtime_seconds": 168.52662920951843
@@ -1905,8 +1905,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17962,
-                    "min_edge_disjoint_count": 448,
-                    "max_edge_disjoint_count": 2999
+                    "min_edge_disjoint_count": 354,
+                    "max_edge_disjoint_count": 446
                 },
                 "ilp": {
                     "cost": 481.0
@@ -1927,8 +1927,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11359,
-                    "min_edge_disjoint_count": 383,
-                    "max_edge_disjoint_count": 2425
+                    "min_edge_disjoint_count": 322,
+                    "max_edge_disjoint_count": 389
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -1960,8 +1960,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9313929313929314,
-                    "max_disjoint_bad_triangle_ratio": 6.234927234927235
+                    "min_disjoint_bad_triangle_ratio": 0.735966735966736,
+                    "max_disjoint_bad_triangle_ratio": 0.9272349272349273
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.206730769230769,
@@ -1969,8 +1969,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9206730769230769,
-                    "max_disjoint_bad_triangle_ratio": 5.829326923076923
+                    "min_disjoint_bad_triangle_ratio": 0.7740384615384616,
+                    "max_disjoint_bad_triangle_ratio": 0.9350961538461539
                 }
             },
             "runtime_seconds": 189.12571096420288
@@ -1988,8 +1988,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19479,
-                    "min_edge_disjoint_count": 475,
-                    "max_edge_disjoint_count": 2964
+                    "min_edge_disjoint_count": 376,
+                    "max_edge_disjoint_count": 470
                 },
                 "ilp": {
                     "cost": 513.0
@@ -2010,8 +2010,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 12480,
-                    "min_edge_disjoint_count": 412,
-                    "max_edge_disjoint_count": 2423
+                    "min_edge_disjoint_count": 322,
+                    "max_edge_disjoint_count": 417
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2043,8 +2043,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9259259259259259,
-                    "max_disjoint_bad_triangle_ratio": 5.777777777777778
+                    "min_disjoint_bad_triangle_ratio": 0.732943469785575,
+                    "max_disjoint_bad_triangle_ratio": 0.9161793372319688
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.076062639821029,
@@ -2052,8 +2052,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9217002237136466,
-                    "max_disjoint_bad_triangle_ratio": 5.4205816554809845
+                    "min_disjoint_bad_triangle_ratio": 0.7203579418344519,
+                    "max_disjoint_bad_triangle_ratio": 0.9328859060402684
                 }
             },
             "runtime_seconds": 96.95631837844849
@@ -2071,8 +2071,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19974,
-                    "min_edge_disjoint_count": 478,
-                    "max_edge_disjoint_count": 2966
+                    "min_edge_disjoint_count": 379,
+                    "max_edge_disjoint_count": 476
                 },
                 "ilp": {
                     "cost": 519.0
@@ -2093,8 +2093,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 12446,
-                    "min_edge_disjoint_count": 396,
-                    "max_edge_disjoint_count": 2458
+                    "min_edge_disjoint_count": 322,
+                    "max_edge_disjoint_count": 411
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2126,8 +2126,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9210019267822736,
-                    "max_disjoint_bad_triangle_ratio": 5.714836223506744
+                    "min_disjoint_bad_triangle_ratio": 0.7302504816955684,
+                    "max_disjoint_bad_triangle_ratio": 0.9171483622350675
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.9502262443438914,
@@ -2135,8 +2135,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.8959276018099548,
-                    "max_disjoint_bad_triangle_ratio": 5.5610859728506785
+                    "min_disjoint_bad_triangle_ratio": 0.7285067873303167,
+                    "max_disjoint_bad_triangle_ratio": 0.9298642533936652
                 }
             },
             "runtime_seconds": 95.70659732818604
@@ -2154,8 +2154,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18401,
-                    "min_edge_disjoint_count": 459,
-                    "max_edge_disjoint_count": 2998
+                    "min_edge_disjoint_count": 356,
+                    "max_edge_disjoint_count": 453
                 },
                 "ilp": {
                     "cost": 495.0
@@ -2176,8 +2176,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11225,
-                    "min_edge_disjoint_count": 390,
-                    "max_edge_disjoint_count": 2438
+                    "min_edge_disjoint_count": 323,
+                    "max_edge_disjoint_count": 390
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2209,8 +2209,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9272727272727272,
-                    "max_disjoint_bad_triangle_ratio": 6.056565656565657
+                    "min_disjoint_bad_triangle_ratio": 0.7191919191919192,
+                    "max_disjoint_bad_triangle_ratio": 0.9151515151515152
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.0165876777251186,
@@ -2218,8 +2218,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.9241706161137441,
-                    "max_disjoint_bad_triangle_ratio": 5.777251184834123
+                    "min_disjoint_bad_triangle_ratio": 0.7654028436018957,
+                    "max_disjoint_bad_triangle_ratio": 0.9241706161137441
                 }
             },
             "runtime_seconds": 96.44301700592041
@@ -2237,8 +2237,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18236,
-                    "min_edge_disjoint_count": 438,
-                    "max_edge_disjoint_count": 2976
+                    "min_edge_disjoint_count": 354,
+                    "max_edge_disjoint_count": 444
                 },
                 "ilp": {
                     "cost": 478.0
@@ -2259,8 +2259,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11185,
-                    "min_edge_disjoint_count": 382,
-                    "max_edge_disjoint_count": 2431
+                    "min_edge_disjoint_count": 310,
+                    "max_edge_disjoint_count": 389
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2292,8 +2292,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9163179916317992,
-                    "max_disjoint_bad_triangle_ratio": 6.2259414225941425
+                    "min_disjoint_bad_triangle_ratio": 0.7405857740585774,
+                    "max_disjoint_bad_triangle_ratio": 0.9288702928870293
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.2469437652811735,
@@ -2301,8 +2301,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9339853300733496,
-                    "max_disjoint_bad_triangle_ratio": 5.943765281173594
+                    "min_disjoint_bad_triangle_ratio": 0.7579462102689487,
+                    "max_disjoint_bad_triangle_ratio": 0.9511002444987775
                 }
             },
             "runtime_seconds": 95.18111896514893
@@ -2320,8 +2320,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19065,
-                    "min_edge_disjoint_count": 472,
-                    "max_edge_disjoint_count": 2970
+                    "min_edge_disjoint_count": 376,
+                    "max_edge_disjoint_count": 461
                 },
                 "ilp": {
                     "cost": 513.0
@@ -2342,8 +2342,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11467,
-                    "min_edge_disjoint_count": 408,
-                    "max_edge_disjoint_count": 2395
+                    "min_edge_disjoint_count": 325,
+                    "max_edge_disjoint_count": 408
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2375,8 +2375,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9200779727095516,
-                    "max_disjoint_bad_triangle_ratio": 5.7894736842105265
+                    "min_disjoint_bad_triangle_ratio": 0.732943469785575,
+                    "max_disjoint_bad_triangle_ratio": 0.898635477582846
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.1,
@@ -2384,8 +2384,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.9272727272727272,
-                    "max_disjoint_bad_triangle_ratio": 5.443181818181818
+                    "min_disjoint_bad_triangle_ratio": 0.7386363636363636,
+                    "max_disjoint_bad_triangle_ratio": 0.9272727272727272
                 }
             },
             "runtime_seconds": 96.68465614318848
@@ -2403,8 +2403,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18502,
-                    "min_edge_disjoint_count": 431,
-                    "max_edge_disjoint_count": 2988
+                    "min_edge_disjoint_count": 346,
+                    "max_edge_disjoint_count": 439
                 },
                 "ilp": {
                     "cost": 481.0
@@ -2425,8 +2425,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11128,
-                    "min_edge_disjoint_count": 372,
-                    "max_edge_disjoint_count": 2423
+                    "min_edge_disjoint_count": 303,
+                    "max_edge_disjoint_count": 383
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2458,8 +2458,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.896049896049896,
-                    "max_disjoint_bad_triangle_ratio": 6.212058212058212
+                    "min_disjoint_bad_triangle_ratio": 0.7193347193347194,
+                    "max_disjoint_bad_triangle_ratio": 0.9126819126819127
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.175609756097561,
@@ -2467,8 +2467,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9073170731707317,
-                    "max_disjoint_bad_triangle_ratio": 5.909756097560976
+                    "min_disjoint_bad_triangle_ratio": 0.7390243902439024,
+                    "max_disjoint_bad_triangle_ratio": 0.9341463414634147
                 }
             },
             "runtime_seconds": 95.17904210090637
@@ -2486,8 +2486,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19121,
-                    "min_edge_disjoint_count": 475,
-                    "max_edge_disjoint_count": 2992
+                    "min_edge_disjoint_count": 386,
+                    "max_edge_disjoint_count": 476
                 },
                 "ilp": {
                     "cost": 520.0
@@ -2508,8 +2508,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11510,
-                    "min_edge_disjoint_count": 398,
-                    "max_edge_disjoint_count": 2432
+                    "min_edge_disjoint_count": 331,
+                    "max_edge_disjoint_count": 404
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2541,8 +2541,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9134615384615384,
-                    "max_disjoint_bad_triangle_ratio": 5.753846153846154
+                    "min_disjoint_bad_triangle_ratio": 0.7423076923076923,
+                    "max_disjoint_bad_triangle_ratio": 0.9153846153846154
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.167816091954023,
@@ -2550,8 +2550,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9149425287356322,
-                    "max_disjoint_bad_triangle_ratio": 5.590804597701149
+                    "min_disjoint_bad_triangle_ratio": 0.7609195402298851,
+                    "max_disjoint_bad_triangle_ratio": 0.9287356321839081
                 }
             },
             "runtime_seconds": 95.28895497322083
@@ -2569,8 +2569,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19287,
-                    "min_edge_disjoint_count": 455,
-                    "max_edge_disjoint_count": 2963
+                    "min_edge_disjoint_count": 362,
+                    "max_edge_disjoint_count": 460
                 },
                 "ilp": {
                     "cost": 502.0
@@ -2591,8 +2591,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11628,
-                    "min_edge_disjoint_count": 395,
-                    "max_edge_disjoint_count": 2425
+                    "min_edge_disjoint_count": 320,
+                    "max_edge_disjoint_count": 393
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2624,8 +2624,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9063745019920318,
-                    "max_disjoint_bad_triangle_ratio": 5.902390438247012
+                    "min_disjoint_bad_triangle_ratio": 0.7211155378486056,
+                    "max_disjoint_bad_triangle_ratio": 0.9163346613545816
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.2126168224299065,
@@ -2633,8 +2633,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9228971962616822,
-                    "max_disjoint_bad_triangle_ratio": 5.66588785046729
+                    "min_disjoint_bad_triangle_ratio": 0.7476635514018691,
+                    "max_disjoint_bad_triangle_ratio": 0.9182242990654206
                 }
             },
             "runtime_seconds": 97.65982794761658
@@ -2652,8 +2652,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19076,
-                    "min_edge_disjoint_count": 466,
-                    "max_edge_disjoint_count": 2973
+                    "min_edge_disjoint_count": 370,
+                    "max_edge_disjoint_count": 460
                 },
                 "ilp": {
                     "cost": 505.0
@@ -2674,8 +2674,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11546,
-                    "min_edge_disjoint_count": 389,
-                    "max_edge_disjoint_count": 2419
+                    "min_edge_disjoint_count": 324,
+                    "max_edge_disjoint_count": 393
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2707,8 +2707,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9227722772277228,
-                    "max_disjoint_bad_triangle_ratio": 5.887128712871287
+                    "min_disjoint_bad_triangle_ratio": 0.7326732673267327,
+                    "max_disjoint_bad_triangle_ratio": 0.9108910891089109
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.9531615925058547,
@@ -2716,8 +2716,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9110070257611241,
-                    "max_disjoint_bad_triangle_ratio": 5.665105386416862
+                    "min_disjoint_bad_triangle_ratio": 0.7587822014051522,
+                    "max_disjoint_bad_triangle_ratio": 0.9203747072599532
                 }
             },
             "runtime_seconds": 98.67272591590881
@@ -2735,8 +2735,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19828,
-                    "min_edge_disjoint_count": 485,
-                    "max_edge_disjoint_count": 2962
+                    "min_edge_disjoint_count": 389,
+                    "max_edge_disjoint_count": 484
                 },
                 "ilp": {
                     "cost": 532.0
@@ -2757,8 +2757,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 12038,
-                    "min_edge_disjoint_count": 419,
-                    "max_edge_disjoint_count": 2421
+                    "min_edge_disjoint_count": 339,
+                    "max_edge_disjoint_count": 413
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2790,8 +2790,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9116541353383458,
-                    "max_disjoint_bad_triangle_ratio": 5.567669172932331
+                    "min_disjoint_bad_triangle_ratio": 0.731203007518797,
+                    "max_disjoint_bad_triangle_ratio": 0.9097744360902256
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.0357142857142856,
@@ -2799,8 +2799,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999999,
-                    "min_disjoint_bad_triangle_ratio": 0.9352678571428571,
-                    "max_disjoint_bad_triangle_ratio": 5.404017857142857
+                    "min_disjoint_bad_triangle_ratio": 0.7566964285714286,
+                    "max_disjoint_bad_triangle_ratio": 0.921875
                 }
             },
             "runtime_seconds": 97.0839991569519
@@ -2818,8 +2818,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18077,
-                    "min_edge_disjoint_count": 421,
-                    "max_edge_disjoint_count": 3003
+                    "min_edge_disjoint_count": 344,
+                    "max_edge_disjoint_count": 427
                 },
                 "ilp": {
                     "cost": 467.0
@@ -2840,8 +2840,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10311,
-                    "min_edge_disjoint_count": 352,
-                    "max_edge_disjoint_count": 2398
+                    "min_edge_disjoint_count": 293,
+                    "max_edge_disjoint_count": 353
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2873,8 +2873,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9014989293361885,
-                    "max_disjoint_bad_triangle_ratio": 6.430406852248394
+                    "min_disjoint_bad_triangle_ratio": 0.7366167023554604,
+                    "max_disjoint_bad_triangle_ratio": 0.9143468950749465
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.05,
@@ -2882,8 +2882,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9263157894736842,
-                    "max_disjoint_bad_triangle_ratio": 6.310526315789474
+                    "min_disjoint_bad_triangle_ratio": 0.7710526315789473,
+                    "max_disjoint_bad_triangle_ratio": 0.9289473684210526
                 }
             },
             "runtime_seconds": 95.72633385658264
@@ -2901,8 +2901,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18446,
-                    "min_edge_disjoint_count": 452,
-                    "max_edge_disjoint_count": 2988
+                    "min_edge_disjoint_count": 360,
+                    "max_edge_disjoint_count": 439
                 },
                 "ilp": {
                     "cost": 493.0
@@ -2923,8 +2923,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11636,
-                    "min_edge_disjoint_count": 387,
-                    "max_edge_disjoint_count": 2449
+                    "min_edge_disjoint_count": 310,
+                    "max_edge_disjoint_count": 391
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -2956,8 +2956,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.9168356997971603,
-                    "max_disjoint_bad_triangle_ratio": 6.060851926977688
+                    "min_disjoint_bad_triangle_ratio": 0.7302231237322515,
+                    "max_disjoint_bad_triangle_ratio": 0.8904665314401623
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.032332563510393,
@@ -2965,8 +2965,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.8937644341801386,
-                    "max_disjoint_bad_triangle_ratio": 5.655889145496536
+                    "min_disjoint_bad_triangle_ratio": 0.7159353348729792,
+                    "max_disjoint_bad_triangle_ratio": 0.9030023094688222
                 }
             },
             "runtime_seconds": 97.07813501358032
@@ -2984,8 +2984,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19155,
-                    "min_edge_disjoint_count": 470,
-                    "max_edge_disjoint_count": 3001
+                    "min_edge_disjoint_count": 375,
+                    "max_edge_disjoint_count": 467
                 },
                 "ilp": {
                     "cost": 509.0
@@ -3006,8 +3006,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11515,
-                    "min_edge_disjoint_count": 400,
-                    "max_edge_disjoint_count": 2452
+                    "min_edge_disjoint_count": 323,
+                    "max_edge_disjoint_count": 404
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3039,8 +3039,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999999,
-                    "min_disjoint_bad_triangle_ratio": 0.9233791748526523,
-                    "max_disjoint_bad_triangle_ratio": 5.895874263261296
+                    "min_disjoint_bad_triangle_ratio": 0.7367387033398821,
+                    "max_disjoint_bad_triangle_ratio": 0.9174852652259332
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.216589861751152,
@@ -3048,8 +3048,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9216589861751152,
-                    "max_disjoint_bad_triangle_ratio": 5.649769585253456
+                    "min_disjoint_bad_triangle_ratio": 0.7442396313364056,
+                    "max_disjoint_bad_triangle_ratio": 0.9308755760368663
                 }
             },
             "runtime_seconds": 97.1808431148529
@@ -3067,8 +3067,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17442,
-                    "min_edge_disjoint_count": 458,
-                    "max_edge_disjoint_count": 3011
+                    "min_edge_disjoint_count": 359,
+                    "max_edge_disjoint_count": 447
                 },
                 "ilp": {
                     "cost": 488.0
@@ -3089,8 +3089,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10856,
-                    "min_edge_disjoint_count": 388,
-                    "max_edge_disjoint_count": 2442
+                    "min_edge_disjoint_count": 305,
+                    "max_edge_disjoint_count": 380
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3122,8 +3122,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.9385245901639344,
-                    "max_disjoint_bad_triangle_ratio": 6.170081967213115
+                    "min_disjoint_bad_triangle_ratio": 0.735655737704918,
+                    "max_disjoint_bad_triangle_ratio": 0.9159836065573771
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.106280193236715,
@@ -3131,8 +3131,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9371980676328503,
-                    "max_disjoint_bad_triangle_ratio": 5.898550724637682
+                    "min_disjoint_bad_triangle_ratio": 0.7367149758454107,
+                    "max_disjoint_bad_triangle_ratio": 0.9178743961352657
                 }
             },
             "runtime_seconds": 99.00738906860352
@@ -3150,8 +3150,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 16823,
-                    "min_edge_disjoint_count": 430,
-                    "max_edge_disjoint_count": 3042
+                    "min_edge_disjoint_count": 348,
+                    "max_edge_disjoint_count": 442
                 },
                 "ilp": {
                     "cost": 468.0
@@ -3172,8 +3172,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10867,
-                    "min_edge_disjoint_count": 368,
-                    "max_edge_disjoint_count": 2433
+                    "min_edge_disjoint_count": 303,
+                    "max_edge_disjoint_count": 386
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3205,8 +3205,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9188034188034188,
-                    "max_disjoint_bad_triangle_ratio": 6.5
+                    "min_disjoint_bad_triangle_ratio": 0.7435897435897436,
+                    "max_disjoint_bad_triangle_ratio": 0.9444444444444444
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.9285714285714286,
@@ -3214,8 +3214,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9064039408866995,
-                    "max_disjoint_bad_triangle_ratio": 5.9926108374384235
+                    "min_disjoint_bad_triangle_ratio": 0.7463054187192119,
+                    "max_disjoint_bad_triangle_ratio": 0.9507389162561576
                 }
             },
             "runtime_seconds": 97.3718409538269
@@ -3233,8 +3233,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18523,
-                    "min_edge_disjoint_count": 479,
-                    "max_edge_disjoint_count": 2983
+                    "min_edge_disjoint_count": 383,
+                    "max_edge_disjoint_count": 474
                 },
                 "ilp": {
                     "cost": 517.0
@@ -3255,8 +3255,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11186,
-                    "min_edge_disjoint_count": 399,
-                    "max_edge_disjoint_count": 2409
+                    "min_edge_disjoint_count": 324,
+                    "max_edge_disjoint_count": 407
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3288,8 +3288,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9264990328820116,
-                    "max_disjoint_bad_triangle_ratio": 5.769825918762089
+                    "min_disjoint_bad_triangle_ratio": 0.7408123791102514,
+                    "max_disjoint_bad_triangle_ratio": 0.9168278529980658
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.7829099307159353,
@@ -3297,8 +3297,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9214780600461894,
-                    "max_disjoint_bad_triangle_ratio": 5.563510392609699
+                    "min_disjoint_bad_triangle_ratio": 0.7482678983833718,
+                    "max_disjoint_bad_triangle_ratio": 0.9399538106235565
                 }
             },
             "runtime_seconds": 97.54531693458557
@@ -3316,8 +3316,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18291,
-                    "min_edge_disjoint_count": 456,
-                    "max_edge_disjoint_count": 2995
+                    "min_edge_disjoint_count": 370,
+                    "max_edge_disjoint_count": 455
                 },
                 "ilp": {
                     "cost": 495.0
@@ -3338,8 +3338,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11008,
-                    "min_edge_disjoint_count": 383,
-                    "max_edge_disjoint_count": 2408
+                    "min_edge_disjoint_count": 306,
+                    "max_edge_disjoint_count": 394
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3371,8 +3371,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9212121212121213,
-                    "max_disjoint_bad_triangle_ratio": 6.05050505050505
+                    "min_disjoint_bad_triangle_ratio": 0.7474747474747475,
+                    "max_disjoint_bad_triangle_ratio": 0.9191919191919192
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.2505966587112174,
@@ -3380,8 +3380,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9140811455847255,
-                    "max_disjoint_bad_triangle_ratio": 5.747016706443914
+                    "min_disjoint_bad_triangle_ratio": 0.7303102625298329,
+                    "max_disjoint_bad_triangle_ratio": 0.9403341288782816
                 }
             },
             "runtime_seconds": 96.2363109588623
@@ -3399,8 +3399,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17986,
-                    "min_edge_disjoint_count": 462,
-                    "max_edge_disjoint_count": 2969
+                    "min_edge_disjoint_count": 371,
+                    "max_edge_disjoint_count": 457
                 },
                 "ilp": {
                     "cost": 494.0
@@ -3421,8 +3421,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10958,
-                    "min_edge_disjoint_count": 387,
-                    "max_edge_disjoint_count": 2390
+                    "min_edge_disjoint_count": 323,
+                    "max_edge_disjoint_count": 388
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3454,8 +3454,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9352226720647774,
-                    "max_disjoint_bad_triangle_ratio": 6.010121457489879
+                    "min_disjoint_bad_triangle_ratio": 0.7510121457489879,
+                    "max_disjoint_bad_triangle_ratio": 0.9251012145748988
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 1.963768115942029,
@@ -3463,8 +3463,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9347826086956522,
-                    "max_disjoint_bad_triangle_ratio": 5.7729468599033815
+                    "min_disjoint_bad_triangle_ratio": 0.7801932367149759,
+                    "max_disjoint_bad_triangle_ratio": 0.9371980676328503
                 }
             },
             "runtime_seconds": 96.75748991966248
@@ -3482,8 +3482,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18593,
-                    "min_edge_disjoint_count": 453,
-                    "max_edge_disjoint_count": 3010
+                    "min_edge_disjoint_count": 365,
+                    "max_edge_disjoint_count": 456
                 },
                 "ilp": {
                     "cost": 493.0
@@ -3504,8 +3504,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11875,
-                    "min_edge_disjoint_count": 393,
-                    "max_edge_disjoint_count": 2429
+                    "min_edge_disjoint_count": 330,
+                    "max_edge_disjoint_count": 405
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3537,8 +3537,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9188640973630832,
-                    "max_disjoint_bad_triangle_ratio": 6.105476673427992
+                    "min_disjoint_bad_triangle_ratio": 0.7403651115618661,
+                    "max_disjoint_bad_triangle_ratio": 0.9249492900608519
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.247086247086247,
@@ -3546,8 +3546,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.916083916083916,
-                    "max_disjoint_bad_triangle_ratio": 5.662004662004662
+                    "min_disjoint_bad_triangle_ratio": 0.7692307692307693,
+                    "max_disjoint_bad_triangle_ratio": 0.9440559440559441
                 }
             },
             "runtime_seconds": 334.50723028182983
@@ -3565,8 +3565,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19489,
-                    "min_edge_disjoint_count": 465,
-                    "max_edge_disjoint_count": 2960
+                    "min_edge_disjoint_count": 362,
+                    "max_edge_disjoint_count": 451
                 },
                 "ilp": {
                     "cost": 503.0
@@ -3587,8 +3587,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11417,
-                    "min_edge_disjoint_count": 380,
-                    "max_edge_disjoint_count": 2361
+                    "min_edge_disjoint_count": 306,
+                    "max_edge_disjoint_count": 393
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3620,8 +3620,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9244532803180915,
-                    "max_disjoint_bad_triangle_ratio": 5.88469184890656
+                    "min_disjoint_bad_triangle_ratio": 0.7196819085487077,
+                    "max_disjoint_bad_triangle_ratio": 0.8966202783300199
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.227272727272727,
@@ -3629,8 +3629,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999999,
-                    "min_disjoint_bad_triangle_ratio": 0.9090909090909091,
-                    "max_disjoint_bad_triangle_ratio": 5.648325358851674
+                    "min_disjoint_bad_triangle_ratio": 0.7320574162679426,
+                    "max_disjoint_bad_triangle_ratio": 0.9401913875598086
                 }
             },
             "runtime_seconds": 97.56444787979126
@@ -3648,8 +3648,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18951,
-                    "min_edge_disjoint_count": 474,
-                    "max_edge_disjoint_count": 2971
+                    "min_edge_disjoint_count": 382,
+                    "max_edge_disjoint_count": 466
                 },
                 "ilp": {
                     "cost": 511.0
@@ -3670,8 +3670,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11966,
-                    "min_edge_disjoint_count": 406,
-                    "max_edge_disjoint_count": 2448
+                    "min_edge_disjoint_count": 332,
+                    "max_edge_disjoint_count": 414
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3703,8 +3703,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9275929549902152,
-                    "max_disjoint_bad_triangle_ratio": 5.814090019569472
+                    "min_disjoint_bad_triangle_ratio": 0.7475538160469667,
+                    "max_disjoint_bad_triangle_ratio": 0.9119373776908023
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.0201342281879193,
@@ -3712,8 +3712,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9082774049217002,
-                    "max_disjoint_bad_triangle_ratio": 5.476510067114094
+                    "min_disjoint_bad_triangle_ratio": 0.7427293064876958,
+                    "max_disjoint_bad_triangle_ratio": 0.9261744966442953
                 }
             },
             "runtime_seconds": 99.26171493530273
@@ -3731,8 +3731,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 19695,
-                    "min_edge_disjoint_count": 483,
-                    "max_edge_disjoint_count": 2954
+                    "min_edge_disjoint_count": 393,
+                    "max_edge_disjoint_count": 473
                 },
                 "ilp": {
                     "cost": 531.0
@@ -3753,8 +3753,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11833,
-                    "min_edge_disjoint_count": 406,
-                    "max_edge_disjoint_count": 2388
+                    "min_edge_disjoint_count": 325,
+                    "max_edge_disjoint_count": 408
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3786,8 +3786,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9096045197740112,
-                    "max_disjoint_bad_triangle_ratio": 5.5630885122410545
+                    "min_disjoint_bad_triangle_ratio": 0.7401129943502824,
+                    "max_disjoint_bad_triangle_ratio": 0.8907721280602636
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.2155555555555555,
@@ -3795,8 +3795,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9022222222222223,
-                    "max_disjoint_bad_triangle_ratio": 5.306666666666667
+                    "min_disjoint_bad_triangle_ratio": 0.7222222222222222,
+                    "max_disjoint_bad_triangle_ratio": 0.9066666666666666
                 }
             },
             "runtime_seconds": 98.20601177215576
@@ -3814,8 +3814,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17664,
-                    "min_edge_disjoint_count": 458,
-                    "max_edge_disjoint_count": 3008
+                    "min_edge_disjoint_count": 362,
+                    "max_edge_disjoint_count": 448
                 },
                 "ilp": {
                     "cost": 493.0
@@ -3836,8 +3836,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10611,
-                    "min_edge_disjoint_count": 389,
-                    "max_edge_disjoint_count": 2411
+                    "min_edge_disjoint_count": 305,
+                    "max_edge_disjoint_count": 386
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3869,8 +3869,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 0.9999999999999998,
-                    "min_disjoint_bad_triangle_ratio": 0.9290060851926978,
-                    "max_disjoint_bad_triangle_ratio": 6.101419878296146
+                    "min_disjoint_bad_triangle_ratio": 0.7342799188640974,
+                    "max_disjoint_bad_triangle_ratio": 0.9087221095334685
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.173076923076923,
@@ -3878,8 +3878,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9350961538461539,
-                    "max_disjoint_bad_triangle_ratio": 5.795673076923077
+                    "min_disjoint_bad_triangle_ratio": 0.7331730769230769,
+                    "max_disjoint_bad_triangle_ratio": 0.9278846153846154
                 }
             },
             "runtime_seconds": 96.90422201156616
@@ -3897,8 +3897,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 16680,
-                    "min_edge_disjoint_count": 413,
-                    "max_edge_disjoint_count": 2997
+                    "min_edge_disjoint_count": 325,
+                    "max_edge_disjoint_count": 406
                 },
                 "ilp": {
                     "cost": 448.0
@@ -3919,8 +3919,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10944,
-                    "min_edge_disjoint_count": 370,
-                    "max_edge_disjoint_count": 2425
+                    "min_edge_disjoint_count": 299,
+                    "max_edge_disjoint_count": 367
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -3952,8 +3952,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.921875,
-                    "max_disjoint_bad_triangle_ratio": 6.689732142857143
+                    "min_disjoint_bad_triangle_ratio": 0.7254464285714286,
+                    "max_disjoint_bad_triangle_ratio": 0.90625
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.1256281407035176,
@@ -3961,8 +3961,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9296482412060302,
-                    "max_disjoint_bad_triangle_ratio": 6.092964824120603
+                    "min_disjoint_bad_triangle_ratio": 0.7512562814070352,
+                    "max_disjoint_bad_triangle_ratio": 0.9221105527638191
                 }
             },
             "runtime_seconds": 97.64659309387207
@@ -3980,8 +3980,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 17689,
-                    "min_edge_disjoint_count": 434,
-                    "max_edge_disjoint_count": 2997
+                    "min_edge_disjoint_count": 336,
+                    "max_edge_disjoint_count": 427
                 },
                 "ilp": {
                     "cost": 468.0
@@ -4002,8 +4002,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10981,
-                    "min_edge_disjoint_count": 371,
-                    "max_edge_disjoint_count": 2415
+                    "min_edge_disjoint_count": 303,
+                    "max_edge_disjoint_count": 378
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -4035,8 +4035,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9273504273504274,
-                    "max_disjoint_bad_triangle_ratio": 6.403846153846154
+                    "min_disjoint_bad_triangle_ratio": 0.717948717948718,
+                    "max_disjoint_bad_triangle_ratio": 0.9123931623931624
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.202970297029703,
@@ -4044,8 +4044,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9183168316831684,
-                    "max_disjoint_bad_triangle_ratio": 5.977722772277228
+                    "min_disjoint_bad_triangle_ratio": 0.75,
+                    "max_disjoint_bad_triangle_ratio": 0.9356435643564357
                 }
             },
             "runtime_seconds": 96.52366805076599
@@ -4063,8 +4063,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18461,
-                    "min_edge_disjoint_count": 435,
-                    "max_edge_disjoint_count": 3000
+                    "min_edge_disjoint_count": 346,
+                    "max_edge_disjoint_count": 426
                 },
                 "ilp": {
                     "cost": 475.0
@@ -4085,8 +4085,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 11184,
-                    "min_edge_disjoint_count": 357,
-                    "max_edge_disjoint_count": 2383
+                    "min_edge_disjoint_count": 302,
+                    "max_edge_disjoint_count": 365
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -4118,8 +4118,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9157894736842105,
-                    "max_disjoint_bad_triangle_ratio": 6.315789473684211
+                    "min_disjoint_bad_triangle_ratio": 0.728421052631579,
+                    "max_disjoint_bad_triangle_ratio": 0.8968421052631579
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.027431421446384,
@@ -4127,8 +4127,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.8902743142144638,
-                    "max_disjoint_bad_triangle_ratio": 5.942643391521197
+                    "min_disjoint_bad_triangle_ratio": 0.7531172069825436,
+                    "max_disjoint_bad_triangle_ratio": 0.9102244389027432
                 }
             },
             "runtime_seconds": 96.00115513801575
@@ -4146,8 +4146,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 18300,
-                    "min_edge_disjoint_count": 448,
-                    "max_edge_disjoint_count": 3010
+                    "min_edge_disjoint_count": 367,
+                    "max_edge_disjoint_count": 451
                 },
                 "ilp": {
                     "cost": 497.0
@@ -4168,8 +4168,8 @@
                 },
                 "bad_triangles": {
                     "total_count": 10953,
-                    "min_edge_disjoint_count": 384,
-                    "max_edge_disjoint_count": 2414
+                    "min_edge_disjoint_count": 316,
+                    "max_edge_disjoint_count": 387
                 },
                 "ilp": {
                     "without_4_cycles": {
@@ -4201,8 +4201,8 @@
                     "lp_relaxation_ratio": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0000000000000002,
-                    "min_disjoint_bad_triangle_ratio": 0.9014084507042254,
-                    "max_disjoint_bad_triangle_ratio": 6.056338028169014
+                    "min_disjoint_bad_triangle_ratio": 0.738430583501006,
+                    "max_disjoint_bad_triangle_ratio": 0.9074446680080482
                 },
                 "edge_deleted_graph": {
                     "best_pivot_approximation_with_4_cycles": 2.090909090909091,
@@ -4210,8 +4210,8 @@
                     "lp_relaxation_ratio_with_4_cycles": 1.0,
                     "bad_triangle_primal_ratio": 1.0,
                     "bad_triangle_dual_ratio": 1.0,
-                    "min_disjoint_bad_triangle_ratio": 0.9186602870813397,
-                    "max_disjoint_bad_triangle_ratio": 5.77511961722488
+                    "min_disjoint_bad_triangle_ratio": 0.7559808612440191,
+                    "max_disjoint_bad_triangle_ratio": 0.9258373205741627
                 }
             },
             "runtime_seconds": 96.19640183448792

@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import copy
 import numpy as np
 
 from graph_generation import matrix_to_graph
@@ -339,10 +340,14 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
     all_bad_triangles = find_bad_triangles(S)
     edge_to_triangles = make_edge_to_triangle_map(all_bad_triangles)
 
-    min_disjoint_bad_triangles = find_edge_disjoint_bad_triangles_min(edge_to_triangles)
+    min_disjoint_bad_triangles = find_edge_disjoint_bad_triangles_min(
+        copy.deepcopy(edge_to_triangles)
+    )
     min_num_bad_triangles = count_bad_triangles(min_disjoint_bad_triangles)
 
-    max_disjoint_bad_triangles = find_edge_disjoint_bad_triangles_max(edge_to_triangles)
+    max_disjoint_bad_triangles = find_edge_disjoint_bad_triangles_max(
+        copy.deepcopy(edge_to_triangles)
+    )
     max_num_bad_triangles = count_bad_triangles(max_disjoint_bad_triangles)
 
     # ============================================================
@@ -401,10 +406,14 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
     all_bad_triangles_new = find_bad_triangles(S_new)
     edge_to_triangles_new = make_edge_to_triangle_map(all_bad_triangles_new)
 
-    min_disjoint_bad_triangles_new = find_edge_disjoint_bad_triangles_min(edge_to_triangles_new)
+    min_disjoint_bad_triangles_new = find_edge_disjoint_bad_triangles_min(
+        copy.deepcopy(edge_to_triangles_new)
+    )
     min_num_bad_triangles_new = count_bad_triangles(min_disjoint_bad_triangles_new)
 
-    max_disjoint_bad_triangles_new = find_edge_disjoint_bad_triangles_max(edge_to_triangles_new)
+    max_disjoint_bad_triangles_new = find_edge_disjoint_bad_triangles_max(
+        copy.deepcopy(edge_to_triangles_new)
+    )
     max_num_bad_triangles_new = count_bad_triangles(max_disjoint_bad_triangles_new)
 
     # ============================================================
