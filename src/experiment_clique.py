@@ -8,7 +8,7 @@ from experiment_helpers import (
     build_saveable_results
 )
 
-RESULTS_FILE = "results/experiments_results_clique.json"
+RESULTS_FILE = "results/experiments_results_clique/clq_n10.json"
 
 
 if __name__ == "__main__":
@@ -18,9 +18,7 @@ if __name__ == "__main__":
     # ============================================================
 
     cluster_size_cases = [
-    [25, 25, 25, 25],
-    [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-    [60, 25, 10, 5]
+    [5,5],[3,3,4],[3,2,5]
 ]
     for cluster_sizes in cluster_size_cases:
         n = sum(cluster_sizes)
