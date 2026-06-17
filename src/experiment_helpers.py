@@ -354,15 +354,15 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
     # Complete graph: ILP
     # ============================================================
 
-    # ilp_cost, ilp_x_values, bad_cycles_ilp = solve_ilp(
-    #     S,
-    #     verbose=False,
-    #     relax=False,
-    #     add_four_cycles=False
-    # )
+    ilp_cost, ilp_x_values, bad_cycles_ilp = solve_ilp(
+        S,
+        verbose=False,
+        relax=False,
+        add_four_cycles=False
+    )
 
-    # ilp_clusters = find_ilp_clusters(ilp_x_values, n)
-    # ilp_cluster_count = len(ilp_clusters)
+    ilp_clusters = find_ilp_clusters(ilp_x_values, n)
+    ilp_cluster_count = len(ilp_clusters)
 
     # ============================================================
     # Complete graph: LP relaxation
@@ -420,29 +420,29 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
     # Incomplete graph: ILP without bad 4-cycle constraints
     # ============================================================
 
-    # ilp_cost_new_no4, ilp_x_values_new_no4, bad_cycles_ilp_new_no4 = solve_ilp(
-    #     S_new,
-    #     verbose=False,
-    #     relax=False,
-    #     add_four_cycles=False
-    # )
+    ilp_cost_new_no4, ilp_x_values_new_no4, bad_cycles_ilp_new_no4 = solve_ilp(
+        S_new,
+        verbose=False,
+        relax=False,
+        add_four_cycles=False
+    )
 
-    # ilp_clusters_new_no4 = find_ilp_clusters(ilp_x_values_new_no4, n)
-    # ilp_cluster_count_new_no4 = len(ilp_clusters_new_no4)
+    ilp_clusters_new_no4 = find_ilp_clusters(ilp_x_values_new_no4, n)
+    ilp_cluster_count_new_no4 = len(ilp_clusters_new_no4)
 
     # ============================================================
     # Incomplete graph: ILP with bad 4-cycle constraints
     # ============================================================
 
-    # ilp_cost_new_with4, ilp_x_values_new_with4, bad_cycles_ilp_new_with4 = solve_ilp(
-    #     S_new,
-    #     verbose=False,
-    #     relax=False,
-    #     add_four_cycles=True
-    # )
+    ilp_cost_new_with4, ilp_x_values_new_with4, bad_cycles_ilp_new_with4 = solve_ilp(
+        S_new,
+        verbose=False,
+        relax=False,
+        add_four_cycles=True
+    )
 
-    # ilp_clusters_new_with4 = find_ilp_clusters(ilp_x_values_new_with4, n)
-    # ilp_cluster_count_new_with4 = len(ilp_clusters_new_with4)
+    ilp_clusters_new_with4 = find_ilp_clusters(ilp_x_values_new_with4, n)
+    ilp_cluster_count_new_with4 = len(ilp_clusters_new_with4)
 
     # ============================================================
     # Incomplete graph: LP relaxation without bad 4-cycle constraints
@@ -470,10 +470,10 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
     # Check violated bad 4-cycle constraints
     # ============================================================
 
-    # violated_cycles_ilp_new = check_violated_bad_cycles(
-    #     ilp_x_values_new_no4,
-    #     bad_cycles_ilp_new_with4
-    # )
+    violated_cycles_ilp_new = check_violated_bad_cycles(
+        ilp_x_values_new_no4,
+        bad_cycles_ilp_new_with4
+    )
 
     violated_cycles_lp_new = check_violated_bad_cycles(
         lp_x_values_new_no4,
@@ -482,7 +482,7 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
     # =========================================================================================
     # Incomplete graph: Check whether with and without 4 cycle clustering is the same
     # =========================================================================================
-    # same_clustering_4_cycle = same_clustering(ilp_clusters_new_no4, ilp_clusters_new_with4)
+    same_clustering_4_cycle = same_clustering(ilp_clusters_new_no4, ilp_clusters_new_with4)
     # ============================================================
     # Incomplete graph: bad-triangle LP bounds
     # ============================================================
@@ -510,11 +510,11 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
 
         "pivot_clusters": pivot_clusters,
         "pivots": pivots,
-        # "ilp_clusters": ilp_clusters,
+        "ilp_clusters": ilp_clusters,
 
         "pivot_clusters_new": pivot_clusters_new,
         "pivots_new": pivots_new,
-        # "ilp_clusters_new_with4": ilp_clusters_new_with4,
+        "ilp_clusters_new_with4": ilp_clusters_new_with4,
 
         # General
         "num_edges_deleted": num_edges_deleted,
@@ -526,9 +526,9 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
         "min_num_bad_triangles": min_num_bad_triangles,
         "max_num_bad_triangles": max_num_bad_triangles,
 
-        # "ilp_cost": ilp_cost,
-        # "ilp_cluster_count": ilp_cluster_count,
-        # "bad_cycles_ilp": bad_cycles_ilp,
+        "ilp_cost": ilp_cost,
+        "ilp_cluster_count": ilp_cluster_count,
+        "bad_cycles_ilp": bad_cycles_ilp,
 
         "lp_cost": lp_cost,
         "bad_cycles_lp": bad_cycles_lp,
@@ -542,13 +542,13 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
         "min_num_bad_triangles_new": min_num_bad_triangles_new,
         "max_num_bad_triangles_new": max_num_bad_triangles_new,
 
-        # "ilp_cost_new_no4": ilp_cost_new_no4,
-        # "ilp_cluster_count_new_no4": ilp_cluster_count_new_no4,
-        # "bad_cycles_ilp_new_no4": bad_cycles_ilp_new_no4,
+        "ilp_cost_new_no4": ilp_cost_new_no4,
+        "ilp_cluster_count_new_no4": ilp_cluster_count_new_no4,
+        "bad_cycles_ilp_new_no4": bad_cycles_ilp_new_no4,
 
-        # "ilp_cost_new_with4": ilp_cost_new_with4,
-        # "ilp_cluster_count_new_with4": ilp_cluster_count_new_with4,
-        # "bad_cycles_ilp_new_with4": bad_cycles_ilp_new_with4,
+        "ilp_cost_new_with4": ilp_cost_new_with4,
+        "ilp_cluster_count_new_with4": ilp_cluster_count_new_with4,
+        "bad_cycles_ilp_new_with4": bad_cycles_ilp_new_with4,
 
         "lp_cost_new_no4": lp_cost_new_no4,
         "bad_cycles_lp_new_no4": bad_cycles_lp_new_no4,
@@ -558,7 +558,7 @@ def run_full_experiment(S, p_delete, seed, pivot_seeds):
 
         # "violated_cycles_ilp_new": violated_cycles_ilp_new,
         "violated_cycles_lp_new": violated_cycles_lp_new,
-        # "same_clustering_4_cycle": same_clustering_4_cycle,
+        "same_clustering_4_cycle": same_clustering_4_cycle,
 
         "primal_cost_new": primal_cost_new,
         "dual_cost_new": dual_cost_new,
@@ -599,9 +599,9 @@ def build_saveable_results(graph_params, experiment_data):
                 "max_edge_disjoint_count": experiment_data["max_num_bad_triangles"]
             },
 
-            # "ilp": {
-            #     "cost": experiment_data["ilp_cost"]
-            # },
+            "ilp": {
+                "cost": experiment_data["ilp_cost"]
+            },
 
             "lp_relaxation": {
                 "cost": experiment_data["lp_cost"]
@@ -627,16 +627,16 @@ def build_saveable_results(graph_params, experiment_data):
                 "max_edge_disjoint_count": experiment_data["max_num_bad_triangles_new"]
             },
 
-            # "ilp": {
-            #     "without_4_cycles": {
-            #         "cost": experiment_data["ilp_cost_new_no4"]
-            #     },
-            #     "with_4_cycles": {
-            #         "cost": experiment_data["ilp_cost_new_with4"],
-            #         "bad_4_cycles_count": len(experiment_data["bad_cycles_ilp_new_with4"])
-            #     },
-            #     "same_clustering_4_cycle": experiment_data["same_clustering_4_cycle"]
-            # },
+            "ilp": {
+                "without_4_cycles": {
+                    "cost": experiment_data["ilp_cost_new_no4"]
+                },
+                "with_4_cycles": {
+                    "cost": experiment_data["ilp_cost_new_with4"],
+                    "bad_4_cycles_count": len(experiment_data["bad_cycles_ilp_new_with4"])
+                },
+                "same_clustering_4_cycle": experiment_data["same_clustering_4_cycle"]
+            },
 
             "lp_relaxation": {
                 "without_4_cycles": {
@@ -653,69 +653,69 @@ def build_saveable_results(graph_params, experiment_data):
             }
         },
 
-        # "approximations": {
-        #     "complete_graph": {
-        #         "best_pivot_approximation": safe_ratio(
-        #             experiment_data["pivot_results"]["best_cost"],
-        #             experiment_data["ilp_cost"]
-        #         ),
-        #         "average_pivot_approximation": safe_ratio(
-        #             experiment_data["pivot_results"]["average_cost"],
-        #             experiment_data["ilp_cost"]
-        #         ),
-        #         "lp_relaxation_ratio": safe_ratio(
-        #             experiment_data["lp_cost"],
-        #             experiment_data["ilp_cost"]
-        #         ),
-        #         "bad_triangle_primal_ratio": safe_ratio(
-        #             experiment_data["primal_cost"],
-        #             experiment_data["ilp_cost"]
-        #         ),
-        #         "bad_triangle_dual_ratio": safe_ratio(
-        #             experiment_data["dual_cost"],
-        #             experiment_data["ilp_cost"]
-        #         ),
-        #         "min_disjoint_bad_triangle_ratio": safe_ratio(
-        #             experiment_data["min_num_bad_triangles"],
-        #             experiment_data["ilp_cost"]
-        #         ),
-        #         "max_disjoint_bad_triangle_ratio": safe_ratio(
-        #             experiment_data["max_num_bad_triangles"],
-        #             experiment_data["ilp_cost"]
-        #         )
-        #     },
+        "approximations": {
+            "complete_graph": {
+                "best_pivot_approximation": safe_ratio(
+                    experiment_data["pivot_results"]["best_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "average_pivot_approximation": safe_ratio(
+                    experiment_data["pivot_results"]["average_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "lp_relaxation_ratio": safe_ratio(
+                    experiment_data["lp_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "bad_triangle_primal_ratio": safe_ratio(
+                    experiment_data["primal_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "bad_triangle_dual_ratio": safe_ratio(
+                    experiment_data["dual_cost"],
+                    experiment_data["ilp_cost"]
+                ),
+                "min_disjoint_bad_triangle_ratio": safe_ratio(
+                    experiment_data["min_num_bad_triangles"],
+                    experiment_data["ilp_cost"]
+                ),
+                "max_disjoint_bad_triangle_ratio": safe_ratio(
+                    experiment_data["max_num_bad_triangles"],
+                    experiment_data["ilp_cost"]
+                )
+            },
 
-        #     "edge_deleted_graph": {
-        #         "best_pivot_approximation_with_4_cycles": safe_ratio(
-        #             experiment_data["pivot_results_new"]["best_cost"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         ),
-        #         "average_pivot_approximation_with_4_cycles": safe_ratio(
-        #             experiment_data["pivot_results_new"]["average_cost"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         ),
-        #         "lp_relaxation_ratio_with_4_cycles": safe_ratio(
-        #             experiment_data["lp_cost_new_with4"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         ),
-        #         "bad_triangle_primal_ratio": safe_ratio(
-        #             experiment_data["primal_cost_new"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         ),
-        #         "bad_triangle_dual_ratio": safe_ratio(
-        #             experiment_data["dual_cost_new"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         ),
-        #         "min_disjoint_bad_triangle_ratio": safe_ratio(
-        #             experiment_data["min_num_bad_triangles_new"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         ),
-        #         "max_disjoint_bad_triangle_ratio": safe_ratio(
-        #             experiment_data["max_num_bad_triangles_new"],
-        #             experiment_data["ilp_cost_new_with4"]
-        #         )
-        #     }
-        # },
+            "edge_deleted_graph": {
+                "best_pivot_approximation_with_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["best_cost"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "average_pivot_approximation_with_4_cycles": safe_ratio(
+                    experiment_data["pivot_results_new"]["average_cost"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "lp_relaxation_ratio_with_4_cycles": safe_ratio(
+                    experiment_data["lp_cost_new_with4"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "bad_triangle_primal_ratio": safe_ratio(
+                    experiment_data["primal_cost_new"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "bad_triangle_dual_ratio": safe_ratio(
+                    experiment_data["dual_cost_new"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "min_disjoint_bad_triangle_ratio": safe_ratio(
+                    experiment_data["min_num_bad_triangles_new"],
+                    experiment_data["ilp_cost_new_with4"]
+                ),
+                "max_disjoint_bad_triangle_ratio": safe_ratio(
+                    experiment_data["max_num_bad_triangles_new"],
+                    experiment_data["ilp_cost_new_with4"]
+                )
+            }
+        },
 
         "runtime_seconds": experiment_data["total_runtime"]
     }
@@ -765,7 +765,7 @@ def print_standard_results(graph_type, graph_params, experiment_data):
     print("Maximum amount of disjoint bad triangles:", experiment_data["max_num_bad_triangles"])
 
     print_subsection("ILP")
-    # print("ILP optimal cost:", experiment_data["ilp_cost"])
+    print("ILP optimal cost:", experiment_data["ilp_cost"])
 
     print_subsection("LP relaxation")
     print("LP relaxation cost:", experiment_data["lp_cost"])
@@ -786,18 +786,18 @@ def print_standard_results(graph_type, graph_params, experiment_data):
     print("Minimum amount of disjoint bad triangles:", experiment_data["min_num_bad_triangles_new"])
     print("Maximum amount of disjoint bad triangles:", experiment_data["max_num_bad_triangles_new"])
 
-    # print_subsection("ILP")
-    # print("ILP cost without 4-cycles:", experiment_data["ilp_cost_new_no4"])
-    # print("ILP cost with 4-cycles:", experiment_data["ilp_cost_new_with4"])
-    # print("Bad 4-cycles detected ILP:", len(experiment_data["bad_cycles_ilp_new_with4"]))
-    # print(
-    #     "With and without 4-cycle same clusters:",
-    #     experiment_data["same_clustering_4_cycle"]
-    # )
+    print_subsection("ILP")
+    print("ILP cost without 4-cycles:", experiment_data["ilp_cost_new_no4"])
+    print("ILP cost with 4-cycles:", experiment_data["ilp_cost_new_with4"])
+    print("Bad 4-cycles detected ILP:", len(experiment_data["bad_cycles_ilp_new_with4"]))
+    print(
+        "With and without 4-cycle same clusters:",
+        experiment_data["same_clustering_4_cycle"]
+    )
 
     print_subsection("LP relaxation")
     print("LP relaxation cost without 4-cycles:", experiment_data["lp_cost_new_no4"])
-    print("LP relaxation cost with 4-cycles:", experiment_data["lp_cost_new_with4"])
+    # print("LP relaxation cost with 4-cycles:", experiment_data["lp_cost_new_with4"])
 
     print_subsection("Bad-triangle LP bounds")
     print("LP-primal optimal cost:", experiment_data["primal_cost_new"])
@@ -806,64 +806,64 @@ def print_standard_results(graph_type, graph_params, experiment_data):
     print_section("Approximations")
 
     print_subsection("Complete graph")
-    # print_ratio(
-    #     "Best Pivot approximation",
-    #     safe_ratio(experiment_data["pivot_results"]["best_cost"], experiment_data["ilp_cost"])
-    # )
-    # print_ratio(
-    #     "Average Pivot approximation",
-    #     safe_ratio(experiment_data["pivot_results"]["average_cost"], experiment_data["ilp_cost"])
-    # )
-    # print_ratio(
-    #     "LP relaxation ratio",
-    #     safe_ratio(experiment_data["lp_cost"], experiment_data["ilp_cost"])
-    # )
-    # print_ratio(
-    #     "Bad-triangle primal ratio",
-    #     safe_ratio(experiment_data["primal_cost"], experiment_data["ilp_cost"])
-    # )
-    # print_ratio(
-    #     "Bad-triangle dual ratio",
-    #     safe_ratio(experiment_data["dual_cost"], experiment_data["ilp_cost"])
-    # )
-    # print_ratio(
-    #     "Min disjoint bad triangle ratio",
-    #     safe_ratio(experiment_data["min_num_bad_triangles"], experiment_data["ilp_cost"])
-    # )
-    # print_ratio(
-    #     "Max disjoint bad triangle ratio",
-    #     safe_ratio(experiment_data["max_num_bad_triangles"], experiment_data["ilp_cost"])
-    # )
+    print_ratio(
+        "Best Pivot approximation",
+        safe_ratio(experiment_data["pivot_results"]["best_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Average Pivot approximation",
+        safe_ratio(experiment_data["pivot_results"]["average_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "LP relaxation ratio",
+        safe_ratio(experiment_data["lp_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Bad-triangle primal ratio",
+        safe_ratio(experiment_data["primal_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Bad-triangle dual ratio",
+        safe_ratio(experiment_data["dual_cost"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Min disjoint bad triangle ratio",
+        safe_ratio(experiment_data["min_num_bad_triangles"], experiment_data["ilp_cost"])
+    )
+    print_ratio(
+        "Max disjoint bad triangle ratio",
+        safe_ratio(experiment_data["max_num_bad_triangles"], experiment_data["ilp_cost"])
+    )
 
-    # print_subsection("Edge-deleted graph")
-    # print_ratio(
-    #     "Best Pivot approximation with 4-cycles",
-    #     safe_ratio(experiment_data["pivot_results_new"]["best_cost"], experiment_data["ilp_cost_new_with4"])
-    # )
-    # print_ratio(
-    #     "Average Pivot approximation with 4-cycles",
-    #     safe_ratio(experiment_data["pivot_results_new"]["average_cost"], experiment_data["ilp_cost_new_with4"])
-    # )
-    # print_ratio(
-    #     "LP relaxation ratio with 4-cycles",
-    #     safe_ratio(experiment_data["lp_cost_new_with4"], experiment_data["ilp_cost_new_with4"])
-    # )
-    # print_ratio(
-    #     "Bad-triangle primal ratio",
-    #     safe_ratio(experiment_data["primal_cost_new"], experiment_data["ilp_cost_new_with4"])
-    # )
-    # print_ratio(
-    #     "Bad-triangle dual ratio",
-    #     safe_ratio(experiment_data["dual_cost_new"], experiment_data["ilp_cost_new_with4"])
-    # )
-    # print_ratio(
-    #     "Min disjoint bad triangle ratio",
-    #     safe_ratio(experiment_data["min_num_bad_triangles_new"], experiment_data["ilp_cost_new_with4"])
-    # )
-    # print_ratio(
-    #     "Max disjoint bad triangle ratio",
-    #     safe_ratio(experiment_data["max_num_bad_triangles_new"], experiment_data["ilp_cost_new_with4"])
-    # )
+    print_subsection("Edge-deleted graph")
+    print_ratio(
+        "Best Pivot approximation with 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["best_cost"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Average Pivot approximation with 4-cycles",
+        safe_ratio(experiment_data["pivot_results_new"]["average_cost"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "LP relaxation ratio with 4-cycles",
+        safe_ratio(experiment_data["lp_cost_new_with4"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Bad-triangle primal ratio",
+        safe_ratio(experiment_data["primal_cost_new"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Bad-triangle dual ratio",
+        safe_ratio(experiment_data["dual_cost_new"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Min disjoint bad triangle ratio",
+        safe_ratio(experiment_data["min_num_bad_triangles_new"], experiment_data["ilp_cost_new_with4"])
+    )
+    print_ratio(
+        "Max disjoint bad triangle ratio",
+        safe_ratio(experiment_data["max_num_bad_triangles_new"], experiment_data["ilp_cost_new_with4"])
+    )
 
     print_section("Runtime")
     print("Total runtime:", round(experiment_data["total_runtime"], 2), "seconds")

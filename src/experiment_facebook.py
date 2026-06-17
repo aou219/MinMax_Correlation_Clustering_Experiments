@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # Full Facebook ego-network experiments
     # ============================================================
 
-    ego_ids = ["414", "686", "348", "0"]
+    ego_ids = ["348", "0"]
 
     p_delete = 0.15
     seed = 1
