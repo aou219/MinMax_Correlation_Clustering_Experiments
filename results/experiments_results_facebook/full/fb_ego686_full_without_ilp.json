@@ -1,0 +1,96 @@
+{
+    "shared_graph_params": {
+        "graph_type": "facebook_full_ego",
+        "pivot_seeds": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+        ],
+        "sample_type": "full_ego_network",
+        "ego_id": "686",
+        "negative_edges": 12709,
+        "positive_edges": 1656,
+        "p_delete": 0.15,
+        "num_nodes": 170,
+        "num_circles": 14,
+        "num_facebook_edges": 1656,
+        "circle_sizes": [
+            101,
+            84,
+            72,
+            49,
+            37,
+            31,
+            27,
+            21,
+            17,
+            14,
+            13,
+            10,
+            5,
+            4
+        ],
+        "signing_rule": {
+            "existing_facebook_friendship": "+1",
+            "missing_friendship_inside_full_ego_network": "-1",
+            "deleted_edge": "0"
+        }
+    },
+    "experiments": [
+        {
+            "graph_params": {
+                "seed": 1
+            },
+            "complete_graph": {
+                "pivot": {
+                    "best_cost": 1487,
+                    "average_cost": 1617.6
+                },
+                "bad_triangles": {
+                    "total_count": 28716,
+                    "min_edge_disjoint_count": 741,
+                    "max_edge_disjoint_count": 799
+                },
+                "lp_relaxation": {
+                    "cost": 826.5
+                },
+                "bad_triangle_lp_bounds": {
+                    "primal_cost": 826.5,
+                    "dual_cost": 826.5000000000001
+                }
+            },
+            "edge_deleted_graph": {
+                "num_edges_deleted": 2190,
+                "pivot": {
+                    "best_cost": 1267,
+                    "average_cost": 1390.3
+                },
+                "bad_triangles": {
+                    "total_count": 17975,
+                    "min_edge_disjoint_count": 627,
+                    "max_edge_disjoint_count": 686
+                },
+                "lp_relaxation": {
+                    "without_4_cycles": {
+                        "cost": 711.0
+                    },
+                    "with_4_cycles": {
+                        "cost": 711.0
+                    }
+                },
+                "bad_triangle_lp_bounds": {
+                    "primal_cost": 711.0,
+                    "dual_cost": 711.0000000000005
+                }
+            },
+            "runtime_seconds": 470.58933210372925
+        }
+    ]
+}
