@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # Parameters for random signed graphs
     # ============================================================
 
-    n = 30
+    n = 20
 
     p_delete_values = [0.05, 0.25, 0.40]
     p_positive_values = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     draw_graph = False
 
     # ============================================================
-    # Run experiments
+    # Run experiments    
     # ============================================================
 
     for p_delete in p_delete_values:
