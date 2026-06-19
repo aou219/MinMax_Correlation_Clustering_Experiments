@@ -1,0 +1,29 @@
+category,pattern,evidence,strength,use_in_thesis
+4-cycle constraints,Bad 4-cycle constraints can change the optimal clustering even when the cost stays the same.,Clustering changed in 2666/12097 known runs = 22.039%; same-cost different-clustering cases: 1776,medium,yes
+4-cycle constraints,Bad 4-cycle constraints rarely change the ILP objective cost.,Cost changed in 974/12097 runs = 8.052%,strong,yes
+bad triangles,"In clique graphs, bad triangles are strongly related to ILP cost.",Correlation bad triangles vs ILP: 0.936,strong,yes
+bad triangles,"In facebook graphs, bad triangles are strongly related to ILP cost.",Correlation bad triangles vs ILP: 1.000,strong,yes
+bad triangles,"In random graphs, bad triangles are strongly related to ILP cost.",Correlation bad triangles vs ILP: 0.948,strong,yes
+random p+,"As p+ increases, edge deletion reduces the ILP cost less.",Correlation p+ vs cost reduction: -0.996,strong,yes
+random p+,Edge deletion has the strongest cost-reduction effect when p+ is low.,Highest reduction at p+=0.2: 78.617%; weakest at p+=0.8: 8.284%,strong,yes
+bad triangles,"In clique graphs, edge deletion removes many bad triangles.",Average removed fraction: 46.536%,strong,likely
+bad triangles,"In clique graphs, edge-disjoint bad triangles track ILP cost.",Correlation max disjoint bad triangles vs ILP: 0.995,strong,likely
+bad triangles,"In facebook graphs, edge deletion removes many bad triangles.",Average removed fraction: 44.655%,strong,likely
+bad triangles,"In facebook graphs, edge-disjoint bad triangles track ILP cost.",Correlation max disjoint bad triangles vs ILP: 1.000,strong,likely
+bad triangles,"In random graphs, edge deletion removes many bad triangles.",Average removed fraction: 61.782%,strong,likely
+bad triangles,"In random graphs, edge-disjoint bad triangles track ILP cost.",Correlation max disjoint bad triangles vs ILP: 0.978,strong,likely
+clique size,Larger clique sizes are related to more bad 4-cycles after edge deletion.,Correlation largest clique size vs bad 4-cycles: 0.795,strong,likely
+complete vs new,"In clique graphs, Pivot usually becomes worse relative to ILP after edge deletion.",Average Pivot/ILP change new - complete: 0.413,strong,likely
+complete vs new,"In clique graphs, edge deletion lowers the ILP objective cost.",Average cost reduction: 22.846%,medium,likely
+complete vs new,"In facebook graphs, Pivot usually becomes worse relative to ILP after edge deletion.",Average Pivot/ILP change new - complete: 0.172,medium,likely
+complete vs new,"In facebook graphs, edge deletion lowers the ILP objective cost.",Average cost reduction: 21.946%,medium,likely
+complete vs new,"In random graphs, edge deletion lowers the ILP objective cost.",Average cost reduction: 45.052%,strong,likely
+random n,"For random graphs, LP/ILP complete becomes looser as n grows.",Correlation n vs LP/ILP complete: -0.990,strong,likely
+random n,"For random graphs, the percentage cost reduction from edge deletion decreases as n grows.",Correlation n vs cost reduction: -0.907,strong,likely
+clique size,Larger clique sizes are related to worse Pivot performance on the new graph.,Correlation largest clique size vs Pivot/ILP new: 0.421,medium,maybe
+clique size,More imbalanced clique/community structures are related to worse Pivot performance.,Correlation imbalance vs Pivot/ILP complete: 0.318; imbalance vs Pivot/ILP new: 0.235,weak,maybe
+complete vs new,"In clique graphs, LP tightness changes only slightly after edge deletion.",Average LP/ILP change new - complete: -0.001,weak,maybe
+complete vs new,"In facebook graphs, LP tightness changes only slightly after edge deletion.",Average LP/ILP change new - complete: 0.009,weak,maybe
+complete vs new,"In random graphs, LP tightness changes only slightly after edge deletion.",Average LP/ILP change new - complete: 0.023,weak,maybe
+complete vs new,"In random graphs, Pivot usually becomes worse relative to ILP after edge deletion.",Average Pivot/ILP change new - complete: 0.042,weak,maybe
+random n,"For random graphs, Pivot/new tends to become worse as n grows.",Correlation n vs Pivot/ILP new: 0.976,strong,maybe
