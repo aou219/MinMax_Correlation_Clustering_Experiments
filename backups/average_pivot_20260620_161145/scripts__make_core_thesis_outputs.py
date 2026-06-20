@@ -182,8 +182,8 @@ def add_derived_columns(df):
     df["complete_lp_gap"] = 1 - df["complete_lp_ratio"]
     df["edge_lp_gap"] = 1 - df["edge_lp_ratio_with4"]
 
-    df["complete_pivot_excess"] = df["complete_average_pivot_approx"] - 1
-    df["edge_pivot_excess"] = df["edge_average_pivot_approx_with4"] - 1
+    df["complete_pivot_excess"] = df["complete_best_pivot_approx"] - 1
+    df["edge_pivot_excess"] = df["edge_best_pivot_approx_with4"] - 1
 
     df["fourcycle_cost_gap"] = df["edge_ilp_with4_cost"] - df["edge_ilp_without4_cost"]
     df["fourcycle_cost_gap_per_remaining_edge"] = df["fourcycle_cost_gap"] / df["remaining_edges"]
@@ -228,7 +228,7 @@ def load_data():
         "edge_ilp_with4_cost", "edge_ilp_without4_cost",
         "edge_lp_with4_cost",
         "complete_lp_ratio", "edge_lp_ratio_with4",
-        "complete_average_pivot_approx", "edge_average_pivot_approx_with4",
+        "complete_best_pivot_approx", "edge_best_pivot_approx_with4",
         "complete_bad_triangles_total", "edge_bad_triangles_total",
         "edge_bad_4_cycles_count", "edge_num_edges_deleted",
         "runtime_seconds",
@@ -297,8 +297,8 @@ def aggregate(df, keys):
         fourcycle_cost_changed=("fourcycle_cost_changed", "mean"),
         same_cost_different_clustering=("same_cost_different_clustering", "mean"),
 
-        pivot_complete=("complete_average_pivot_approx", "mean"),
-        pivot_new=("edge_average_pivot_approx_with4", "mean"),
+        pivot_complete=("complete_best_pivot_approx", "mean"),
+        pivot_new=("edge_best_pivot_approx_with4", "mean"),
         pivot_excess_new=("edge_pivot_excess", "mean"),
 
         lp_complete_cost=("complete_lp_cost", "mean"),
@@ -667,9 +667,9 @@ def make_plots(df):
         fam,
         "pivot_complete",
         "pivot_new",
-        "RQ2: Average Pivot approximation, complete vs new",
-        "Average Pivot/ILP",
-        "04_rq2_average_pivot_complete_vs_new.png",
+        "RQ2: Pivot approximation, complete vs new",
+        "Pivot/ILP",
+        "04_rq2_pivot_complete_vs_new.png",
         y_ref=1,
     )
 
@@ -703,7 +703,7 @@ def write_report(tables):
     lines.append("1. `01_rq1_normalized_cost_ratio.png`")
     lines.append("2. `02_rq1_bad4_density.png`")
     lines.append("3. `03_bad_triangle_density_complete_vs_new.png`")
-    lines.append("4. `04_rq2_average_pivot_complete_vs_new.png`")
+    lines.append("4. `04_rq2_pivot_complete_vs_new.png`")
     lines.append("5. `05_rq2_runtime_by_size.png`")
     lines.append("6. `06_rq3_lp_gap_complete_vs_new.png`")
     lines.append("")

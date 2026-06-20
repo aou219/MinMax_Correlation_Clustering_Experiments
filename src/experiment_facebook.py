@@ -1,18 +1,17 @@
-import os
+from pathlib import Path
 
 from facebook_sampling import (
-    load_facebook_ego_edges,
-    load_facebook_circles,
-    build_complete_signed_matrix_from_facebook_sample,
+load_facebook_ego_edges,
+load_facebook_circles,
+build_complete_signed_matrix_from_facebook_sample,
 )
 
 from experiment_helpers import (
-    save_results_append,
-    run_full_experiment,
-    print_standard_results,
-    build_saveable_results
+save_results_append,
+run_full_experiment,
+print_standard_results,
+build_saveable_results,
 )
-
 
 def get_all_nodes_from_edges_and_circles(edge_nodes, circles):
     """
@@ -21,7 +20,6 @@ def get_all_nodes_from_edges_and_circles(edge_nodes, circles):
     - plus all nodes that appear in the .circles file
     """
     circle_nodes = set()
-
     for circle in circles:
         circle_nodes.update(circle["nodes"])
 
@@ -32,112 +30,124 @@ def get_all_nodes_from_edges_and_circles(edge_nodes, circles):
 
 if __name__ == "__main__":
 
+
     # ============================================================
-    # Full Facebook ego-network experiments
+    # Parameters for one Facebook ego-network experiment
     # ============================================================
 
-    ego_ids = ["348", "0"]
+    ego_id = "348"
 
     p_delete = 0.15
     seed = 1
-    pivot_seeds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    pivot_seeds = list(range(1, 11))
 
-    for ego_id in ego_ids:
+    edges_file = Path(f"data/facebook/{ego_id}.edges")
+    circles_file = Path(f"data/facebook/{ego_id}.circles")
 
-        edges_file = f"data/facebook/{ego_id}.edges"
-        circles_file = f"data/facebook/{ego_id}.circles"
+    # results_dir = Path("results/experiments_results_facebook/full")
+    # results_dir.mkdir(parents=True, exist_ok=True)
 
-        results_file = f"results/experiments_results_facebook/full/fb_ego{ego_id}_full_without_ilp.json"
-        os.makedirs(os.path.dirname(results_file), exist_ok=True)
+    # results_file = results_dir / f"fb_ego{ego_id}_full_without_ilp.json"
 
-        # Remove old result file for this ego, so rerunning does not append duplicates.
-        if os.path.exists(results_file):
-            os.remove(results_file)
+    # # Remove old result file, so rerunning does not append duplicates.
+    # if results_file.exists():
+    #     results_file.unlink()
 
-        # ============================================================
-        # Load full ego-network
-        # ============================================================
+    print("\n" + "=" * 70, flush=True)
+    print("RUNNING ONE FACEBOOK EGO EXPERIMENT", flush=True)
+    print(f"ego_id = {ego_id}", flush=True)
+    print(f"p_delete = {p_delete}", flush=True)
+    print(f"seed = {seed}", flush=True)
+    print(f"edges_file = {edges_file}", flush=True)
+    print(f"circles_file = {circles_file}", flush=True)
+    # print(f"Saving to: {results_file}", flush=True)
+    print("=" * 70, flush=True)
 
-        edge_nodes, facebook_edges = load_facebook_ego_edges(edges_file)
-        circles = load_facebook_circles(circles_file)
+    # ============================================================
+    # Load full ego-network
+    # ============================================================
 
-        all_nodes = get_all_nodes_from_edges_and_circles(
-            edge_nodes=edge_nodes,
-            circles=circles
-        )
+    edge_nodes, facebook_edges = load_facebook_ego_edges(str(edges_file))
+    circles = load_facebook_circles(str(circles_file))
 
-        n = len(all_nodes)
+    all_nodes = get_all_nodes_from_edges_and_circles(
+        edge_nodes=edge_nodes,
+        circles=circles,
+    )
 
-        circle_sizes = sorted(
-            [len(circle["nodes"]) for circle in circles],
-            reverse=True
-        )
+    n = len(all_nodes)
 
-        # ============================================================
-        # Build complete signed graph
-        # ============================================================
+    circle_sizes = sorted(
+        [len(circle["nodes"]) for circle in circles],
+        reverse=True,
+    )
 
-        S, node_to_index, positive_count, negative_count = build_complete_signed_matrix_from_facebook_sample(
+    # ============================================================
+    # Build complete signed graph
+    # ============================================================
+
+    S, node_to_index, positive_count, negative_count = (
+        build_complete_signed_matrix_from_facebook_sample(
             all_nodes,
-            facebook_edges
+            facebook_edges,
         )
+    )
 
-        # ============================================================
-        # Run full experiment
-        # ============================================================
+    # ============================================================
+    # Run full experiment
+    # ============================================================
 
-        experiment_data = run_full_experiment(
-            S=S,
-            p_delete=p_delete,
-            seed=seed,
-            pivot_seeds=pivot_seeds
-        )
+    experiment_data = run_full_experiment(
+        S=S,
+        p_delete=p_delete,
+        seed=seed,
+        pivot_seeds=pivot_seeds,
+    )
 
-        # ============================================================
-        # Graph-specific parameters
-        # ============================================================
+    # ============================================================
+    # Graph-specific parameters
+    # ============================================================
 
-        graph_params = {
-            "graph_type": "facebook_full_ego",
-            "ego_id": ego_id,
-            "num_nodes": n,
-            "num_facebook_edges": len(facebook_edges),
-            "num_circles": len(circles),
-            "circle_sizes": circle_sizes,
-            "seed": seed,
-            "pivot_seeds": pivot_seeds,
-            "p_delete": p_delete,
-            "num_edges_deleted": experiment_data["num_edges_deleted"],
-            "positive_edges": positive_count,
-            "negative_edges": negative_count,
-            "sample_type": "full_ego_network",
-            "signing_rule": {
-                "existing_facebook_friendship": "+1",
-                "missing_friendship_inside_full_ego_network": "-1",
-                "deleted_edge": "0"
-            }
-        }
+    graph_params = {
+        "graph_type": "facebook_full_ego",
+        "ego_id": ego_id,
+        "num_nodes": n,
+        "num_facebook_edges": len(facebook_edges),
+        "num_circles": len(circles),
+        "circle_sizes": circle_sizes,
+        "seed": seed,
+        "pivot_seeds": pivot_seeds,
+        "p_delete": p_delete,
+        "num_edges_deleted": experiment_data["num_edges_deleted"],
+        "positive_edges": positive_count,
+        "negative_edges": negative_count,
+        "sample_type": "full_ego_network",
+        "signing_rule": {
+            "existing_facebook_friendship": "+1",
+            "missing_friendship_inside_full_ego_network": "-1",
+            "deleted_edge": "0",
+        },
+    }
 
-        # ============================================================
-        # Print results
-        # ============================================================
+    # ============================================================
+    # Print results
+    # ============================================================
 
-        print_standard_results(
-            graph_type="facebook_full_ego",
-            graph_params=graph_params,
-            experiment_data=experiment_data
-        )
+    print_standard_results(
+        graph_type="facebook_full_ego",
+        graph_params=graph_params,
+        experiment_data=experiment_data,
+    )
 
-        # ============================================================
-        # Save results
-        # ============================================================
+    # ============================================================
+    # Save results
+    # ============================================================
 
-        results = build_saveable_results(
-            graph_params=graph_params,
-            experiment_data=experiment_data
-        )
+    results = build_saveable_results(
+        graph_params=graph_params,
+        experiment_data=experiment_data,
+    )
 
-        save_results_append(results_file, results)
+    # save_results_append(str(results_file), results)
 
-        print()
-        print("Saved:", results_file)
+    # print(f"Saved result to {results_file}", flush=True)

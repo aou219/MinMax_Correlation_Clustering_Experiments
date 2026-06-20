@@ -12,14 +12,14 @@ Only complete p_delete units used: **True**.
 1. `01_rq1_normalized_cost_ratio.png`
 2. `02_rq1_bad4_density.png`
 3. `03_bad_triangle_density_complete_vs_new.png`
-4. `04_rq2_average_pivot_complete_vs_new.png`
+4. `04_rq2_pivot_complete_vs_new.png`
 5. `06_rq3_lp_gap_complete_vs_new.png`
 
 ## Important interpretation notes
 
 These results should be interpreted as results for the tested formulation in this thesis. The edge-deleted ILP includes the constraints used in the experiments, including bad 4-cycle constraints, but it does not include all possible larger bad-cycle constraints. Therefore, a lower measured cost or normalized cost ratio should be read as a lower disagreement cost under this tested formulation, not as proof that the full sparse correlation clustering problem is always easier to solve.
 
-The Pivot values should also be interpreted carefully. In the tables, Pivot is reported through the average Pivot result used in the experiments. This gives a more representative view of the randomized Pivot algorithm than selecting only the best run. The Facebook results are useful as real-world examples, but they are based on a small number of ego-networks and some larger Facebook rows have missing ILP-based ratios. Finally, the analysis is cost-based: it compares cost values, ratios, structural patterns and runtime, but it does not evaluate recovery of planted clusters with measures such as ARI or NMI.
+The Pivot values should also be interpreted carefully. In the tables, Pivot is reported through the best Pivot result used in the experiments, so the Pivot ratios are optimistic compared with a single single random Pivot run. The Facebook results are useful as real-world examples, but they are based on a small number of ego-networks and some larger Facebook rows have missing ILP-based ratios. Finally, the analysis is cost-based: it compares cost values, ratios, structural patterns and runtime, but it does not evaluate recovery of planted clusters with measures such as ARI or NMI.
 
 ## RQ1 — Edge deletion
 
@@ -79,38 +79,38 @@ The dashed complete lines are horizontal because the complete graph does not cha
 
 | graph_family | pivot_complete_mean | lp_complete_mean | complete_bad_triangle_density_mean | pivot_new_p0.05 | pivot_new_p0.15 | pivot_new_p0.25 | pivot_new_p0.40 | lp_new_p0.05 | lp_new_p0.15 | lp_new_p0.25 | lp_new_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.15 | normalized_cost_ratio_p0.25 | normalized_cost_ratio_p0.40 | median_runtime_p0.05 | median_runtime_p0.15 | median_runtime_p0.25 | median_runtime_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| clique | 2.005 | 0.997 | 0.137 | 2.110 | 2.319 | 2.472 | 2.642 | 0.997 | 0.997 | 0.996 | 0.995 | 0.997 | 0.979 | 0.975 | 0.933 | 0.466 | 0.389 | 0.337 | 0.318 |
-| facebook | 1.560 | 0.937 | 0.027 | 1.542 | 1.661 | 1.718 | 1.772 | 0.930 | 0.935 | 0.945 | 0.973 | 1.019 | 1.006 | 0.999 | 0.902 | 214.915 | 262.969 | 149.832 | 126.051 |
-| random | 1.443 | 0.891 | 0.313 | 1.465 | 1.490 | 1.511 | 1.555 | 0.897 | 0.917 | 0.930 | 0.948 | 0.921 | 0.740 | 0.587 | 0.406 | 0.394 | 0.349 | 0.286 | 0.247 |
+| clique | 1.316 | 0.997 | 0.137 | 1.417 | 1.640 | 1.828 | 2.062 | 0.997 | 0.997 | 0.996 | 0.995 | 0.997 | 0.979 | 0.975 | 0.933 | 0.466 | 0.389 | 0.337 | 0.318 |
+| facebook | 1.258 | 0.937 | 0.027 | 1.233 | 1.439 | 1.479 | 1.567 | 0.930 | 0.935 | 0.945 | 0.973 | 1.019 | 1.006 | 0.999 | 0.902 | 214.915 | 262.969 | 149.832 | 126.051 |
+| random | 1.213 | 0.891 | 0.313 | 1.230 | 1.253 | 1.284 | 1.330 | 0.897 | 0.917 | 0.930 | 0.948 | 0.921 | 0.740 | 0.587 | 0.406 | 0.394 | 0.349 | 0.286 | 0.247 |
 
 
-**Analysis.** Table RQ2.1 shows that input graph family strongly affects method performance. Pivot performs worst on clique/community graphs after edge deletion: the Pivot/ILP ratio increases from 1.417 at `p_delete = 0.05` to 2.062 at `p_delete = 0.40`. Random graphs are more stable, with Pivot/ILP increasing only from 1.230 to 1.330. This suggests that Pivot is more sensitive to the loss of structured community information than to random edge deletion. These Pivot values are based on average Pivot over the experimental runs, so they give a more representative view of Pivot performance than selecting only the best run. LP behaves differently: it stays very close to ILP on clique/community graphs, with LP/ILP around 0.995–0.997, while it is less tight on random and Facebook graphs but improves as more edges are deleted.
+**Analysis.** Table RQ2.1 shows that input graph family strongly affects method performance. Pivot performs worst on clique/community graphs after edge deletion: the Pivot/ILP ratio increases from 1.417 at `p_delete = 0.05` to 2.062 at `p_delete = 0.40`. Random graphs are more stable, with Pivot/ILP increasing only from 1.230 to 1.330. This suggests that Pivot is more sensitive to the loss of structured community information than to random edge deletion. These Pivot values should be read as best-Pivot results from the experiments, so they are an positive view of Pivot performance. LP behaves differently: it stays very close to ILP on clique/community graphs, with LP/ILP around 0.995–0.997, while it is less tight on random and Facebook graphs but improves as more edges are deleted.
 
-![Figure 4: Average Pivot approximation, complete vs edge-deleted](../../../figures/thesis_plots/04_rq2_average_pivot_complete_vs_new.png)
+![Figure 4: Pivot approximation, complete vs edge-deleted](../../../figures/thesis_plots/04_rq2_pivot_complete_vs_new.png)
 
-**Figure 4. Average Pivot approximation on complete and edge-deleted graphs.**  
+**Figure 4. Pivot approximation on complete and edge-deleted graphs.**  
 The complete Pivot lines are almost flat because the complete graphs are the same for every `p_delete` value. The edge-deleted clique/community line goes up strongly and looks roughly like a straight increasing line. This means Pivot becomes worse when structured community graphs become sparse. A likely reason is that Pivot needs local edge information to choose clusters. When edges are deleted, the community signal is less complete. Random graphs stay much flatter, probably because they already have less clear community structure. Facebook is between random and clique/community, but this line is based on only a few ego-networks with ILP values, so it should not be interpreted too strongly.
 
 ### Table RQ2.2 — Graph size as input to method output
 
 | graph_family | n | runs | pivot_new_p0.05 | pivot_new_p0.40 | lp_new_p0.05 | lp_new_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.40 | median_runtime_p0.05 | median_runtime_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| clique | 10 | 600 | 1.785 | 2.337 | 0.998 | 0.992 | 0.997 | 0.813 | 0.042 | 0.027 |
-| clique | 15 | 600 | 1.977 | 2.545 | 0.998 | 0.996 | 1.000 | 0.910 | 0.149 | 0.094 |
-| clique | 20 | 600 | 2.078 | 2.530 | 1.000 | 0.996 | 0.997 | 0.939 | 0.413 | 0.254 |
-| clique | 25 | 800 | 2.201 | 2.663 | 1.000 | 0.999 | 0.996 | 0.974 | 0.947 | 0.573 |
-| clique | 30 | 800 | 2.361 | 3.019 | 1.000 | 1.000 | 0.996 | 0.980 | 1.750 | 1.071 |
-| clique | 100 | 180 | 2.217 | 2.483 | 0.955 | 0.955 | 1.003 | 0.999 | 116.372 | 82.301 |
-| facebook | 58 | 4 | 1.399 | 1.630 | 0.892 | 0.986 | 1.038 | 0.828 | 25.556 | 6.519 |
-| facebook | 64 | 4 | 1.682 | 1.923 | 0.968 | 0.991 | 1.019 | 0.913 | 61.229 | 15.915 |
-| facebook | 155 | 4 | 1.545 | 1.765 | 0.931 | 0.943 | 1.001 | 0.965 | 1644.134 | 514.034 |
+| clique | 10 | 600 | 1.117 | 1.545 | 0.998 | 0.992 | 0.997 | 0.813 | 0.042 | 0.027 |
+| clique | 15 | 600 | 1.267 | 1.851 | 0.998 | 0.996 | 1.000 | 0.910 | 0.149 | 0.094 |
+| clique | 20 | 600 | 1.353 | 1.974 | 1.000 | 0.996 | 0.997 | 0.939 | 0.413 | 0.254 |
+| clique | 25 | 800 | 1.505 | 2.165 | 1.000 | 0.999 | 0.996 | 0.974 | 0.947 | 0.573 |
+| clique | 30 | 800 | 1.606 | 2.474 | 1.000 | 1.000 | 0.996 | 0.980 | 1.750 | 1.071 |
+| clique | 100 | 180 | 1.912 | 2.293 | 0.955 | 0.955 | 1.003 | 0.999 | 116.372 | 82.301 |
+| facebook | 58 | 4 | 1.149 | 1.486 | 0.892 | 0.986 | 1.038 | 0.828 | 25.556 | 6.519 |
+| facebook | 64 | 4 | 1.138 | 1.547 | 0.968 | 0.991 | 1.019 | 0.913 | 61.229 | 15.915 |
+| facebook | 155 | 4 | 1.413 | 1.669 | 0.931 | 0.943 | 1.001 | 0.965 | 1644.134 | 514.034 |
 | facebook | 170 | 4 | - | - | - | - | - | - | 368.601 | 236.188 |
-| random | 5 | 1400 | 1.407 | 1.599 | 0.990 | 1.000 | 0.873 | 0.249 | 0.007 | 0.005 |
-| random | 10 | 1400 | 1.454 | 1.655 | 0.966 | 0.984 | 0.917 | 0.363 | 0.045 | 0.029 |
-| random | 15 | 1400 | 1.474 | 1.573 | 0.915 | 0.969 | 0.925 | 0.413 | 0.194 | 0.114 |
-| random | 20 | 1400 | 1.481 | 1.537 | 0.875 | 0.949 | 0.932 | 0.446 | 0.606 | 0.373 |
-| random | 25 | 1400 | 1.485 | 1.514 | 0.841 | 0.926 | 0.934 | 0.462 | 1.603 | 1.122 |
-| random | 30 | 1400 | 1.474 | 1.485 | 0.816 | 0.895 | 0.939 | 0.480 | 11.479 | 3.275 |
+| random | 5 | 1400 | 1.116 | 1.201 | 0.990 | 1.000 | 0.873 | 0.249 | 0.007 | 0.005 |
+| random | 10 | 1400 | 1.156 | 1.340 | 0.966 | 0.984 | 0.917 | 0.363 | 0.045 | 0.029 |
+| random | 15 | 1400 | 1.231 | 1.322 | 0.915 | 0.969 | 0.925 | 0.413 | 0.194 | 0.114 |
+| random | 20 | 1400 | 1.259 | 1.341 | 0.875 | 0.949 | 0.932 | 0.446 | 0.606 | 0.373 |
+| random | 25 | 1400 | 1.292 | 1.352 | 0.841 | 0.926 | 0.934 | 0.462 | 1.603 | 1.122 |
+| random | 30 | 1400 | 1.302 | 1.344 | 0.816 | 0.895 | 0.939 | 0.480 | 11.479 | 3.275 |
 
 Full table saved as `rq2_2_graph_size_effect_compact.csv`.
 
@@ -121,36 +121,36 @@ Full table saved as `rq2_2_graph_size_effect_compact.csv`.
 
 | input_type | input_setting | avg_n | p_delete | pivot_new | lp_new | normalized_cost_ratio | complete_bad_triangle_density | new_bad_triangle_density | median_runtime |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| clique | 3-2-5 | 10.000 | 0.400 | 2.261 | 0.996 | 0.801 | 0.117 | 0.025 | 0.026 |
-| clique | 3-3-4 | 10.000 | 0.400 | 1.929 | 0.992 | 0.739 | 0.114 | 0.026 | 0.027 |
-| clique | 5-5 | 10.000 | 0.400 | 2.802 | 0.988 | 0.898 | 0.152 | 0.034 | 0.030 |
-| clique | 5-5-3-2 | 15.000 | 0.400 | 2.153 | 0.989 | 0.860 | 0.098 | 0.022 | 0.093 |
-| clique | 5-5-5 | 15.000 | 0.400 | 2.303 | 0.999 | 0.911 | 0.116 | 0.027 | 0.093 |
-| clique | 8-7 | 15.000 | 0.400 | 3.177 | 1.000 | 0.959 | 0.171 | 0.038 | 0.096 |
-| clique | 10-10 | 20.000 | 0.400 | 3.197 | 1.000 | 0.995 | 0.169 | 0.036 | 0.258 |
-| clique | 5-5-5-5 | 20.000 | 0.400 | 1.989 | 0.990 | 0.892 | 0.098 | 0.020 | 0.253 |
-| clique | 7-7-6 | 20.000 | 0.400 | 2.402 | 0.998 | 0.929 | 0.123 | 0.025 | 0.254 |
-| clique | 10-10-5 | 25.000 | 0.400 | 2.503 | 0.998 | 0.969 | 0.137 | 0.029 | 0.572 |
-| clique | 12-7-6 | 25.000 | 0.400 | 2.585 | 1.000 | 0.965 | 0.138 | 0.030 | 0.573 |
-| clique | 13-12 | 25.000 | 0.400 | 3.199 | 1.000 | 0.988 | 0.175 | 0.038 | 0.568 |
-| clique | 9-8-8 | 25.000 | 0.400 | 2.366 | 1.000 | 0.974 | 0.128 | 0.028 | 0.573 |
-| clique | 10-10-10 | 30.000 | 0.400 | 2.552 | 1.000 | 0.971 | 0.133 | 0.028 | 1.097 |
-| clique | 15-10-5 | 30.000 | 0.400 | 2.805 | 1.000 | 0.983 | 0.145 | 0.031 | 1.080 |
-| clique | 15-15 | 30.000 | 0.400 | 3.325 | 1.000 | 0.995 | 0.176 | 0.038 | 1.056 |
-| clique | 20-5-5 | 30.000 | 0.400 | 3.394 | 0.999 | 0.969 | 0.168 | 0.036 | 1.053 |
-| clique | 10-10-10-10-10-10-10-10-10-10 | 100.000 | 0.400 | 1.634 | 0.866 | 0.997 | 0.063 | 0.014 | 126.204 |
-| clique | 25-25-25-25 | 100.000 | 0.400 | 2.436 | 1.000 | 1.002 | 0.115 | 0.025 | 78.522 |
-| clique | 60-25-10-5 | 100.000 | 0.400 | 3.380 | 1.000 | 0.998 | 0.158 | 0.034 | 82.248 |
-| facebook | ego=3980.0 | 58.000 | 0.400 | 1.630 | 0.986 | 0.828 | 0.020 | 0.004 | 6.519 |
-| facebook | ego=698.0 | 64.000 | 0.400 | 1.923 | 0.991 | 0.913 | 0.025 | 0.006 | 15.915 |
-| facebook | ego=414.0 | 155.000 | 0.400 | 1.765 | 0.943 | 0.965 | 0.029 | 0.006 | 514.034 |
+| clique | 3-2-5 | 10.000 | 0.400 | 1.427 | 0.996 | 0.801 | 0.117 | 0.025 | 0.026 |
+| clique | 3-3-4 | 10.000 | 0.400 | 1.372 | 0.992 | 0.739 | 0.114 | 0.026 | 0.027 |
+| clique | 5-5 | 10.000 | 0.400 | 1.830 | 0.988 | 0.898 | 0.152 | 0.034 | 0.030 |
+| clique | 5-5-3-2 | 15.000 | 0.400 | 1.549 | 0.989 | 0.860 | 0.098 | 0.022 | 0.093 |
+| clique | 5-5-5 | 15.000 | 0.400 | 1.642 | 0.999 | 0.911 | 0.116 | 0.027 | 0.093 |
+| clique | 8-7 | 15.000 | 0.400 | 2.361 | 1.000 | 0.959 | 0.171 | 0.038 | 0.096 |
+| clique | 10-10 | 20.000 | 0.400 | 2.474 | 1.000 | 0.995 | 0.169 | 0.036 | 0.258 |
+| clique | 5-5-5-5 | 20.000 | 0.400 | 1.534 | 0.990 | 0.892 | 0.098 | 0.020 | 0.253 |
+| clique | 7-7-6 | 20.000 | 0.400 | 1.913 | 0.998 | 0.929 | 0.123 | 0.025 | 0.254 |
+| clique | 10-10-5 | 25.000 | 0.400 | 2.029 | 0.998 | 0.969 | 0.137 | 0.029 | 0.572 |
+| clique | 12-7-6 | 25.000 | 0.400 | 2.121 | 1.000 | 0.965 | 0.138 | 0.030 | 0.573 |
+| clique | 13-12 | 25.000 | 0.400 | 2.596 | 1.000 | 0.988 | 0.175 | 0.038 | 0.568 |
+| clique | 9-8-8 | 25.000 | 0.400 | 1.913 | 1.000 | 0.974 | 0.128 | 0.028 | 0.573 |
+| clique | 10-10-10 | 30.000 | 0.400 | 2.146 | 1.000 | 0.971 | 0.133 | 0.028 | 1.097 |
+| clique | 15-10-5 | 30.000 | 0.400 | 2.293 | 1.000 | 0.983 | 0.145 | 0.031 | 1.080 |
+| clique | 15-15 | 30.000 | 0.400 | 2.704 | 1.000 | 0.995 | 0.176 | 0.038 | 1.056 |
+| clique | 20-5-5 | 30.000 | 0.400 | 2.752 | 0.999 | 0.969 | 0.168 | 0.036 | 1.053 |
+| clique | 10-10-10-10-10-10-10-10-10-10 | 100.000 | 0.400 | 1.547 | 0.866 | 0.997 | 0.063 | 0.014 | 126.204 |
+| clique | 25-25-25-25 | 100.000 | 0.400 | 2.269 | 1.000 | 1.002 | 0.115 | 0.025 | 78.522 |
+| clique | 60-25-10-5 | 100.000 | 0.400 | 3.063 | 1.000 | 0.998 | 0.158 | 0.034 | 82.248 |
+| facebook | ego=3980.0 | 58.000 | 0.400 | 1.486 | 0.986 | 0.828 | 0.020 | 0.004 | 6.519 |
+| facebook | ego=698.0 | 64.000 | 0.400 | 1.547 | 0.991 | 0.913 | 0.025 | 0.006 | 15.915 |
+| facebook | ego=414.0 | 155.000 | 0.400 | 1.669 | 0.943 | 0.965 | 0.029 | 0.006 | 514.034 |
 | facebook | ego=686.0 | 170.000 | 0.400 | - | - | - | 0.036 | 0.009 | 236.188 |
 | random | p+=0.200 | 17.500 | 0.400 | - | - | 0.000 | 0.094 | 0.000 | 0.179 |
 | random | p+=0.300 | 17.500 | 0.400 | - | - | 0.000 | 0.183 | 0.000 | 0.207 |
 | random | p+=0.400 | 17.500 | 0.400 | - | - | 0.000 | 0.277 | 0.000 | 0.252 |
-| random | p+=0.500 | 17.500 | 0.400 | 1.473 | 0.951 | 0.188 | 0.367 | 0.012 | 0.306 |
-| random | p+=0.600 | 17.500 | 0.400 | 1.484 | 0.915 | 0.459 | 0.433 | 0.045 | 0.278 |
-| random | p+=0.700 | 17.500 | 0.400 | 1.517 | 0.933 | 0.827 | 0.449 | 0.082 | 0.220 |
+| random | p+=0.500 | 17.500 | 0.400 | 1.238 | 0.951 | 0.188 | 0.367 | 0.012 | 0.306 |
+| random | p+=0.600 | 17.500 | 0.400 | 1.274 | 0.915 | 0.459 | 0.433 | 0.045 | 0.278 |
+| random | p+=0.700 | 17.500 | 0.400 | 1.313 | 0.933 | 0.827 | 0.449 | 0.082 | 0.220 |
 
 Full table saved as `rq2_3_input_structure_details_p040.csv`.
 
@@ -225,7 +225,7 @@ Full table saved as `rq3_2_lp_gap_by_size_compact.csv`.
 
 The results should be interpreted within the scope of the formulation tested in this thesis. The sparse experiments include bad 4-cycle constraints, but not all possible larger bad-cycle constraints. Therefore, a decrease in measured cost or normalized cost ratio means that the tested formulation gives a lower disagreement cost per remaining edge; it does not prove that the full sparse correlation clustering problem becomes easier.
 
-A second limitation is that Pivot is reported using the average Pivot result from the experimental runs. This gives a more representative view of the randomized Pivot algorithm than selecting only the best run. The Facebook results should also be interpreted carefully because only a small number of ego-networks is included and some larger Facebook instances have missing ILP-based ratios. Finally, this analysis is based on cost values, ratios, structural counts and runtime. It does not measure recovery of planted communities with extra clustering-quality scores such as ARI or NMI.
+A second limitation is that Pivot is reported using the best Pivot result from the experimental runs, so the Pivot ratios are optimistic compared with a single random Pivot execution. The Facebook results should also be interpreted carefully because only a small number of ego-networks is included and some larger Facebook instances have missing ILP-based ratios. Finally, this analysis is based on cost values, ratios, structural counts and runtime. It does not measure recovery of planted communities with extra clustering-quality scores such as ARI or NMI.
 
 ## Created CSV tables
 
