@@ -105,10 +105,22 @@
                             "with_4_cycles": {
                                 "cost": 60.5
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 60.5,
+                            "optimal": true,
+                            "runtime_seconds": 0.2390000820159912
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 67.0,
+                            "optimal": true,
+                            "runtime_seconds": 7.9700000286102295,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.9029850746268657
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.9029850746268657,
+                        "all_pairs_lp_to_ilp_ratio": 0.9029850746268657
                     },
                     "runtime_seconds": 25.49323272705078
                 },
@@ -142,10 +154,22 @@
                             "with_4_cycles": {
                                 "cost": 66.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 66.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.2239999771118164
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 74.0,
+                            "optimal": true,
+                            "runtime_seconds": 6.644000053405762,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.8918918918918919
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.8918918918918919,
+                        "all_pairs_lp_to_ilp_ratio": 0.8918918918918919
                     },
                     "runtime_seconds": 25.556480884552002
                 },
@@ -179,10 +203,22 @@
                             "with_4_cycles": {
                                 "cost": 54.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 54.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.23599982261657715
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 58.0,
+                            "optimal": true,
+                            "runtime_seconds": 8.793999910354614,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.9310344827586207
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.9310344827586207,
+                        "all_pairs_lp_to_ilp_ratio": 0.9310344827586207
                     },
                     "runtime_seconds": 13.382734060287476
                 },
@@ -216,10 +252,22 @@
                             "with_4_cycles": {
                                 "cost": 36.500000000000114
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 36.5,
+                            "optimal": true,
+                            "runtime_seconds": 0.29799985885620117
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 37.0,
+                            "optimal": true,
+                            "runtime_seconds": 7.993000030517578,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.9864864864864895
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 0.9864864864864895,
+                        "all_pairs_lp_to_ilp_ratio": 0.9864864864864865
                     },
                     "runtime_seconds": 6.51894998550415
                 }

@@ -83,10 +83,22 @@
                             "with_4_cycles": {
                                 "cost": 447.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 447.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9309999942779541
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 447.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.0269999504089355,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.4784369468689
                 },
@@ -120,10 +132,22 @@
                             "with_4_cycles": {
                                 "cost": 499.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 499.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9120001792907715
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 499.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9810001850128174,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 113.71386408805847
                 },
@@ -157,10 +181,22 @@
                             "with_4_cycles": {
                                 "cost": 400.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 400.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.874000072479248
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 400.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.878999948501587,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 93.54951691627502
                 },
@@ -194,10 +230,22 @@
                             "with_4_cycles": {
                                 "cost": 316.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 316.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.0230000019073486
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 316.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9860000610351562,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.91936111450195
                 }
@@ -259,10 +307,22 @@
                             "with_4_cycles": {
                                 "cost": 405.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 405.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8919999599456787
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 405.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9429998397827148,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.1907958984375
                 },
@@ -296,10 +356,22 @@
                             "with_4_cycles": {
                                 "cost": 464.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 464.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9509999752044678
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 464.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.062000036239624,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 113.77725291252136
                 },
@@ -333,10 +405,22 @@
                             "with_4_cycles": {
                                 "cost": 350.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 350.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9459998607635498
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 350.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9240000247955322,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 91.01322793960571
                 },
@@ -370,10 +454,22 @@
                             "with_4_cycles": {
                                 "cost": 289.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 289.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9570000171661377
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 289.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9649999141693115,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 81.5075011253357
                 }
@@ -435,10 +531,22 @@
                             "with_4_cycles": {
                                 "cost": 408.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9019999504089355
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.946000099182129,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.52528309822083
                 },
@@ -472,10 +580,22 @@
                             "with_4_cycles": {
                                 "cost": 465.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 465.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8940000534057617
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 465.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.946000099182129,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 112.24651288986206
                 },
@@ -509,10 +629,22 @@
                             "with_4_cycles": {
                                 "cost": 361.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 361.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8919999599456787
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 361.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.875,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 92.35602474212646
                 },
@@ -546,10 +678,22 @@
                             "with_4_cycles": {
                                 "cost": 290.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 290.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.0429999828338623
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 290.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.0149998664855957,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 81.95342898368835
                 }
@@ -611,10 +755,22 @@
                             "with_4_cycles": {
                                 "cost": 408.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8920001983642578
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9000000953674316,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.6249041557312
                 },
@@ -648,10 +804,22 @@
                             "with_4_cycles": {
                                 "cost": 466.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 466.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8619999885559082
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 466.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9570000171661377,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 113.35346293449402
                 },
@@ -685,10 +853,22 @@
                             "with_4_cycles": {
                                 "cost": 363.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 363.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9089999198913574
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 363.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9170000553131104,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 92.31956195831299
                 },
@@ -722,10 +902,22 @@
                             "with_4_cycles": {
                                 "cost": 291.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 291.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9259998798370361
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 291.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.994999885559082,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.12370181083679
                 }
@@ -787,10 +979,22 @@
                             "with_4_cycles": {
                                 "cost": 412.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 412.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9290001392364502
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 412.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9179999828338623,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.28889918327332
                 },
@@ -824,10 +1028,22 @@
                             "with_4_cycles": {
                                 "cost": 477.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 477.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8989999294281006
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 477.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9670000076293945,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 114.30068016052246
                 },
@@ -861,10 +1077,22 @@
                             "with_4_cycles": {
                                 "cost": 365.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 365.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9340000152587891
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 365.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9449999332427979,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 91.8071358203888
                 },
@@ -898,10 +1126,22 @@
                             "with_4_cycles": {
                                 "cost": 293.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 293.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.0169999599456787
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 293.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9900000095367432,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 81.95368528366089
                 }
@@ -963,10 +1203,22 @@
                             "with_4_cycles": {
                                 "cost": 417.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 417.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8880000114440918
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 417.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.941999912261963,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.63100910186768
                 }
@@ -1028,10 +1280,22 @@
                             "with_4_cycles": {
                                 "cost": 411.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 411.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8970000743865967
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 411.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9399998188018799,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.53539872169495
                 }
@@ -1093,10 +1357,22 @@
                             "with_4_cycles": {
                                 "cost": 415.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 415.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9600000381469727
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 415.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.934999942779541,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.48558688163757
                 }
@@ -1158,10 +1434,22 @@
                             "with_4_cycles": {
                                 "cost": 441.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 441.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9229998588562012
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 441.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.933000087738037,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.46536612510681
                 }
@@ -1223,10 +1511,22 @@
                             "with_4_cycles": {
                                 "cost": 404.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 404.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9170000553131104
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 404.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.994999885559082,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.2772810459137
                 }
@@ -1288,10 +1588,22 @@
                             "with_4_cycles": {
                                 "cost": 447.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 447.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9039998054504395
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 447.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9399998188018799,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.86390399932861
                 }
@@ -1353,10 +1665,22 @@
                             "with_4_cycles": {
                                 "cost": 415.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 415.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9090001583099365
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 415.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.003000020980835,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 173.82701587677002
                 }
@@ -1418,10 +1742,22 @@
                             "with_4_cycles": {
                                 "cost": 441.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 441.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9140000343322754
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 441.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.928999900817871,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 229.6023609638214
                 }
@@ -1483,10 +1819,22 @@
                             "with_4_cycles": {
                                 "cost": 428.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 428.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9010000228881836
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 428.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9250001907348633,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 227.401780128479
                 }
@@ -1548,10 +1896,22 @@
                             "with_4_cycles": {
                                 "cost": 452.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 452.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8989999294281006
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 452.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.933000087738037,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 165.77545070648193
                 }
@@ -1613,10 +1973,22 @@
                             "with_4_cycles": {
                                 "cost": 452.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 452.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.929999828338623
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 452.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.940000057220459,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.0570182800293
                 }
@@ -1678,10 +2050,22 @@
                             "with_4_cycles": {
                                 "cost": 413.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 413.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9220001697540283
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 413.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9120001792907715,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.94825911521912
                 }
@@ -1743,10 +2127,22 @@
                             "with_4_cycles": {
                                 "cost": 434.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 434.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9380002021789551
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 434.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.003000020980835,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.98005509376526
                 }
@@ -1808,10 +2204,22 @@
                             "with_4_cycles": {
                                 "cost": 403.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 403.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9059998989105225
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 403.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9140000343322754,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.44840288162231
                 }
@@ -1873,10 +2281,22 @@
                             "with_4_cycles": {
                                 "cost": 402.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 402.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9040000438690186
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 402.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8899998664855957,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 102.59662890434265
                 }
@@ -1940,10 +2360,22 @@
                             "with_4_cycles": {
                                 "cost": 420.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 420.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.880000114440918
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 420.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.869999885559082,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.67618298530579
                 }
@@ -2007,10 +2439,22 @@
                             "with_4_cycles": {
                                 "cost": 406.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 406.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9040000438690186
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 406.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9039998054504395,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.31535625457764
                 }
@@ -2074,10 +2518,22 @@
                             "with_4_cycles": {
                                 "cost": 415.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 415.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9010000228881836
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 415.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9549999237060547,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.69309425354004
                 }
@@ -2141,10 +2597,22 @@
                             "with_4_cycles": {
                                 "cost": 434.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 434.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9210000038146973
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 434.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9179999828338623,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.05177712440491
                 }
@@ -2208,10 +2676,22 @@
                             "with_4_cycles": {
                                 "cost": 432.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 432.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8829998970031738
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 432.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9000000953674316,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.37274122238159
                 }
@@ -2275,10 +2755,22 @@
                             "with_4_cycles": {
                                 "cost": 419.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 419.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9049999713897705
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 419.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.944000005722046,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.07144594192505
                 }
@@ -2342,10 +2834,22 @@
                             "with_4_cycles": {
                                 "cost": 395.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 395.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8990001678466797
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 395.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9909999370574951,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.19898700714111
                 }
@@ -2409,10 +2913,22 @@
                             "with_4_cycles": {
                                 "cost": 416.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 416.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8940000534057617
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 416.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.946000099182129,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.82523107528687
                 }
@@ -2476,10 +2992,22 @@
                             "with_4_cycles": {
                                 "cost": 404.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 404.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9160001277923584
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 404.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.934000015258789,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 98.00099897384644
                 }
@@ -2543,10 +3071,22 @@
                             "with_4_cycles": {
                                 "cost": 434.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 434.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9419999122619629
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 434.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9110000133514404,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 95.9989960193634
                 }
@@ -2610,10 +3150,22 @@
                             "with_4_cycles": {
                                 "cost": 437.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 437.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8980000019073486
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 437.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8869998455047607,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.16114807128906
                 }
@@ -2677,10 +3229,22 @@
                             "with_4_cycles": {
                                 "cost": 432.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 432.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8959999084472656
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 432.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9240000247955322,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.18030023574829
                 }
@@ -2744,10 +3308,22 @@
                             "with_4_cycles": {
                                 "cost": 436.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 436.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8969998359680176
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 436.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8929998874664307,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.37213325500488
                 }
@@ -2811,10 +3387,22 @@
                             "with_4_cycles": {
                                 "cost": 379.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 379.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.872999906539917
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 379.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9079999923706055,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.76253890991211
                 }
@@ -2878,10 +3466,22 @@
                             "with_4_cycles": {
                                 "cost": 419.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 419.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.870999813079834
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 419.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.934999942779541,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.78883194923401
                 }
@@ -2945,10 +3545,22 @@
                             "with_4_cycles": {
                                 "cost": 428.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 428.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9579999446868896
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 428.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9600000381469727,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.659255027771
                 }
@@ -3012,10 +3624,22 @@
                             "with_4_cycles": {
                                 "cost": 425.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 425.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8559999465942383
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 425.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9169998168945312,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.91543078422546
                 }
@@ -3079,10 +3703,22 @@
                             "with_4_cycles": {
                                 "cost": 435.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 435.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8600001335144043
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 435.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8980000019073486,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 98.4845199584961
                 }
@@ -3146,10 +3782,22 @@
                             "with_4_cycles": {
                                 "cost": 427.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 427.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8869998455047607
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 427.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.875,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 98.66949319839478
                 }
@@ -3213,10 +3861,22 @@
                             "with_4_cycles": {
                                 "cost": 420.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 420.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9340000152587891
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 420.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8839998245239258,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 97.62345910072327
                 }
@@ -3278,10 +3938,22 @@
                             "with_4_cycles": {
                                 "cost": 460.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 460.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8670001029968262
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 460.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9890000820159912,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 112.812579870224
                 },
@@ -3315,10 +3987,22 @@
                             "with_4_cycles": {
                                 "cost": 413.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 413.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9179999828338623
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 413.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9210000038146973,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 98.29870057106018
                 },
@@ -3352,10 +4036,22 @@
                             "with_4_cycles": {
                                 "cost": 364.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 364.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9500000476837158
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 364.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9709999561309814,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 92.77857613563538
                 },
@@ -3389,10 +4085,22 @@
                             "with_4_cycles": {
                                 "cost": 294.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 294.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.503999948501587
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 294.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.2039999961853027,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.92908120155334
                 }
@@ -3454,10 +4162,22 @@
                             "with_4_cycles": {
                                 "cost": 466.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 466.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8989999294281006
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 466.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.936000108718872,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 113.02785277366638
                 },
@@ -3491,10 +4211,22 @@
                             "with_4_cycles": {
                                 "cost": 417.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 417.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8619999885559082
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 417.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.880000114440918,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 102.08633804321289
                 },
@@ -3528,10 +4260,22 @@
                             "with_4_cycles": {
                                 "cost": 356.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 356.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9079999923706055
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 356.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9279999732971191,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 112.38550972938538
                 },
@@ -3565,10 +4309,22 @@
                             "with_4_cycles": {
                                 "cost": 280.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 280.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.0209999084472656
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 280.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9539999961853027,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.2476270198822
                 }
@@ -3630,10 +4386,22 @@
                             "with_4_cycles": {
                                 "cost": 484.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 484.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.875999927520752
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 484.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9219999313354492,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 112.33878898620605
                 },
@@ -3667,10 +4435,22 @@
                             "with_4_cycles": {
                                 "cost": 418.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 418.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9000000953674316
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 418.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.878000020980835,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 98.71950817108154
                 },
@@ -3704,10 +4484,22 @@
                             "with_4_cycles": {
                                 "cost": 361.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 361.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9210000038146973
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 361.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.941999912261963,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.0708601474762
                 },
@@ -3741,10 +4533,22 @@
                             "with_4_cycles": {
                                 "cost": 288.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 288.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9089999198913574
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 288.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.940999984741211,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 83.09996008872986
                 }
@@ -3806,10 +4610,22 @@
                             "with_4_cycles": {
                                 "cost": 505.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 505.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9030001163482666
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 505.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.934000015258789,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 114.47771215438843
                 },
@@ -3843,10 +4659,22 @@
                             "with_4_cycles": {
                                 "cost": 454.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 454.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9030001163482666
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 454.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9110000133514404,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 103.17835116386414
                 },
@@ -3880,10 +4708,22 @@
                             "with_4_cycles": {
                                 "cost": 402.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 402.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.943000078201294
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 402.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9739999771118164,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.54361009597778
                 },
@@ -3917,10 +4757,22 @@
                             "with_4_cycles": {
                                 "cost": 329.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 329.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.437000036239624
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 329.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.2380001544952393,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 84.90519499778748
                 }
@@ -3982,10 +4834,22 @@
                             "with_4_cycles": {
                                 "cost": 479.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 479.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8529999256134033
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 479.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.939000129699707,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 116.37156391143799
                 },
@@ -4019,10 +4883,22 @@
                             "with_4_cycles": {
                                 "cost": 431.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 431.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9240000247955322
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 431.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8909997940063477,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 99.28021216392517
                 },
@@ -4056,10 +4932,22 @@
                             "with_4_cycles": {
                                 "cost": 385.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 385.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.872999906539917
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 385.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9219999313354492,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 96.03177285194397
                 },
@@ -4093,10 +4981,22 @@
                             "with_4_cycles": {
                                 "cost": 312.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 312.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9570000171661377
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 312.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9500000476837158,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 83.71418809890747
                 }
@@ -4158,10 +5058,22 @@
                             "with_4_cycles": {
                                 "cost": 456.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 456.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8599998950958252
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 456.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9519999027252197,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 112.77755689620972
                 },
@@ -4195,10 +5107,22 @@
                             "with_4_cycles": {
                                 "cost": 408.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.937999963760376
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8970000743865967,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 99.92138075828552
                 },
@@ -4232,10 +5156,22 @@
                             "with_4_cycles": {
                                 "cost": 358.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 358.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9239997863769531
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 358.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8989999294281006,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 92.46589589118958
                 },
@@ -4269,10 +5205,22 @@
                             "with_4_cycles": {
                                 "cost": 272.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 272.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.0469999313354492
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 272.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9700000286102295,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 81.98599696159363
                 }
@@ -4334,10 +5282,22 @@
                             "with_4_cycles": {
                                 "cost": 448.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 448.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9060001373291016
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 448.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9509999752044678,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 111.47943091392517
                 },
@@ -4371,10 +5331,22 @@
                             "with_4_cycles": {
                                 "cost": 402.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 402.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9460000991821289
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 402.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9769999980926514,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 103.22419786453247
                 },
@@ -4408,10 +5380,22 @@
                             "with_4_cycles": {
                                 "cost": 363.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 363.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8789999485015869
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 363.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.933000087738037,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 93.49749088287354
                 },
@@ -4445,10 +5429,22 @@
                             "with_4_cycles": {
                                 "cost": 285.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 285.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8870000839233398
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 285.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9479999542236328,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.3013801574707
                 }
@@ -4510,10 +5506,22 @@
                             "with_4_cycles": {
                                 "cost": 444.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 444.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.871999979019165
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 444.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.928999900817871,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 114.91951417922974
                 },
@@ -4547,10 +5555,22 @@
                             "with_4_cycles": {
                                 "cost": 392.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 392.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8429999351501465
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 392.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.883000135421753,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 100.75880599021912
                 },
@@ -4584,10 +5604,22 @@
                             "with_4_cycles": {
                                 "cost": 358.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 358.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9129998683929443
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 358.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.943000078201294,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 92.36568999290466
                 },
@@ -4621,10 +5653,22 @@
                             "with_4_cycles": {
                                 "cost": 289.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 289.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.0320000648498535
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 289.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.0380001068115234,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.12048387527466
                 }
@@ -4686,10 +5730,22 @@
                             "with_4_cycles": {
                                 "cost": 457.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 457.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.869999885559082
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 457.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9120001792907715,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 115.2821741104126
                 },
@@ -4723,10 +5779,22 @@
                             "with_4_cycles": {
                                 "cost": 408.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8839998245239258
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 408.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9040000438690186,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 103.06263399124146
                 },
@@ -4760,10 +5828,22 @@
                             "with_4_cycles": {
                                 "cost": 363.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 363.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8900001049041748
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 363.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.938999891281128,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 92.71060109138489
                 },
@@ -4797,10 +5877,22 @@
                             "with_4_cycles": {
                                 "cost": 296.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 296.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.934999942779541
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 296.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.9229998588562012,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 82.13155317306519
                 }
@@ -4862,10 +5954,22 @@
                             "with_4_cycles": {
                                 "cost": 473.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 473.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.8980000019073486
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 473.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.050999879837036,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 114.46042323112488
                 },
@@ -4899,10 +6003,22 @@
                             "with_4_cycles": {
                                 "cost": 424.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 424.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9409999847412109
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 424.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8609998226165771,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 100.29500699043274
                 },
@@ -4936,10 +6052,22 @@
                             "with_4_cycles": {
                                 "cost": 382.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 382.0,
+                            "optimal": true,
+                            "runtime_seconds": 0.9040000438690186
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 382.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.8930001258850098,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 94.79582285881042
                 },
@@ -4973,10 +6101,22 @@
                             "with_4_cycles": {
                                 "cost": 313.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 313.0,
+                            "optimal": true,
+                            "runtime_seconds": 1.4639999866485596
+                        },
+                        "all_pairs_ilp": {
+                            "cost": 313.0,
+                            "optimal": true,
+                            "runtime_seconds": 2.052999973297119,
+                            "mip_gap": 0.0
                         }
                     },
                     "approximations": {
-                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0
+                        "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
+                        "all_pairs_lp_to_ilp_ratio": 1.0
                     },
                     "runtime_seconds": 84.20545697212219
                 }

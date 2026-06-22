@@ -90,9 +90,20 @@
                             "with_4_cycles": {
                                 "cost": 711.0
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 711.0,
+                            "optimal": true,
+                            "runtime_seconds": 42.54299998283386
+                        },
+                        "all_pairs_ilp": {
+                            "status": "skipped",
+                            "reason": "ILP intentionally skipped for Facebook ego 686; LP only."
                         }
                     },
-                    "approximations": {},
+                    "approximations": {
+                        "all_pairs_lp_to_ilp_ratio": null
+                    },
                     "runtime_seconds": 470.58933210372925
                 },
                 "0.05": {
@@ -116,9 +127,20 @@
                             "with_4_cycles": {
                                 "cost": 786.5
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 786.5,
+                            "optimal": true,
+                            "runtime_seconds": 28.664999961853027
+                        },
+                        "all_pairs_ilp": {
+                            "status": "skipped",
+                            "reason": "ILP intentionally skipped for Facebook ego 686; LP only."
                         }
                     },
-                    "approximations": {},
+                    "approximations": {
+                        "all_pairs_lp_to_ilp_ratio": null
+                    },
                     "runtime_seconds": 368.60119104385376
                 },
                 "0.25": {
@@ -142,9 +164,20 @@
                             "with_4_cycles": {
                                 "cost": 633.5
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 633.5,
+                            "optimal": true,
+                            "runtime_seconds": 57.723999977111816
+                        },
+                        "all_pairs_ilp": {
+                            "status": "skipped",
+                            "reason": "ILP intentionally skipped for Facebook ego 686; LP only."
                         }
                     },
-                    "approximations": {},
+                    "approximations": {
+                        "all_pairs_lp_to_ilp_ratio": null
+                    },
                     "runtime_seconds": 270.8615779876709
                 },
                 "0.40": {
@@ -168,9 +201,20 @@
                             "with_4_cycles": {
                                 "cost": 524.5
                             }
+                        },
+                        "all_pairs_lp_relaxation": {
+                            "cost": 524.5,
+                            "optimal": true,
+                            "runtime_seconds": 87.80599999427795
+                        },
+                        "all_pairs_ilp": {
+                            "status": "skipped",
+                            "reason": "ILP intentionally skipped for Facebook ego 686; LP only."
                         }
                     },
-                    "approximations": {},
+                    "approximations": {
+                        "all_pairs_lp_to_ilp_ratio": null
+                    },
                     "runtime_seconds": 236.18790221214294
                 }
             },
