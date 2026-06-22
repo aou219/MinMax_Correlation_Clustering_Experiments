@@ -6,21 +6,20 @@ def pair(i, j):
     return min(i, j), max(i, j)
 
 
-def solve_all_pairs(S, time_limit=None, verbose=True, relax=False):
-    """Solve the full metric ILP or its LP relaxation.
-
-    A variable exists for every unordered vertex pair. Missing edges have no
-    objective term, but their variables participate in every triangle
-    inequality. With binary variables and an optimal solve, this formulation
-    returns the correlation-clustering optimum on an incomplete graph.
-    """
+def solve_all_pairs(
+    S,
+    time_limit=None,
+    verbose=True,
+    relax=False,
+    return_x_values=True,
+):
+    """Solve the full metric ILP or its LP relaxation."""
     n = S.shape[0]
     model_name = "all_pairs_lp" if relax else "all_pairs_ilp"
     model = gp.Model(model_name)
 
     if not verbose:
         model.Params.OutputFlag = 0
-
     if time_limit is not None:
         model.Params.TimeLimit = time_limit
 
@@ -42,7 +41,6 @@ def solve_all_pairs(S, time_limit=None, verbose=True, relax=False):
             objective_terms.append(variable)
         elif S[i, j] == -1:
             objective_terms.append(1 - variable)
-
     model.setObjective(gp.quicksum(objective_terms), GRB.MINIMIZE)
 
     for i in range(n):
@@ -51,7 +49,6 @@ def solve_all_pairs(S, time_limit=None, verbose=True, relax=False):
                 x_ij = x[pair(i, j)]
                 x_ik = x[pair(i, k)]
                 x_jk = x[pair(j, k)]
-
                 model.addConstr(x_ij <= x_ik + x_jk)
                 model.addConstr(x_ik <= x_ij + x_jk)
                 model.addConstr(x_jk <= x_ij + x_ik)
@@ -62,16 +59,17 @@ def solve_all_pairs(S, time_limit=None, verbose=True, relax=False):
         raise RuntimeError(
             f"Gurobi did not solve successfully. Status: {model.Status}"
         )
-
     if model.SolCount == 0:
-        raise RuntimeError("Gurobi stopped without finding a feasible solution.")
+        raise RuntimeError("Gurobi stopped without a feasible solution.")
 
-    if relax:
-        x_values = {edge: variable.X for edge, variable in x.items()}
-    else:
-        x_values = {
-            edge: int(round(variable.X)) for edge, variable in x.items()
-        }
+    x_values = None
+    if return_x_values:
+        if relax:
+            x_values = {edge: variable.X for edge, variable in x.items()}
+        else:
+            x_values = {
+                edge: int(round(variable.X)) for edge, variable in x.items()
+            }
 
     solve_info = {
         "status": int(model.Status),
@@ -81,5 +79,6 @@ def solve_all_pairs(S, time_limit=None, verbose=True, relax=False):
         "num_variables": len(x),
         "num_triangle_constraints": 3 * (n * (n - 1) * (n - 2) // 6),
     }
-
-    return float(model.ObjVal), x_values, solve_info
+    objective_value = float(model.ObjVal)
+    model.dispose()
+    return objective_value, x_values, solve_info
