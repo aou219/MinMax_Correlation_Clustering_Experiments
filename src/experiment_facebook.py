@@ -6,6 +6,8 @@ load_facebook_circles,
 build_complete_signed_matrix_from_facebook_sample,
 )
 
+from draw_graphs import draw_graphs
+
 from experiment_helpers import (
 save_results_append,
 run_full_experiment,
@@ -22,45 +24,42 @@ def get_all_nodes_from_edges_and_circles(edge_nodes, circles):
     circle_nodes = set()
     for circle in circles:
         circle_nodes.update(circle["nodes"])
-
     all_nodes = edge_nodes | circle_nodes
-
     return sorted(all_nodes)
 
-
 if __name__ == "__main__":
-
 
     # ============================================================
     # Parameters for one Facebook ego-network experiment
     # ============================================================
 
-    ego_id = "348"
+    ego_id = "3980"
 
     p_delete = 0.15
     seed = 1
     pivot_seeds = list(range(1, 11))
 
+    draw_graph = True
+
     edges_file = Path(f"data/facebook/{ego_id}.edges")
     circles_file = Path(f"data/facebook/{ego_id}.circles")
 
-    # results_dir = Path("results/experiments_results_facebook/full")
-    # results_dir.mkdir(parents=True, exist_ok=True)
+    results_dir = Path("results/experiments_results_facebook/full")
+    results_dir.mkdir(parents=True, exist_ok=True)
 
-    # results_file = results_dir / f"fb_ego{ego_id}_full_without_ilp.json"
+    results_file = results_dir / f"fb_ego{ego_id}_full.json"
 
-    # # Remove old result file, so rerunning does not append duplicates.
-    # if results_file.exists():
-    #     results_file.unlink()
+    if results_file.exists():
+        results_file.unlink()
 
     print("\n" + "=" * 70, flush=True)
-    print("RUNNING ONE FACEBOOK EGO EXPERIMENT", flush=True)
+    print("RUNNING ONE FACEBOOK EGO EXPERIMENT WITH ILP", flush=True)
     print(f"ego_id = {ego_id}", flush=True)
     print(f"p_delete = {p_delete}", flush=True)
     print(f"seed = {seed}", flush=True)
     print(f"edges_file = {edges_file}", flush=True)
     print(f"circles_file = {circles_file}", flush=True)
-    # print(f"Saving to: {results_file}", flush=True)
+    print(f"Saving to: {results_file}", flush=True)
     print("=" * 70, flush=True)
 
     # ============================================================
@@ -148,6 +147,23 @@ if __name__ == "__main__":
         experiment_data=experiment_data,
     )
 
-    # save_results_append(str(results_file), results)
+    save_results_append(str(results_file), results)
 
-    # print(f"Saved result to {results_file}", flush=True)
+    print(f"Saved result to {results_file}", flush=True)
+
+    # ============================================================
+    # Draw clustered graphs
+    # ============================================================
+
+    if draw_graph:
+        draw_graphs(
+            G_complete=experiment_data["G"],
+            pivot_clusters=experiment_data["pivot_clusters"],
+            ilp_clusters=experiment_data["ilp_clusters"],
+            G_new=experiment_data["G_new"],
+            pivot_clusters_new=experiment_data["pivot_clusters_new"],
+            ilp_clusters_new=experiment_data["ilp_clusters_new_with4"],
+            pivots=experiment_data["pivots"],
+            pivots_new=experiment_data["pivots_new"],
+        )
+

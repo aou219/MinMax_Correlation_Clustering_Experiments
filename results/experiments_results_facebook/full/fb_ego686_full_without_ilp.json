@@ -55,51 +55,44 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "best_cost": 1487,
                     "average_cost": 1617.6
                 },
                 "bad_triangles": {
                     "total_count": 28716,
-                    "min_edge_disjoint_count": 741,
                     "max_edge_disjoint_count": 799
                 },
-                "lp_relaxation": {
-                    "cost": 826.5
-                },
                 "bad_triangle_lp_bounds": {
-                    "primal_cost": 826.5,
-                    "dual_cost": 826.5000000000001
+                    "primal_cost": 826.5
+                },
+                "sparse_lp_relaxation": {
+                    "cost": 826.5
                 }
             },
-            "complete_graph_approximations": null,
             "p_delete_results": {
                 "0.15": {
                     "p_delete": 0.15,
                     "edge_deleted_graph": {
                         "num_edges_deleted": 2190,
                         "pivot": {
-                            "best_cost": 1267,
                             "average_cost": 1390.3
                         },
                         "bad_triangles": {
                             "total_count": 17975,
-                            "min_edge_disjoint_count": 627,
                             "max_edge_disjoint_count": 686
                         },
-                        "lp_relaxation": {
+                        "bad_triangle_lp_bounds": {
+                            "primal_cost": 711.0
+                        },
+                        "sparse_lp_relaxation": {
                             "without_4_cycles": {
                                 "cost": 711.0
                             },
                             "with_4_cycles": {
                                 "cost": 711.0
                             }
-                        },
-                        "bad_triangle_lp_bounds": {
-                            "primal_cost": 711.0,
-                            "dual_cost": 711.0000000000005
                         }
                     },
-                    "approximations": null,
+                    "approximations": {},
                     "runtime_seconds": 470.58933210372925
                 },
                 "0.05": {
@@ -107,28 +100,25 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 735,
                         "pivot": {
-                            "best_cost": 1393,
                             "average_cost": 1526.6
                         },
                         "bad_triangles": {
                             "total_count": 24671,
-                            "min_edge_disjoint_count": 699,
                             "max_edge_disjoint_count": 757
                         },
-                        "lp_relaxation": {
+                        "bad_triangle_lp_bounds": {
+                            "primal_cost": 786.5
+                        },
+                        "sparse_lp_relaxation": {
                             "without_4_cycles": {
                                 "cost": 786.5
                             },
                             "with_4_cycles": {
                                 "cost": 786.5
                             }
-                        },
-                        "bad_triangle_lp_bounds": {
-                            "primal_cost": 786.5,
-                            "dual_cost": 786.5000000000014
                         }
                     },
-                    "approximations": null,
+                    "approximations": {},
                     "runtime_seconds": 368.60119104385376
                 },
                 "0.25": {
@@ -136,28 +126,25 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 3615,
                         "pivot": {
-                            "best_cost": 1099,
                             "average_cost": 1208.3
                         },
                         "bad_triangles": {
                             "total_count": 12580,
-                            "min_edge_disjoint_count": 557,
                             "max_edge_disjoint_count": 601
                         },
-                        "lp_relaxation": {
+                        "bad_triangle_lp_bounds": {
+                            "primal_cost": 633.5
+                        },
+                        "sparse_lp_relaxation": {
                             "without_4_cycles": {
                                 "cost": 633.5
                             },
                             "with_4_cycles": {
                                 "cost": 633.5
                             }
-                        },
-                        "bad_triangle_lp_bounds": {
-                            "primal_cost": 633.5,
-                            "dual_cost": 633.4999999999998
                         }
                     },
-                    "approximations": null,
+                    "approximations": {},
                     "runtime_seconds": 270.8615779876709
                 },
                 "0.40": {
@@ -165,30 +152,30 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 5753,
                         "pivot": {
-                            "best_cost": 901,
                             "average_cost": 969.1
                         },
                         "bad_triangles": {
                             "total_count": 7080,
-                            "min_edge_disjoint_count": 444,
                             "max_edge_disjoint_count": 491
                         },
-                        "lp_relaxation": {
+                        "bad_triangle_lp_bounds": {
+                            "primal_cost": 524.5
+                        },
+                        "sparse_lp_relaxation": {
                             "without_4_cycles": {
                                 "cost": 524.5
                             },
                             "with_4_cycles": {
                                 "cost": 524.5
                             }
-                        },
-                        "bad_triangle_lp_bounds": {
-                            "primal_cost": 524.5,
-                            "dual_cost": 524.5
                         }
                     },
-                    "approximations": null,
+                    "approximations": {},
                     "runtime_seconds": 236.18790221214294
                 }
+            },
+            "complete_graph_sparse_approximations": {
+                "sparse_lp_to_ilp_ratio": null
             }
         }
     ]

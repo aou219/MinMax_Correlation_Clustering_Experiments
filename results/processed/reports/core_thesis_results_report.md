@@ -17,22 +17,22 @@ Only complete p_delete units used: **True**.
 
 ## Important interpretation notes
 
-These results should be interpreted as results for the tested formulation in this thesis. The edge-deleted ILP includes the constraints used in the experiments, including bad 4-cycle constraints, but it does not include all possible larger bad-cycle constraints. Therefore, a lower measured cost or normalized cost ratio should be read as a lower disagreement cost under this tested formulation, not as proof that the full sparse correlation clustering problem is always easier to solve.
+These results should be interpreted as results for the tested formulation in this thesis. The edge-deleted Sparse ILP includes the constraints used in the experiments, including bad 4-cycle constraints, but it does not include all possible larger bad-cycle constraints. Therefore, a lower measured cost or normalized cost ratio should be read as a lower disagreement cost under this tested formulation, not as proof that the full sparse correlation clustering problem is always easier to solve.
 
-The Pivot values should also be interpreted carefully. In the tables, Pivot is reported through the average Pivot result used in the experiments. This gives a more representative view of the randomized Pivot algorithm than selecting only the best run. The Facebook results are useful as real-world examples, but they are based on a small number of ego-networks and some larger Facebook rows have missing ILP-based ratios. Finally, the analysis is cost-based: it compares cost values, ratios, structural patterns and runtime, but it does not evaluate recovery of planted clusters with measures such as ARI or NMI.
+The Pivot values should also be interpreted carefully. In the tables, Pivot is reported through the average Pivot result used in the experiments. This gives a more representative view of the randomized Pivot algorithm than selecting only the best run. The Facebook results are useful as real-world examples, but they are based on a small number of ego-networks and some larger Facebook rows have missing Sparse ILP-based ratios. Finally, the analysis is cost-based: it compares cost values, ratios, structural patterns and runtime, but it does not evaluate recovery of planted clusters with measures such as ARI or NMI.
 
 ## RQ1 — Edge deletion
 
 ### Table RQ1.1 — Cost effect and cost ratios
 
-| graph_family | complete_ilp_mean | complete_cost_per_edge_mean | new_ilp_p0.05 | new_ilp_p0.15 | new_ilp_p0.25 | new_ilp_p0.40 | cost_ratio_p0.05 | cost_ratio_p0.15 | cost_ratio_p0.25 | cost_ratio_p0.40 | new_cost_per_edge_p0.05 | new_cost_per_edge_p0.15 | new_cost_per_edge_p0.25 | new_cost_per_edge_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.15 | normalized_cost_ratio_p0.25 | normalized_cost_ratio_p0.40 |
+| graph_family | complete_sparse_ilp_mean | complete_cost_per_edge_mean | new_sparse_ilp_p0.05 | new_sparse_ilp_p0.15 | new_sparse_ilp_p0.25 | new_sparse_ilp_p0.40 | cost_ratio_p0.05 | cost_ratio_p0.15 | cost_ratio_p0.25 | cost_ratio_p0.40 | new_cost_per_edge_p0.05 | new_cost_per_edge_p0.15 | new_cost_per_edge_p0.25 | new_cost_per_edge_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.15 | normalized_cost_ratio_p0.25 | normalized_cost_ratio_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | clique | 46.004 | 0.093 | 43.713 | 38.678 | 34.134 | 27.076 | 0.949 | 0.834 | 0.733 | 0.561 | 0.093 | 0.092 | 0.091 | 0.087 | 0.997 | 0.979 | 0.975 | 0.933 |
 | facebook | 323.000 | 0.053 | 308.667 | 273.000 | 240.333 | 185.000 | 0.969 | 0.860 | 0.752 | 0.541 | 0.054 | 0.054 | 0.053 | 0.049 | 1.019 | 1.006 | 0.999 | 0.902 |
 | random | 45.170 | 0.224 | 40.858 | 31.743 | 23.197 | 12.662 | 0.878 | 0.631 | 0.443 | 0.246 | 0.210 | 0.179 | 0.145 | 0.096 | 0.921 | 0.740 | 0.587 | 0.406 |
 
 
-**Analysis.** Table RQ1.1 shows that edge deletion lowers the absolute ILP cost for all graph families. This is expected, because fewer edges remain in the objective. The cost ratio and normalized cost ratio are therefore more informative than the absolute cost alone. Random graphs show the strongest decrease: at `p_delete = 0.40`, the cost ratio is 0.246 and the normalized cost ratio is 0.406. This means that, under the tested formulation, the remaining random graphs have a much lower disagreement cost per remaining edge. This should not be interpreted as proof that the full sparse problem is easier in general, because deleting edges can also create larger bad cycles that are not included in this thesis beyond length 4. Clique/community graphs are more stable, with a normalized cost ratio of 0.933 at `p_delete = 0.40`, meaning the remaining graph keeps more of its original conflict structure. Facebook graphs are in between, ending at 0.902, but should be interpreted carefully because the sample is small.
+**Analysis.** Table RQ1.1 shows that edge deletion lowers the absolute Sparse ILP cost for all graph families. This is expected, because fewer edges remain in the objective. The cost ratio and normalized cost ratio are therefore more informative than the absolute cost alone. Random graphs show the strongest decrease: at `p_delete = 0.40`, the cost ratio is 0.246 and the normalized cost ratio is 0.406. This means that, under the tested formulation, the remaining random graphs have a much lower disagreement cost per remaining edge. This should not be interpreted as proof that the full sparse problem is easier in general, because deleting edges can also create larger bad cycles that are not included in this thesis beyond length 4. Clique/community graphs are more stable, with a normalized cost ratio of 0.933 at `p_delete = 0.40`, meaning the remaining graph keeps more of its original conflict structure. Facebook graphs are in between, ending at 0.902, but should be interpreted carefully because the sample is small.
 
 ![Figure 1: Normalized cost after edge deletion](../../../figures/thesis_plots/01_rq1_normalized_cost_ratio.png)
 
@@ -77,23 +77,23 @@ The dashed complete lines are horizontal because the complete graph does not cha
 
 ### Table RQ2.1 — Method performance by graph family
 
-| graph_family | pivot_complete_mean | lp_complete_mean | complete_bad_triangle_density_mean | pivot_new_p0.05 | pivot_new_p0.15 | pivot_new_p0.25 | pivot_new_p0.40 | lp_new_p0.05 | lp_new_p0.15 | lp_new_p0.25 | lp_new_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.15 | normalized_cost_ratio_p0.25 | normalized_cost_ratio_p0.40 | median_runtime_p0.05 | median_runtime_p0.15 | median_runtime_p0.25 | median_runtime_p0.40 |
+| graph_family | pivot_complete_mean | sparse_lp_complete_mean | complete_bad_triangle_density_mean | pivot_new_p0.05 | pivot_new_p0.15 | pivot_new_p0.25 | pivot_new_p0.40 | sparse_lp_new_p0.05 | sparse_lp_new_p0.15 | sparse_lp_new_p0.25 | sparse_lp_new_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.15 | normalized_cost_ratio_p0.25 | normalized_cost_ratio_p0.40 | median_runtime_p0.05 | median_runtime_p0.15 | median_runtime_p0.25 | median_runtime_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | clique | 2.005 | 0.997 | 0.137 | 2.110 | 2.319 | 2.472 | 2.642 | 0.997 | 0.997 | 0.996 | 0.995 | 0.997 | 0.979 | 0.975 | 0.933 | 0.466 | 0.389 | 0.337 | 0.318 |
 | facebook | 1.560 | 0.937 | 0.027 | 1.542 | 1.661 | 1.718 | 1.772 | 0.930 | 0.935 | 0.945 | 0.973 | 1.019 | 1.006 | 0.999 | 0.902 | 214.915 | 262.969 | 149.832 | 126.051 |
 | random | 1.443 | 0.891 | 0.313 | 1.465 | 1.490 | 1.511 | 1.555 | 0.897 | 0.917 | 0.930 | 0.948 | 0.921 | 0.740 | 0.587 | 0.406 | 0.394 | 0.349 | 0.286 | 0.247 |
 
 
-**Analysis.** Table RQ2.1 shows that input graph family strongly affects method performance. Pivot performs worst on clique/community graphs after edge deletion: the Pivot/ILP ratio increases from 1.417 at `p_delete = 0.05` to 2.062 at `p_delete = 0.40`. Random graphs are more stable, with Pivot/ILP increasing only from 1.230 to 1.330. This suggests that Pivot is more sensitive to the loss of structured community information than to random edge deletion. These Pivot values are based on average Pivot over the experimental runs, so they give a more representative view of Pivot performance than selecting only the best run. LP behaves differently: it stays very close to ILP on clique/community graphs, with LP/ILP around 0.995–0.997, while it is less tight on random and Facebook graphs but improves as more edges are deleted.
+**Analysis.** Table RQ2.1 shows that input graph family strongly affects method performance. Pivot performs worst on clique/community graphs after edge deletion: the Pivot/Sparse ILP ratio increases from 1.417 at `p_delete = 0.05` to 2.062 at `p_delete = 0.40`. Random graphs are more stable, with Pivot/Sparse ILP increasing only from 1.230 to 1.330. This suggests that Pivot is more sensitive to the loss of structured community information than to random edge deletion. These Pivot values are based on average Pivot over the experimental runs, so they give a more representative view of Pivot performance than selecting only the best run. Sparse LP behaves differently: it stays very close to Sparse ILP on clique/community graphs, with Sparse LP/Sparse ILP around 0.995–0.997, while it is less tight on random and Facebook graphs but improves as more edges are deleted.
 
 ![Figure 4: Average Pivot approximation, complete vs edge-deleted](../../../figures/thesis_plots/04_rq2_average_pivot_complete_vs_new.png)
 
 **Figure 4. Average Pivot approximation on complete and edge-deleted graphs.**  
-The complete Pivot lines are almost flat because the complete graphs are the same for every `p_delete` value. The edge-deleted clique/community line goes up strongly and looks roughly like a straight increasing line. This means Pivot becomes worse when structured community graphs become sparse. A likely reason is that Pivot needs local edge information to choose clusters. When edges are deleted, the community signal is less complete. Random graphs stay much flatter, probably because they already have less clear community structure. Facebook is between random and clique/community, but this line is based on only a few ego-networks with ILP values, so it should not be interpreted too strongly.
+The complete Pivot lines are almost flat because the complete graphs are the same for every `p_delete` value. The edge-deleted clique/community line goes up strongly and looks roughly like a straight increasing line. This means Pivot becomes worse when structured community graphs become sparse. A likely reason is that Pivot needs local edge information to choose clusters. When edges are deleted, the community signal is less complete. Random graphs stay much flatter, probably because they already have less clear community structure. Facebook is between random and clique/community, but this line is based on only a few ego-networks with Sparse ILP values, so it should not be interpreted too strongly.
 
 ### Table RQ2.2 — Graph size as input to method output
 
-| graph_family | n | runs | pivot_new_p0.05 | pivot_new_p0.40 | lp_new_p0.05 | lp_new_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.40 | median_runtime_p0.05 | median_runtime_p0.40 |
+| graph_family | n | runs | pivot_new_p0.05 | pivot_new_p0.40 | sparse_lp_new_p0.05 | sparse_lp_new_p0.40 | normalized_cost_ratio_p0.05 | normalized_cost_ratio_p0.40 | median_runtime_p0.05 | median_runtime_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | clique | 10 | 600 | 1.785 | 2.337 | 0.998 | 0.992 | 0.997 | 0.813 | 0.042 | 0.027 |
 | clique | 15 | 600 | 1.977 | 2.545 | 0.998 | 0.996 | 1.000 | 0.910 | 0.149 | 0.094 |
@@ -115,11 +115,11 @@ The complete Pivot lines are almost flat because the complete graphs are the sam
 Full table saved as `rq2_2_graph_size_effect_compact.csv`.
 
 
-**Analysis.** Table RQ2.2 shows how graph size changes the output of the methods. For clique/community graphs, larger graphs mainly make Pivot worse: at `p_delete = 0.40`, Pivot/ILP rises from 1.545 for `n = 10` to 2.474 for `n = 30`. For random graphs, graph size mainly affects the LP relaxation: at `p_delete = 0.40`, LP/ILP decreases from 1.000 for `n = 5` to 0.895 for `n = 30`. This means that larger random graphs keep more structure that the LP relaxation does not capture as an integer solution. Runtime also increases strongly with size and real-world structure. This runtime effect belongs to RQ2, because it shows how input structure affects practical solvability. It should not be confused with the cost ratios from RQ1: a lower measured cost does not automatically mean the full sparse problem is easier to solve.
+**Analysis.** Table RQ2.2 shows how graph size changes the output of the methods. For clique/community graphs, larger graphs mainly make Pivot worse: at `p_delete = 0.40`, Pivot/Sparse ILP rises from 1.545 for `n = 10` to 2.474 for `n = 30`. For random graphs, graph size mainly affects the Sparse LP relaxation: at `p_delete = 0.40`, Sparse LP/Sparse ILP decreases from 1.000 for `n = 5` to 0.895 for `n = 30`. This means that larger random graphs keep more structure that the Sparse LP relaxation does not capture as an integer solution. Runtime also increases strongly with size and real-world structure. This runtime effect belongs to RQ2, because it shows how input structure affects practical solvability. It should not be confused with the cost ratios from RQ1: a lower measured cost does not automatically mean the full sparse problem is easier to solve.
 
 ### Table RQ2.3 — Input-structure details at p_delete = 0.40
 
-| input_type | input_setting | avg_n | p_delete | pivot_new | lp_new | normalized_cost_ratio | complete_bad_triangle_density | new_bad_triangle_density | median_runtime |
+| input_type | input_setting | avg_n | p_delete | pivot_new | sparse_lp_new | normalized_cost_ratio | complete_bad_triangle_density | new_bad_triangle_density | median_runtime |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | clique | 3-2-5 | 10.000 | 0.400 | 2.261 | 0.996 | 0.801 | 0.117 | 0.025 | 0.026 |
 | clique | 3-3-4 | 10.000 | 0.400 | 1.929 | 0.992 | 0.739 | 0.114 | 0.026 | 0.027 |
@@ -155,29 +155,29 @@ Full table saved as `rq2_2_graph_size_effect_compact.csv`.
 Full table saved as `rq2_3_input_structure_details_p040.csv`.
 
 
-**Analysis.** Table RQ2.3 gives a closer look at specific input structures at the strongest deletion level. For clique/community graphs, the exact community composition matters. For example, the clique setting `20-5-5` has Pivot/ILP = 2.752, while `5-5-5-5` has Pivot/ILP = 1.534. This suggests that imbalance and community structure can strongly affect Pivot. The random rows show that higher `p+` values lead to higher bad triangle density and higher normalized cost ratios. The Facebook rows show that real-world ego-networks can have moderate method quality but much higher runtime, especially for larger ego-networks. The row with missing Pivot/LP values should not be used for method-quality conclusions, but it can still support the runtime discussion.
+**Analysis.** Table RQ2.3 gives a closer look at specific input structures at the strongest deletion level. For clique/community graphs, the exact community composition matters. For example, the clique setting `20-5-5` has Pivot/Sparse ILP = 2.752, while `5-5-5-5` has Pivot/Sparse ILP = 1.534. This suggests that imbalance and community structure can strongly affect Pivot. The random rows show that higher `p+` values lead to higher bad triangle density and higher normalized cost ratios. The Facebook rows show that real-world ego-networks can have moderate method quality but much higher runtime, especially for larger ego-networks. The row with missing Pivot/Sparse LP values should not be used for method-quality conclusions, but it can still support the runtime discussion.
 
-## RQ3 — LP vs ILP
+## RQ3 — Sparse LP vs Sparse ILP
 
-### Table RQ3.1 — LP gap by graph family
+### Table RQ3.1 — Sparse LP gap by graph family
 
-| graph_family | lp_complete_mean | lp_gap_complete_mean | lp_new_p0.05 | lp_new_p0.15 | lp_new_p0.25 | lp_new_p0.40 | lp_gap_new_p0.05 | lp_gap_new_p0.15 | lp_gap_new_p0.25 | lp_gap_new_p0.40 |
+| graph_family | sparse_lp_complete_mean | sparse_lp_gap_complete_mean | sparse_lp_new_p0.05 | sparse_lp_new_p0.15 | sparse_lp_new_p0.25 | sparse_lp_new_p0.40 | sparse_lp_gap_new_p0.05 | sparse_lp_gap_new_p0.15 | sparse_lp_gap_new_p0.25 | sparse_lp_gap_new_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | clique | 0.997 | 0.003 | 0.997 | 0.997 | 0.996 | 0.995 | 0.003 | 0.003 | 0.004 | 0.005 |
 | facebook | 0.937 | 0.063 | 0.930 | 0.935 | 0.945 | 0.973 | 0.070 | 0.065 | 0.055 | 0.027 |
 | random | 0.891 | 0.109 | 0.897 | 0.917 | 0.930 | 0.948 | 0.103 | 0.083 | 0.070 | 0.052 |
 
 
-**Analysis.** Table RQ3.1 shows that the LP relaxation is closest to ILP for clique/community graphs. The complete LP gap is only 0.003, and the edge-deleted LP gap stays very small, from 0.003 to 0.005. Random graphs have the largest LP gap, with a complete LP gap of 0.109. However, under the tested formulation, edge deletion reduces the LP gap for random graphs from 0.103 to 0.052. Facebook graphs show a similar decrease from 0.070 to 0.027, although these results are based on a small sample. This should be interpreted as the LP becoming closer to the tested ILP formulation, not as a claim about the full sparse formulation with all larger bad-cycle constraints.
+**Analysis.** Table RQ3.1 shows that the Sparse LP relaxation is closest to Sparse ILP for clique/community graphs. The complete Sparse LP gap is only 0.003, and the edge-deleted Sparse LP gap stays very small, from 0.003 to 0.005. Random graphs have the largest Sparse LP gap, with a complete Sparse LP gap of 0.109. However, under the tested formulation, edge deletion reduces the Sparse LP gap for random graphs from 0.103 to 0.052. Facebook graphs show a similar decrease from 0.070 to 0.027, although these results are based on a small sample. This should be interpreted as the Sparse LP becoming closer to the tested Sparse ILP formulation, not as a claim about the full sparse formulation with all larger bad-cycle constraints.
 
-![Figure 5: LP gap, complete vs edge-deleted](../../../figures/thesis_plots/06_rq3_lp_gap_complete_vs_new.png)
+![Figure 5: Sparse LP gap, complete vs edge-deleted](../../../figures/thesis_plots/06_rq3_lp_gap_complete_vs_new.png)
 
-**Figure 5. LP gap in complete and edge-deleted graphs.**  
-The clique/community LP gap stays very close to zero, so the LP relaxation is almost exact for these structured graphs. Random graphs have the largest complete LP gap, but the edge-deleted random line goes down as `p_delete` increases. This looks like a steady decreasing trend. It suggests that, for random graphs, edge deletion makes the tested LP relaxation closer to the tested ILP result. Facebook shows a similar decrease and becomes lower than random at higher deletion levels. This probably happens because deleting edges removes many local conflicts. This conclusion only applies to the model and constraints used here, not automatically to all larger sparse bad cycles.
+**Figure 5. Sparse LP gap in complete and edge-deleted graphs.**  
+The clique/community Sparse LP gap stays very close to zero, so the Sparse LP relaxation is almost exact for these structured graphs. Random graphs have the largest complete Sparse LP gap, but the edge-deleted random line goes down as `p_delete` increases. This looks like a steady decreasing trend. It suggests that, for random graphs, edge deletion makes the tested Sparse LP relaxation closer to the tested Sparse ILP result. Facebook shows a similar decrease and becomes lower than random at higher deletion levels. This probably happens because deleting edges removes many local conflicts. This conclusion only applies to the model and constraints used here, not automatically to all larger sparse bad cycles.
 
-### Table RQ3.2 — LP gap by graph size
+### Table RQ3.2 — Sparse LP gap by graph size
 
-| graph_family | n | runs | lp_new_p0.05 | lp_new_p0.40 | lp_gap_new_p0.05 | lp_gap_new_p0.40 |
+| graph_family | n | runs | sparse_lp_new_p0.05 | sparse_lp_new_p0.40 | sparse_lp_gap_new_p0.05 | sparse_lp_gap_new_p0.40 |
 | --- | --- | --- | --- | --- | --- | --- |
 | clique | 10 | 600 | 0.998 | 0.992 | 0.002 | 0.008 |
 | clique | 15 | 600 | 0.998 | 0.996 | 0.002 | 0.004 |
@@ -199,11 +199,11 @@ The clique/community LP gap stays very close to zero, so the LP relaxation is al
 Full table saved as `rq3_2_lp_gap_by_size_compact.csv`.
 
 
-**Analysis.** Table RQ3.2 shows that graph size affects the LP gap, especially for random graphs. At `p_delete = 0.40`, the LP gap for random graphs increases from 0.000 for `n = 5` to 0.105 for `n = 30`. This indicates that larger random graphs make the LP relaxation less tight. Clique/community graphs remain much tighter for `n = 10` to `n = 30`, where the LP gaps are close to zero. The `n = 100` clique/community graphs are an exception, with an LP gap of 0.045. This suggests that LP is generally strong for structured graphs, but very large structured instances can still create LP gaps. The Facebook size rows should be interpreted carefully because there are few runs and one larger row has missing method ratios.
+**Analysis.** Table RQ3.2 shows that graph size affects the Sparse LP gap, especially for random graphs. At `p_delete = 0.40`, the Sparse LP gap for random graphs increases from 0.000 for `n = 5` to 0.105 for `n = 30`. This indicates that larger random graphs make the Sparse LP relaxation less tight. Clique/community graphs remain much tighter for `n = 10` to `n = 30`, where the Sparse LP gaps are close to zero. The `n = 100` clique/community graphs are an exception, with an Sparse LP gap of 0.045. This suggests that Sparse LP is generally strong for structured graphs, but very large structured instances can still create Sparse LP gaps. The Facebook size rows should be interpreted carefully because there are few runs and one larger row has missing method ratios.
 
-### Table RQ3.3 — Worst LP gap cases
+### Table RQ3.3 — Worst Sparse LP gap cases
 
-| graph_family | file_name | n | seed | p_delete_num | complete_lp_gap | edge_lp_gap | complete_lp_ratio | edge_lp_ratio_with4 | complete_bad_triangle_density | edge_bad_triangle_density |
+| graph_family | file_name | n | seed | p_delete_num | complete_sparse_lp_gap | edge_sparse_lp_gap | complete_sparse_lp_ratio | edge_sparse_lp_ratio_with4 | complete_bad_triangle_density | edge_bad_triangle_density |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | random | random_n10_p02.json | 10 | 47 | 0.050 | 0.167 | 0.333 | 0.833 | 0.667 | 0.058 | 0.050 |
 | random | random_n30_p03.json | 30 | 42 | 0.050 | 0.332 | 0.331 | 0.668 | 0.669 | 0.211 | 0.151 |
@@ -219,13 +219,13 @@ Full table saved as `rq3_2_lp_gap_by_size_compact.csv`.
 | random | random_n30_p04.json | 30 | 29 | 0.050 | 0.303 | 0.304 | 0.697 | 0.696 | 0.313 | 0.261 |
 
 
-**Analysis.** Table RQ3.3 shows that the worst LP gap cases all occur in random graphs. Most of these cases have `n = 30` and low to moderate positive-edge probabilities. This supports the conclusion that LP struggles most with larger random graphs, where inconsistent local structures are harder for the relaxation to represent. The table also shows relatively high bad triangle densities in several worst cases, suggesting that local conflict structure is connected to a larger LP gap. However, this should be read as a pattern in the observed data, not as proof that bad triangles are the only reason for the LP gap.
+**Analysis.** Table RQ3.3 shows that the worst Sparse LP gap cases all occur in random graphs. Most of these cases have `n = 30` and low to moderate positive-edge probabilities. This supports the conclusion that Sparse LP struggles most with larger random graphs, where inconsistent local structures are harder for the relaxation to represent. The table also shows relatively high bad triangle densities in several worst cases, suggesting that local conflict structure is connected to a larger Sparse LP gap. However, this should be read as a pattern in the observed data, not as proof that bad triangles are the only reason for the Sparse LP gap.
 
 ## Limitations for interpreting the results
 
 The results should be interpreted within the scope of the formulation tested in this thesis. The sparse experiments include bad 4-cycle constraints, but not all possible larger bad-cycle constraints. Therefore, a decrease in measured cost or normalized cost ratio means that the tested formulation gives a lower disagreement cost per remaining edge; it does not prove that the full sparse correlation clustering problem becomes easier.
 
-A second limitation is that Pivot is reported using the average Pivot result from the experimental runs. This gives a more representative view of the randomized Pivot algorithm than selecting only the best run. The Facebook results should also be interpreted carefully because only a small number of ego-networks is included and some larger Facebook instances have missing ILP-based ratios. Finally, this analysis is based on cost values, ratios, structural counts and runtime. It does not measure recovery of planted communities with extra clustering-quality scores such as ARI or NMI.
+A second limitation is that Pivot is reported using the average Pivot result from the experimental runs. This gives a more representative view of the randomized Pivot algorithm than selecting only the best run. The Facebook results should also be interpreted carefully because only a small number of ego-networks is included and some larger Facebook instances have missing Sparse ILP-based ratios. Finally, this analysis is based on cost values, ratios, structural counts and runtime. It does not measure recovery of planted communities with extra clustering-quality scores such as ARI or NMI.
 
 ## Created CSV tables
 
