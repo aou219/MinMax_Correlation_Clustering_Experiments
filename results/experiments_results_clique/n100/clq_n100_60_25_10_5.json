@@ -10,7 +10,97 @@
             7,
             8,
             9,
-            10
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96,
+            97,
+            98,
+            99,
+            100
         ],
         "num_nodes": 100,
         "cluster_sizes": [
@@ -36,7 +126,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1254.4
+                    "best_cost": 812,
+                    "average_cost": 1181.17
                 },
                 "bad_triangles": {
                     "total_count": 26366,
@@ -58,7 +149,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 758,
                         "pivot": {
-                            "average_cost": 1205.0
+                            "best_cost": 907,
+                            "average_cost": 1183.94
                         },
                         "bad_triangles": {
                             "total_count": 16324,
@@ -98,7 +190,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.6486353467561523,
+                        "average_pivot_approximation_without_4_cycles": 2.6486353467561523
                     },
                     "runtime_seconds": 94.4784369468689
                 },
@@ -107,7 +201,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 258,
                         "pivot": {
-                            "average_cost": 1267.6
+                            "best_cost": 892,
+                            "average_cost": 1218.68
                         },
                         "bad_triangles": {
                             "total_count": 22800,
@@ -147,7 +242,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.442244488977956,
+                        "average_pivot_approximation_without_4_cycles": 2.442244488977956
                     },
                     "runtime_seconds": 113.71386408805847
                 },
@@ -156,7 +253,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1238,
                         "pivot": {
-                            "average_cost": 1125.0
+                            "best_cost": 923,
+                            "average_cost": 1129.27
                         },
                         "bad_triangles": {
                             "total_count": 11417,
@@ -196,7 +294,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.823175,
+                        "average_pivot_approximation_without_4_cycles": 2.823175
                     },
                     "runtime_seconds": 93.54951691627502
                 },
@@ -205,7 +305,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 2000,
                         "pivot": {
-                            "average_cost": 992.0
+                            "best_cost": 858,
+                            "average_cost": 989.97
                         },
                         "bad_triangles": {
                             "total_count": 5749,
@@ -245,13 +346,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.1328164556962026,
+                        "average_pivot_approximation_without_4_cycles": 3.1427619047619046
                     },
                     "runtime_seconds": 82.91936111450195
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -260,7 +369,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1232.2
+                    "best_cost": 729,
+                    "average_cost": 1133.07
                 },
                 "bad_triangles": {
                     "total_count": 25119,
@@ -282,7 +392,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 741,
                         "pivot": {
-                            "average_cost": 1177.1
+                            "best_cost": 927,
+                            "average_cost": 1131.4
                         },
                         "bad_triangles": {
                             "total_count": 14808,
@@ -322,7 +433,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7935802469135806,
+                        "average_pivot_approximation_without_4_cycles": 2.7935802469135806
                     },
                     "runtime_seconds": 95.1907958984375
                 },
@@ -331,7 +444,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 222,
                         "pivot": {
-                            "average_cost": 1233.8
+                            "best_cost": 827,
+                            "average_cost": 1134.72
                         },
                         "bad_triangles": {
                             "total_count": 21625,
@@ -371,7 +485,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.4455172413793105,
+                        "average_pivot_approximation_without_4_cycles": 2.4455172413793105
                     },
                     "runtime_seconds": 113.77725291252136
                 },
@@ -380,7 +496,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1268,
                         "pivot": {
-                            "average_cost": 1095.9
+                            "best_cost": 872,
+                            "average_cost": 1082.33
                         },
                         "bad_triangles": {
                             "total_count": 9668,
@@ -420,7 +537,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.0923714285714285,
+                        "average_pivot_approximation_without_4_cycles": 3.0923714285714285
                     },
                     "runtime_seconds": 91.01322793960571
                 },
@@ -429,7 +548,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1969,
                         "pivot": {
-                            "average_cost": 980.4
+                            "best_cost": 840,
+                            "average_cost": 973.46
                         },
                         "bad_triangles": {
                             "total_count": 5218,
@@ -469,13 +589,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.3683737024221454,
+                        "average_pivot_approximation_without_4_cycles": 3.3683737024221454
                     },
                     "runtime_seconds": 81.5075011253357
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -484,7 +612,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1248.0
+                    "best_cost": 751,
+                    "average_cost": 1166.31
                 },
                 "bad_triangles": {
                     "total_count": 25833,
@@ -506,7 +635,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 802,
                         "pivot": {
-                            "average_cost": 1262.8
+                            "best_cost": 877,
+                            "average_cost": 1186.37
                         },
                         "bad_triangles": {
                             "total_count": 15112,
@@ -546,7 +676,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.907769607843137,
+                        "average_pivot_approximation_without_4_cycles": 2.907769607843137
                     },
                     "runtime_seconds": 94.52528309822083
                 },
@@ -555,7 +687,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 284,
                         "pivot": {
-                            "average_cost": 1276.5
+                            "best_cost": 828,
+                            "average_cost": 1166.7
                         },
                         "bad_triangles": {
                             "total_count": 21541,
@@ -595,7 +728,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.5090322580645164,
+                        "average_pivot_approximation_without_4_cycles": 2.5090322580645164
                     },
                     "runtime_seconds": 112.24651288986206
                 },
@@ -604,7 +739,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1284,
                         "pivot": {
-                            "average_cost": 1157.8
+                            "best_cost": 945,
+                            "average_cost": 1124.59
                         },
                         "bad_triangles": {
                             "total_count": 10554,
@@ -644,7 +780,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.115207756232687,
+                        "average_pivot_approximation_without_4_cycles": 3.115207756232687
                     },
                     "runtime_seconds": 92.35602474212646
                 },
@@ -653,7 +791,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 2007,
                         "pivot": {
-                            "average_cost": 1006.7
+                            "best_cost": 858,
+                            "average_cost": 989.35
                         },
                         "bad_triangles": {
                             "total_count": 5349,
@@ -693,13 +832,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.411551724137931,
+                        "average_pivot_approximation_without_4_cycles": 3.411551724137931
                     },
                     "runtime_seconds": 81.95342898368835
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -708,7 +855,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1156.3
+                    "best_cost": 742,
+                    "average_cost": 1120.22
                 },
                 "bad_triangles": {
                     "total_count": 25586,
@@ -730,7 +878,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 781,
                         "pivot": {
-                            "average_cost": 1139.6
+                            "best_cost": 781,
+                            "average_cost": 1145.34
                         },
                         "bad_triangles": {
                             "total_count": 15534,
@@ -770,7 +919,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.807205882352941,
+                        "average_pivot_approximation_without_4_cycles": 2.807205882352941
                     },
                     "runtime_seconds": 94.6249041557312
                 },
@@ -779,7 +930,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 258,
                         "pivot": {
-                            "average_cost": 1176.5
+                            "best_cost": 781,
+                            "average_cost": 1155.05
                         },
                         "bad_triangles": {
                             "total_count": 22061,
@@ -819,7 +971,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.4786480686695276,
+                        "average_pivot_approximation_without_4_cycles": 2.4786480686695276
                     },
                     "runtime_seconds": 113.35346293449402
                 },
@@ -828,7 +982,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1246,
                         "pivot": {
-                            "average_cost": 1103.2
+                            "best_cost": 926,
+                            "average_cost": 1123.69
                         },
                         "bad_triangles": {
                             "total_count": 10869,
@@ -868,7 +1023,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.095564738292011,
+                        "average_pivot_approximation_without_4_cycles": 3.095564738292011
                     },
                     "runtime_seconds": 92.31956195831299
                 },
@@ -877,7 +1034,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1995,
                         "pivot": {
-                            "average_cost": 1021.9
+                            "best_cost": 901,
+                            "average_cost": 1014.87
                         },
                         "bad_triangles": {
                             "total_count": 5790,
@@ -917,13 +1075,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.4875257731958764,
+                        "average_pivot_approximation_without_4_cycles": 3.4875257731958764
                     },
                     "runtime_seconds": 82.12370181083679
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -932,7 +1098,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1196.4
+                    "best_cost": 839,
+                    "average_cost": 1173.74
                 },
                 "bad_triangles": {
                     "total_count": 26081,
@@ -954,7 +1121,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 784,
                         "pivot": {
-                            "average_cost": 1196.1
+                            "best_cost": 805,
+                            "average_cost": 1158.57
                         },
                         "bad_triangles": {
                             "total_count": 15096,
@@ -994,7 +1162,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.812063106796116,
+                        "average_pivot_approximation_without_4_cycles": 2.818905109489051
                     },
                     "runtime_seconds": 94.28889918327332
                 },
@@ -1003,7 +1173,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 261,
                         "pivot": {
-                            "average_cost": 1238.2
+                            "best_cost": 915,
+                            "average_cost": 1208.17
                         },
                         "bad_triangles": {
                             "total_count": 22038,
@@ -1043,7 +1214,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.5328511530398323,
+                        "average_pivot_approximation_without_4_cycles": 2.5328511530398323
                     },
                     "runtime_seconds": 114.30068016052246
                 },
@@ -1052,7 +1225,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1280,
                         "pivot": {
-                            "average_cost": 1144.3
+                            "best_cost": 888,
+                            "average_cost": 1124.83
                         },
                         "bad_triangles": {
                             "total_count": 10307,
@@ -1092,7 +1266,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.08172602739726,
+                        "average_pivot_approximation_without_4_cycles": 3.08172602739726
                     },
                     "runtime_seconds": 91.8071358203888
                 },
@@ -1101,7 +1277,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 2016,
                         "pivot": {
-                            "average_cost": 993.8
+                            "best_cost": 872,
+                            "average_cost": 982.07
                         },
                         "bad_triangles": {
                             "total_count": 5288,
@@ -1141,13 +1318,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.351774744027304,
+                        "average_pivot_approximation_without_4_cycles": 3.351774744027304
                     },
                     "runtime_seconds": 81.95368528366089
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1156,7 +1341,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1236.0
+                    "best_cost": 737,
+                    "average_cost": 1159.31
                 },
                 "bad_triangles": {
                     "total_count": 25538,
@@ -1178,7 +1364,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 733,
                         "pivot": {
-                            "average_cost": 1221.4
+                            "best_cost": 859,
+                            "average_cost": 1192.7
                         },
                         "bad_triangles": {
                             "total_count": 15865,
@@ -1218,13 +1405,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.860191846522782,
+                        "average_pivot_approximation_without_4_cycles": 2.860191846522782
                     },
                     "runtime_seconds": 95.63100910186768
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1233,7 +1428,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1239.4
+                    "best_cost": 737,
+                    "average_cost": 1132.06
                 },
                 "bad_triangles": {
                     "total_count": 24863,
@@ -1255,7 +1451,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 726,
                         "pivot": {
-                            "average_cost": 1176.2
+                            "best_cost": 900,
+                            "average_cost": 1157.41
                         },
                         "bad_triangles": {
                             "total_count": 15406,
@@ -1295,13 +1492,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.8160827250608276,
+                        "average_pivot_approximation_without_4_cycles": 2.8160827250608276
                     },
                     "runtime_seconds": 95.53539872169495
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1310,7 +1515,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1161.2
+                    "best_cost": 747,
+                    "average_cost": 1109.71
                 },
                 "bad_triangles": {
                     "total_count": 24491,
@@ -1332,7 +1538,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 664,
                         "pivot": {
-                            "average_cost": 1196.6
+                            "best_cost": 769,
+                            "average_cost": 1147.98
                         },
                         "bad_triangles": {
                             "total_count": 16023,
@@ -1372,13 +1579,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7662168674698795,
+                        "average_pivot_approximation_without_4_cycles": 2.7662168674698795
                     },
                     "runtime_seconds": 96.48558688163757
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1387,7 +1602,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1107.0
+                    "best_cost": 774,
+                    "average_cost": 1143.65
                 },
                 "bad_triangles": {
                     "total_count": 25480,
@@ -1409,7 +1625,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 698,
                         "pivot": {
-                            "average_cost": 1229.2
+                            "best_cost": 980,
+                            "average_cost": 1182.56
                         },
                         "bad_triangles": {
                             "total_count": 16150,
@@ -1449,13 +1666,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.6815419501133784,
+                        "average_pivot_approximation_without_4_cycles": 2.6815419501133784
                     },
                     "runtime_seconds": 96.46536612510681
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1464,7 +1689,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1100.2
+                    "best_cost": 637,
+                    "average_cost": 1105.2
                 },
                 "bad_triangles": {
                     "total_count": 24697,
@@ -1486,7 +1712,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 735,
                         "pivot": {
-                            "average_cost": 1174.6
+                            "best_cost": 878,
+                            "average_cost": 1133.84
                         },
                         "bad_triangles": {
                             "total_count": 14964,
@@ -1526,13 +1753,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.8065346534653464,
+                        "average_pivot_approximation_without_4_cycles": 2.8065346534653464
                     },
                     "runtime_seconds": 95.2772810459137
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1541,7 +1776,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1232.0
+                    "best_cost": 862,
+                    "average_cost": 1212.82
                 },
                 "bad_triangles": {
                     "total_count": 27251,
@@ -1563,7 +1799,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 730,
                         "pivot": {
-                            "average_cost": 1233.6
+                            "best_cost": 975,
+                            "average_cost": 1219.46
                         },
                         "bad_triangles": {
                             "total_count": 16680,
@@ -1603,13 +1840,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7280984340044743,
+                        "average_pivot_approximation_without_4_cycles": 2.7280984340044743
                     },
                     "runtime_seconds": 97.86390399932861
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1618,7 +1863,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1062.8
+                    "best_cost": 651,
+                    "average_cost": 1114.9
                 },
                 "bad_triangles": {
                     "total_count": 25290,
@@ -1640,7 +1886,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 747,
                         "pivot": {
-                            "average_cost": 1117.6
+                            "best_cost": 722,
+                            "average_cost": 1127.25
                         },
                         "bad_triangles": {
                             "total_count": 15309,
@@ -1680,13 +1927,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7162650602409637,
+                        "average_pivot_approximation_without_4_cycles": 2.7162650602409637
                     },
                     "runtime_seconds": 173.82701587677002
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1695,7 +1950,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1292.9
+                    "best_cost": 872,
+                    "average_cost": 1240.5
                 },
                 "bad_triangles": {
                     "total_count": 27217,
@@ -1717,7 +1973,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 735,
                         "pivot": {
-                            "average_cost": 1292.2
+                            "best_cost": 958,
+                            "average_cost": 1233.0
                         },
                         "bad_triangles": {
                             "total_count": 16636,
@@ -1757,13 +2014,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.795918367346939,
+                        "average_pivot_approximation_without_4_cycles": 2.795918367346939
                     },
                     "runtime_seconds": 229.6023609638214
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1772,7 +2037,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1199.8
+                    "best_cost": 740,
+                    "average_cost": 1153.8
                 },
                 "bad_triangles": {
                     "total_count": 25242,
@@ -1794,7 +2060,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 755,
                         "pivot": {
-                            "average_cost": 1195.4
+                            "best_cost": 886,
+                            "average_cost": 1182.48
                         },
                         "bad_triangles": {
                             "total_count": 15438,
@@ -1834,13 +2101,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.762803738317757,
+                        "average_pivot_approximation_without_4_cycles": 2.762803738317757
                     },
                     "runtime_seconds": 227.401780128479
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1849,7 +2124,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1239.6
+                    "best_cost": 891,
+                    "average_cost": 1182.08
                 },
                 "bad_triangles": {
                     "total_count": 27003,
@@ -1871,7 +2147,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 741,
                         "pivot": {
-                            "average_cost": 1257.3
+                            "best_cost": 971,
+                            "average_cost": 1202.41
                         },
                         "bad_triangles": {
                             "total_count": 16631,
@@ -1911,13 +2188,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.660199115044248,
+                        "average_pivot_approximation_without_4_cycles": 2.660199115044248
                     },
                     "runtime_seconds": 165.77545070648193
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -1926,7 +2211,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1203.6
+                    "best_cost": 861,
+                    "average_cost": 1219.57
                 },
                 "bad_triangles": {
                     "total_count": 27024,
@@ -1948,7 +2234,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 726,
                         "pivot": {
-                            "average_cost": 1218.8
+                            "best_cost": 813,
+                            "average_cost": 1207.37
                         },
                         "bad_triangles": {
                             "total_count": 17056,
@@ -1988,13 +2275,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.671172566371681,
+                        "average_pivot_approximation_without_4_cycles": 2.671172566371681
                     },
                     "runtime_seconds": 96.0570182800293
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2003,7 +2298,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1268.4
+                    "best_cost": 839,
+                    "average_cost": 1161.64
                 },
                 "bad_triangles": {
                     "total_count": 25211,
@@ -2025,7 +2321,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 723,
                         "pivot": {
-                            "average_cost": 1183.1
+                            "best_cost": 903,
+                            "average_cost": 1164.75
                         },
                         "bad_triangles": {
                             "total_count": 15482,
@@ -2065,13 +2362,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.820217917675545,
+                        "average_pivot_approximation_without_4_cycles": 2.820217917675545
                     },
                     "runtime_seconds": 97.94825911521912
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2080,7 +2385,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1222.2
+                    "best_cost": 776,
+                    "average_cost": 1195.35
                 },
                 "bad_triangles": {
                     "total_count": 26409,
@@ -2102,7 +2408,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 760,
                         "pivot": {
-                            "average_cost": 1230.1
+                            "best_cost": 913,
+                            "average_cost": 1222.86
                         },
                         "bad_triangles": {
                             "total_count": 16000,
@@ -2142,13 +2449,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.817649769585253,
+                        "average_pivot_approximation_without_4_cycles": 2.817649769585253
                     },
                     "runtime_seconds": 95.98005509376526
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2157,7 +2472,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1144.2
+                    "best_cost": 725,
+                    "average_cost": 1134.13
                 },
                 "bad_triangles": {
                     "total_count": 24814,
@@ -2179,7 +2495,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 788,
                         "pivot": {
-                            "average_cost": 1220.5
+                            "best_cost": 839,
+                            "average_cost": 1190.39
                         },
                         "bad_triangles": {
                             "total_count": 15337,
@@ -2219,13 +2536,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.9538213399503723,
+                        "average_pivot_approximation_without_4_cycles": 2.9538213399503723
                     },
                     "runtime_seconds": 94.44840288162231
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2234,7 +2559,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1139.8
+                    "best_cost": 714,
+                    "average_cost": 1114.67
                 },
                 "bad_triangles": {
                     "total_count": 24607,
@@ -2256,7 +2582,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 769,
                         "pivot": {
-                            "average_cost": 1204.4
+                            "best_cost": 905,
+                            "average_cost": 1161.94
                         },
                         "bad_triangles": {
                             "total_count": 14691,
@@ -2296,13 +2623,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.890398009950249,
+                        "average_pivot_approximation_without_4_cycles": 2.890398009950249
                     },
                     "runtime_seconds": 102.59662890434265
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2311,9 +2646,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1226.6,
-                    "best_approximation_with_4_cycles": 2.1666666666666665,
-                    "average_approximation_with_4_cycles": 2.9204761904761902
+                    "best_cost": 740,
+                    "average_cost": 1131.52
                 },
                 "bad_triangles": {
                     "total_count": 25361,
@@ -2335,7 +2669,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 747,
                         "pivot": {
-                            "average_cost": 1226.6
+                            "best_cost": 893,
+                            "average_cost": 1173.43
                         },
                         "bad_triangles": {
                             "total_count": 16207,
@@ -2375,13 +2710,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7938809523809525,
+                        "average_pivot_approximation_without_4_cycles": 2.7938809523809525
                     },
                     "runtime_seconds": 94.67618298530579
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2390,9 +2733,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1287.6,
-                    "best_approximation_with_4_cycles": 2.8793103448275863,
-                    "average_approximation_with_4_cycles": 3.1714285714285713
+                    "best_cost": 778,
+                    "average_cost": 1172.73
                 },
                 "bad_triangles": {
                     "total_count": 25878,
@@ -2414,7 +2756,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 800,
                         "pivot": {
-                            "average_cost": 1287.6
+                            "best_cost": 887,
+                            "average_cost": 1190.84
                         },
                         "bad_triangles": {
                             "total_count": 14875,
@@ -2454,13 +2797,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.933103448275862,
+                        "average_pivot_approximation_without_4_cycles": 2.933103448275862
                     },
                     "runtime_seconds": 94.31535625457764
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2469,9 +2820,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1175.9,
-                    "best_approximation_with_4_cycles": 2.440963855421687,
-                    "average_approximation_with_4_cycles": 2.8334939759036146
+                    "best_cost": 758,
+                    "average_cost": 1124.95
                 },
                 "bad_triangles": {
                     "total_count": 24563,
@@ -2493,7 +2843,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 723,
                         "pivot": {
-                            "average_cost": 1175.9
+                            "best_cost": 770,
+                            "average_cost": 1164.5
                         },
                         "bad_triangles": {
                             "total_count": 15691,
@@ -2533,13 +2884,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.806024096385542,
+                        "average_pivot_approximation_without_4_cycles": 2.806024096385542
                     },
                     "runtime_seconds": 95.69309425354004
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2548,9 +2907,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1245.7,
-                    "best_approximation_with_4_cycles": 2.2235023041474653,
-                    "average_approximation_with_4_cycles": 2.8702764976958526
+                    "best_cost": 728,
+                    "average_cost": 1153.25
                 },
                 "bad_triangles": {
                     "total_count": 25803,
@@ -2572,7 +2930,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 749,
                         "pivot": {
-                            "average_cost": 1245.7
+                            "best_cost": 928,
+                            "average_cost": 1210.43
                         },
                         "bad_triangles": {
                             "total_count": 16385,
@@ -2612,13 +2971,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.789009216589862,
+                        "average_pivot_approximation_without_4_cycles": 2.789009216589862
                     },
                     "runtime_seconds": 97.05177712440491
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2627,9 +2994,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1251.6,
-                    "best_approximation_with_4_cycles": 2.5416666666666665,
-                    "average_approximation_with_4_cycles": 2.897222222222222
+                    "best_cost": 702,
+                    "average_cost": 1189.93
                 },
                 "bad_triangles": {
                     "total_count": 26728,
@@ -2651,7 +3017,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 735,
                         "pivot": {
-                            "average_cost": 1251.6
+                            "best_cost": 882,
+                            "average_cost": 1211.3
                         },
                         "bad_triangles": {
                             "total_count": 16511,
@@ -2691,13 +3058,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.803935185185185,
+                        "average_pivot_approximation_without_4_cycles": 2.803935185185185
                     },
                     "runtime_seconds": 97.37274122238159
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2706,9 +3081,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1215.6,
-                    "best_approximation_with_4_cycles": 2.4749403341288785,
-                    "average_approximation_with_4_cycles": 2.9011933174224342
+                    "best_cost": 723,
+                    "average_cost": 1152.3
                 },
                 "bad_triangles": {
                     "total_count": 25305,
@@ -2730,7 +3104,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 746,
                         "pivot": {
-                            "average_cost": 1215.6
+                            "best_cost": 729,
+                            "average_cost": 1170.53
                         },
                         "bad_triangles": {
                             "total_count": 15457,
@@ -2770,13 +3145,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7936276849642003,
+                        "average_pivot_approximation_without_4_cycles": 2.7936276849642003
                     },
                     "runtime_seconds": 96.07144594192505
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2785,9 +3168,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1199.3,
-                    "best_approximation_with_4_cycles": 2.473417721518987,
-                    "average_approximation_with_4_cycles": 3.0362025316455696
+                    "best_cost": 606,
+                    "average_cost": 1102.7
                 },
                 "bad_triangles": {
                     "total_count": 24421,
@@ -2809,7 +3191,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 737,
                         "pivot": {
-                            "average_cost": 1199.3
+                            "best_cost": 804,
+                            "average_cost": 1122.79
                         },
                         "bad_triangles": {
                             "total_count": 14436,
@@ -2849,13 +3232,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.842506329113924,
+                        "average_pivot_approximation_without_4_cycles": 2.849720812182741
                     },
                     "runtime_seconds": 97.19898700714111
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2864,9 +3255,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1207.3,
-                    "best_approximation_with_4_cycles": 2.326923076923077,
-                    "average_approximation_with_4_cycles": 2.9021634615384615
+                    "best_cost": 757,
+                    "average_cost": 1143.48
                 },
                 "bad_triangles": {
                     "total_count": 25152,
@@ -2888,7 +3278,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 758,
                         "pivot": {
-                            "average_cost": 1207.3
+                            "best_cost": 956,
+                            "average_cost": 1161.24
                         },
                         "bad_triangles": {
                             "total_count": 14791,
@@ -2928,13 +3319,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7914423076923076,
+                        "average_pivot_approximation_without_4_cycles": 2.7914423076923076
                     },
                     "runtime_seconds": 96.82523107528687
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -2943,9 +3342,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1185.5,
-                    "best_approximation_with_4_cycles": 2.2846534653465347,
-                    "average_approximation_with_4_cycles": 2.9344059405940595
+                    "best_cost": 663,
+                    "average_cost": 1135.08
                 },
                 "bad_triangles": {
                     "total_count": 24923,
@@ -2967,7 +3365,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 750,
                         "pivot": {
-                            "average_cost": 1185.5
+                            "best_cost": 811,
+                            "average_cost": 1154.09
                         },
                         "bad_triangles": {
                             "total_count": 14954,
@@ -3007,13 +3406,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.8566584158415838,
+                        "average_pivot_approximation_without_4_cycles": 2.8566584158415838
                     },
                     "runtime_seconds": 98.00099897384644
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3022,9 +3429,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1217.5,
-                    "best_approximation_with_4_cycles": 2.525345622119816,
-                    "average_approximation_with_4_cycles": 2.805299539170507
+                    "best_cost": 786,
+                    "average_cost": 1178.04
                 },
                 "bad_triangles": {
                     "total_count": 25347,
@@ -3046,7 +3452,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 739,
                         "pivot": {
-                            "average_cost": 1217.5
+                            "best_cost": 902,
+                            "average_cost": 1173.15
                         },
                         "bad_triangles": {
                             "total_count": 15511,
@@ -3086,13 +3493,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7031105990783413,
+                        "average_pivot_approximation_without_4_cycles": 2.7031105990783413
                     },
                     "runtime_seconds": 95.9989960193634
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3101,9 +3516,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1221.2,
-                    "best_approximation_with_4_cycles": 1.9725400457665905,
-                    "average_approximation_with_4_cycles": 2.794508009153318
+                    "best_cost": 758,
+                    "average_cost": 1171.97
                 },
                 "bad_triangles": {
                     "total_count": 26645,
@@ -3125,7 +3539,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 761,
                         "pivot": {
-                            "average_cost": 1221.2
+                            "best_cost": 862,
+                            "average_cost": 1213.07
                         },
                         "bad_triangles": {
                             "total_count": 16386,
@@ -3165,13 +3580,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.775903890160183,
+                        "average_pivot_approximation_without_4_cycles": 2.775903890160183
                     },
                     "runtime_seconds": 97.16114807128906
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3180,9 +3603,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1246.4,
-                    "best_approximation_with_4_cycles": 2.4074074074074074,
-                    "average_approximation_with_4_cycles": 2.8851851851851853
+                    "best_cost": 717,
+                    "average_cost": 1184.86
                 },
                 "bad_triangles": {
                     "total_count": 26276,
@@ -3204,7 +3626,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 762,
                         "pivot": {
-                            "average_cost": 1246.4
+                            "best_cost": 890,
+                            "average_cost": 1190.73
                         },
                         "bad_triangles": {
                             "total_count": 15966,
@@ -3244,13 +3667,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7563194444444443,
+                        "average_pivot_approximation_without_4_cycles": 2.7563194444444443
                     },
                     "runtime_seconds": 97.18030023574829
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3259,9 +3690,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1242.7,
-                    "best_approximation_with_4_cycles": 2.3279816513761467,
-                    "average_approximation_with_4_cycles": 2.8502293577981654
+                    "best_cost": 723,
+                    "average_cost": 1191.26
                 },
                 "bad_triangles": {
                     "total_count": 26315,
@@ -3283,7 +3713,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 761,
                         "pivot": {
-                            "average_cost": 1242.7
+                            "best_cost": 674,
+                            "average_cost": 1195.97
                         },
                         "bad_triangles": {
                             "total_count": 16095,
@@ -3323,13 +3754,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7430504587155964,
+                        "average_pivot_approximation_without_4_cycles": 2.7430504587155964
                     },
                     "runtime_seconds": 97.37213325500488
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3338,9 +3777,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1118.2,
-                    "best_approximation_with_4_cycles": 2.0686015831134563,
-                    "average_approximation_with_4_cycles": 2.950395778364116
+                    "best_cost": 663,
+                    "average_cost": 1126.68
                 },
                 "bad_triangles": {
                     "total_count": 24465,
@@ -3362,7 +3800,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 775,
                         "pivot": {
-                            "average_cost": 1118.2
+                            "best_cost": 784,
+                            "average_cost": 1143.53
                         },
                         "bad_triangles": {
                             "total_count": 14236,
@@ -3402,13 +3841,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.0172295514511873,
+                        "average_pivot_approximation_without_4_cycles": 3.0172295514511873
                     },
                     "runtime_seconds": 96.76253890991211
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3417,9 +3864,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1300.8,
-                    "best_approximation_with_4_cycles": 2.840095465393795,
-                    "average_approximation_with_4_cycles": 3.1045346062052506
+                    "best_cost": 854,
+                    "average_cost": 1162.62
                 },
                 "bad_triangles": {
                     "total_count": 25046,
@@ -3441,7 +3887,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 731,
                         "pivot": {
-                            "average_cost": 1300.8
+                            "best_cost": 876,
+                            "average_cost": 1181.94
                         },
                         "bad_triangles": {
                             "total_count": 15420,
@@ -3481,13 +3928,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.8208591885441527,
+                        "average_pivot_approximation_without_4_cycles": 2.8208591885441527
                     },
                     "runtime_seconds": 97.78883194923401
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3496,9 +3951,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1211.2,
-                    "best_approximation_with_4_cycles": 2.2850467289719627,
-                    "average_approximation_with_4_cycles": 2.829906542056075
+                    "best_cost": 738,
+                    "average_cost": 1173.33
                 },
                 "bad_triangles": {
                     "total_count": 26080,
@@ -3520,7 +3974,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 749,
                         "pivot": {
-                            "average_cost": 1211.2
+                            "best_cost": 940,
+                            "average_cost": 1192.43
                         },
                         "bad_triangles": {
                             "total_count": 16161,
@@ -3560,13 +4015,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.786051401869159,
+                        "average_pivot_approximation_without_4_cycles": 2.786051401869159
                     },
                     "runtime_seconds": 97.659255027771
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3575,9 +4038,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1175.9,
-                    "best_approximation_with_4_cycles": 2.2423529411764704,
-                    "average_approximation_with_4_cycles": 2.766823529411765
+                    "best_cost": 806,
+                    "average_cost": 1148.1
                 },
                 "bad_triangles": {
                     "total_count": 25473,
@@ -3599,7 +4061,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 734,
                         "pivot": {
-                            "average_cost": 1175.9
+                            "best_cost": 880,
+                            "average_cost": 1178.46
                         },
                         "bad_triangles": {
                             "total_count": 15658,
@@ -3639,13 +4102,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7728470588235297,
+                        "average_pivot_approximation_without_4_cycles": 2.7728470588235297
                     },
                     "runtime_seconds": 97.91543078422546
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3654,9 +4125,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1174.9,
-                    "best_approximation_with_4_cycles": 2.0804597701149423,
-                    "average_approximation_with_4_cycles": 2.700919540229885
+                    "best_cost": 784,
+                    "average_cost": 1154.66
                 },
                 "bad_triangles": {
                     "total_count": 24768,
@@ -3678,7 +4148,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 710,
                         "pivot": {
-                            "average_cost": 1174.9
+                            "best_cost": 790,
+                            "average_cost": 1147.33
                         },
                         "bad_triangles": {
                             "total_count": 15840,
@@ -3718,13 +4189,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.637540229885057,
+                        "average_pivot_approximation_without_4_cycles": 2.637540229885057
                     },
                     "runtime_seconds": 98.4845199584961
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3733,9 +4212,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1245.6,
-                    "best_approximation_with_4_cycles": 2.3255269320843093,
-                    "average_approximation_with_4_cycles": 2.917096018735363
+                    "best_cost": 696,
+                    "average_cost": 1171.52
                 },
                 "bad_triangles": {
                     "total_count": 25758,
@@ -3757,7 +4235,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 766,
                         "pivot": {
-                            "average_cost": 1245.6
+                            "best_cost": 864,
+                            "average_cost": 1191.24
                         },
                         "bad_triangles": {
                             "total_count": 15413,
@@ -3797,13 +4276,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7897892271662763,
+                        "average_pivot_approximation_without_4_cycles": 2.7897892271662763
                     },
                     "runtime_seconds": 98.66949319839478
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3812,9 +4299,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1222.7,
-                    "best_approximation_with_4_cycles": 2.711904761904762,
-                    "average_approximation_with_4_cycles": 2.9111904761904763
+                    "best_cost": 815,
+                    "average_cost": 1165.44
                 },
                 "bad_triangles": {
                     "total_count": 25510,
@@ -3836,7 +4322,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 780,
                         "pivot": {
-                            "average_cost": 1222.7
+                            "best_cost": 947,
+                            "average_cost": 1194.75
                         },
                         "bad_triangles": {
                             "total_count": 14952,
@@ -3876,13 +4363,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.844642857142857,
+                        "average_pivot_approximation_without_4_cycles": 2.844642857142857
                     },
                     "runtime_seconds": 97.62345910072327
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -3891,7 +4386,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1081.1
+                    "best_cost": 675,
+                    "average_cost": 1111.34
                 },
                 "bad_triangles": {
                     "total_count": 25125,
@@ -3913,7 +4409,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 236,
                         "pivot": {
-                            "average_cost": 1095.5
+                            "best_cost": 698,
+                            "average_cost": 1137.31
                         },
                         "bad_triangles": {
                             "total_count": 21540,
@@ -3953,7 +4450,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.472413043478261,
+                        "average_pivot_approximation_without_4_cycles": 2.472413043478261
                     },
                     "runtime_seconds": 112.812579870224
                 },
@@ -3962,7 +4461,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 723,
                         "pivot": {
-                            "average_cost": 1130.6
+                            "best_cost": 732,
+                            "average_cost": 1151.38
                         },
                         "bad_triangles": {
                             "total_count": 15555,
@@ -4002,7 +4502,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.787845036319613,
+                        "average_pivot_approximation_without_4_cycles": 2.787845036319613
                     },
                     "runtime_seconds": 98.29870057106018
                 },
@@ -4011,7 +4513,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1236,
                         "pivot": {
-                            "average_cost": 1067.2
+                            "best_cost": 913,
+                            "average_cost": 1114.64
                         },
                         "bad_triangles": {
                             "total_count": 10570,
@@ -4051,7 +4554,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.0621978021978027,
+                        "average_pivot_approximation_without_4_cycles": 3.0621978021978027
                     },
                     "runtime_seconds": 92.77857613563538
                 },
@@ -4060,7 +4565,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1932,
                         "pivot": {
-                            "average_cost": 982.2
+                            "best_cost": 826,
+                            "average_cost": 988.53
                         },
                         "bad_triangles": {
                             "total_count": 5611,
@@ -4100,13 +4606,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.3623469387755103,
+                        "average_pivot_approximation_without_4_cycles": 3.3738225255972694
                     },
                     "runtime_seconds": 82.92908120155334
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -4115,7 +4629,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1212.3
+                    "best_cost": 796,
+                    "average_cost": 1152.25
                 },
                 "bad_triangles": {
                     "total_count": 25112,
@@ -4137,7 +4652,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 240,
                         "pivot": {
-                            "average_cost": 1246.4
+                            "best_cost": 793,
+                            "average_cost": 1183.29
                         },
                         "bad_triangles": {
                             "total_count": 21829,
@@ -4177,7 +4693,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.5392489270386265,
+                        "average_pivot_approximation_without_4_cycles": 2.5392489270386265
                     },
                     "runtime_seconds": 113.02785277366638
                 },
@@ -4186,7 +4704,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 747,
                         "pivot": {
-                            "average_cost": 1234.1
+                            "best_cost": 792,
+                            "average_cost": 1189.27
                         },
                         "bad_triangles": {
                             "total_count": 15572,
@@ -4226,7 +4745,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.851966426858513,
+                        "average_pivot_approximation_without_4_cycles": 2.851966426858513
                     },
                     "runtime_seconds": 102.08633804321289
                 },
@@ -4235,7 +4756,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1267,
                         "pivot": {
-                            "average_cost": 1131.8
+                            "best_cost": 918,
+                            "average_cost": 1137.93
                         },
                         "bad_triangles": {
                             "total_count": 10297,
@@ -4275,7 +4797,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.196432584269663,
+                        "average_pivot_approximation_without_4_cycles": 3.196432584269663
                     },
                     "runtime_seconds": 112.38550972938538
                 },
@@ -4284,7 +4808,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1994,
                         "pivot": {
-                            "average_cost": 999.6
+                            "best_cost": 841,
+                            "average_cost": 983.6
                         },
                         "bad_triangles": {
                             "total_count": 5191,
@@ -4324,13 +4849,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.512857142857143,
+                        "average_pivot_approximation_without_4_cycles": 3.525448028673835
                     },
                     "runtime_seconds": 82.2476270198822
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -4339,7 +4872,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1247.4
+                    "best_cost": 810,
+                    "average_cost": 1171.57
                 },
                 "bad_triangles": {
                     "total_count": 26551,
@@ -4361,7 +4895,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 285,
                         "pivot": {
-                            "average_cost": 1277.5
+                            "best_cost": 896,
+                            "average_cost": 1214.83
                         },
                         "bad_triangles": {
                             "total_count": 22338,
@@ -4401,7 +4936,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.509979338842975,
+                        "average_pivot_approximation_without_4_cycles": 2.509979338842975
                     },
                     "runtime_seconds": 112.33878898620605
                 },
@@ -4410,7 +4947,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 785,
                         "pivot": {
-                            "average_cost": 1219.0
+                            "best_cost": 751,
+                            "average_cost": 1170.24
                         },
                         "bad_triangles": {
                             "total_count": 15440,
@@ -4450,7 +4988,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.799617224880383,
+                        "average_pivot_approximation_without_4_cycles": 2.799617224880383
                     },
                     "runtime_seconds": 98.71950817108154
                 },
@@ -4459,7 +4999,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1286,
                         "pivot": {
-                            "average_cost": 1115.3
+                            "best_cost": 828,
+                            "average_cost": 1106.83
                         },
                         "bad_triangles": {
                             "total_count": 10363,
@@ -4499,7 +5040,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.0660110803324097,
+                        "average_pivot_approximation_without_4_cycles": 3.0660110803324097
                     },
                     "runtime_seconds": 94.0708601474762
                 },
@@ -4508,7 +5051,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 2000,
                         "pivot": {
-                            "average_cost": 995.3
+                            "best_cost": 888,
+                            "average_cost": 995.52
                         },
                         "bad_triangles": {
                             "total_count": 5415,
@@ -4548,13 +5092,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.4566666666666666,
+                        "average_pivot_approximation_without_4_cycles": 3.4566666666666666
                     },
                     "runtime_seconds": 83.09996008872986
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -4563,7 +5115,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1247.4
+                    "best_cost": 823,
+                    "average_cost": 1191.87
                 },
                 "bad_triangles": {
                     "total_count": 26228,
@@ -4585,7 +5138,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 239,
                         "pivot": {
-                            "average_cost": 1270.0
+                            "best_cost": 902,
+                            "average_cost": 1224.85
                         },
                         "bad_triangles": {
                             "total_count": 22709,
@@ -4625,7 +5179,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.425445544554455,
+                        "average_pivot_approximation_without_4_cycles": 2.425445544554455
                     },
                     "runtime_seconds": 114.47771215438843
                 },
@@ -4634,7 +5190,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 730,
                         "pivot": {
-                            "average_cost": 1275.7
+                            "best_cost": 964,
+                            "average_cost": 1206.11
                         },
                         "bad_triangles": {
                             "total_count": 16397,
@@ -4674,7 +5231,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.6566299559471362,
+                        "average_pivot_approximation_without_4_cycles": 2.6566299559471362
                     },
                     "runtime_seconds": 103.17835116386414
                 },
@@ -4683,7 +5242,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1217,
                         "pivot": {
-                            "average_cost": 1194.4
+                            "best_cost": 924,
+                            "average_cost": 1140.38
                         },
                         "bad_triangles": {
                             "total_count": 11406,
@@ -4723,7 +5283,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.836766169154229,
+                        "average_pivot_approximation_without_4_cycles": 2.836766169154229
                     },
                     "runtime_seconds": 96.54361009597778
                 },
@@ -4732,7 +5294,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1946,
                         "pivot": {
-                            "average_cost": 1021.4
+                            "best_cost": 850,
+                            "average_cost": 1012.3
                         },
                         "bad_triangles": {
                             "total_count": 6040,
@@ -4772,13 +5335,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.076899696048632,
+                        "average_pivot_approximation_without_4_cycles": 3.076899696048632
                     },
                     "runtime_seconds": 84.90519499778748
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -4787,7 +5358,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1230.2
+                    "best_cost": 817,
+                    "average_cost": 1170.25
                 },
                 "bad_triangles": {
                     "total_count": 26720,
@@ -4809,7 +5381,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 243,
                         "pivot": {
-                            "average_cost": 1264.4
+                            "best_cost": 863,
+                            "average_cost": 1210.39
                         },
                         "bad_triangles": {
                             "total_count": 22855,
@@ -4849,7 +5422,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.526910229645094,
+                        "average_pivot_approximation_without_4_cycles": 2.526910229645094
                     },
                     "runtime_seconds": 116.37156391143799
                 },
@@ -4858,7 +5433,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 777,
                         "pivot": {
-                            "average_cost": 1209.0
+                            "best_cost": 909,
+                            "average_cost": 1188.68
                         },
                         "bad_triangles": {
                             "total_count": 15995,
@@ -4898,7 +5474,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.757958236658933,
+                        "average_pivot_approximation_without_4_cycles": 2.757958236658933
                     },
                     "runtime_seconds": 99.28021216392517
                 },
@@ -4907,7 +5485,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1282,
                         "pivot": {
-                            "average_cost": 1146.3
+                            "best_cost": 897,
+                            "average_cost": 1155.89
                         },
                         "bad_triangles": {
                             "total_count": 11075,
@@ -4947,7 +5526,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.0023116883116887,
+                        "average_pivot_approximation_without_4_cycles": 3.0101302083333334
                     },
                     "runtime_seconds": 96.03177285194397
                 },
@@ -4956,7 +5537,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1986,
                         "pivot": {
-                            "average_cost": 1014.0
+                            "best_cost": 878,
+                            "average_cost": 1021.3
                         },
                         "bad_triangles": {
                             "total_count": 5973,
@@ -4996,13 +5578,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.2733974358974356,
+                        "average_pivot_approximation_without_4_cycles": 3.2733974358974356
                     },
                     "runtime_seconds": 83.71418809890747
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -5011,7 +5601,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1165.3
+                    "best_cost": 679,
+                    "average_cost": 1097.72
                 },
                 "bad_triangles": {
                     "total_count": 24657,
@@ -5033,7 +5624,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 257,
                         "pivot": {
-                            "average_cost": 1174.1
+                            "best_cost": 661,
+                            "average_cost": 1111.49
                         },
                         "bad_triangles": {
                             "total_count": 20939,
@@ -5073,7 +5665,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.437478070175439,
+                        "average_pivot_approximation_without_4_cycles": 2.437478070175439
                     },
                     "runtime_seconds": 112.77755689620972
                 },
@@ -5082,7 +5676,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 735,
                         "pivot": {
-                            "average_cost": 1182.4
+                            "best_cost": 896,
+                            "average_cost": 1139.63
                         },
                         "bad_triangles": {
                             "total_count": 15037,
@@ -5122,7 +5717,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.7932107843137257,
+                        "average_pivot_approximation_without_4_cycles": 2.7932107843137257
                     },
                     "runtime_seconds": 99.92138075828552
                 },
@@ -5131,7 +5728,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1289,
                         "pivot": {
-                            "average_cost": 1116.8
+                            "best_cost": 836,
+                            "average_cost": 1101.99
                         },
                         "bad_triangles": {
                             "total_count": 9897,
@@ -5171,7 +5769,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.0781843575418995,
+                        "average_pivot_approximation_without_4_cycles": 3.0781843575418995
                     },
                     "runtime_seconds": 92.46589589118958
                 },
@@ -5180,7 +5780,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 2012,
                         "pivot": {
-                            "average_cost": 973.7
+                            "best_cost": 858,
+                            "average_cost": 963.66
                         },
                         "bad_triangles": {
                             "total_count": 4905,
@@ -5220,13 +5821,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.5428676470588236,
+                        "average_pivot_approximation_without_4_cycles": 3.5428676470588236
                     },
                     "runtime_seconds": 81.98599696159363
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -5235,7 +5844,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1084.2
+                    "best_cost": 794,
+                    "average_cost": 1096.69
                 },
                 "bad_triangles": {
                     "total_count": 23483,
@@ -5257,7 +5867,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 219,
                         "pivot": {
-                            "average_cost": 1104.8
+                            "best_cost": 803,
+                            "average_cost": 1118.41
                         },
                         "bad_triangles": {
                             "total_count": 20819,
@@ -5297,7 +5908,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.496450892857143,
+                        "average_pivot_approximation_without_4_cycles": 2.496450892857143
                     },
                     "runtime_seconds": 111.47943091392517
                 },
@@ -5306,7 +5919,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 714,
                         "pivot": {
-                            "average_cost": 1143.9
+                            "best_cost": 849,
+                            "average_cost": 1124.34
                         },
                         "bad_triangles": {
                             "total_count": 15345,
@@ -5346,7 +5960,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.796865671641791,
+                        "average_pivot_approximation_without_4_cycles": 2.796865671641791
                     },
                     "runtime_seconds": 103.22419786453247
                 },
@@ -5355,7 +5971,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1167,
                         "pivot": {
-                            "average_cost": 1103.9
+                            "best_cost": 872,
+                            "average_cost": 1088.88
                         },
                         "bad_triangles": {
                             "total_count": 10992,
@@ -5395,7 +6012,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.9996694214876034,
+                        "average_pivot_approximation_without_4_cycles": 2.9996694214876034
                     },
                     "runtime_seconds": 93.49749088287354
                 },
@@ -5404,7 +6023,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1894,
                         "pivot": {
-                            "average_cost": 962.8
+                            "best_cost": 820,
+                            "average_cost": 972.07
                         },
                         "bad_triangles": {
                             "total_count": 5769,
@@ -5444,13 +6064,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.410771929824562,
+                        "average_pivot_approximation_without_4_cycles": 3.410771929824562
                     },
                     "runtime_seconds": 82.3013801574707
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -5459,7 +6087,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1084.5
+                    "best_cost": 786,
+                    "average_cost": 1102.03
                 },
                 "bad_triangles": {
                     "total_count": 24042,
@@ -5481,7 +6110,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 220,
                         "pivot": {
-                            "average_cost": 1102.4
+                            "best_cost": 787,
+                            "average_cost": 1129.34
                         },
                         "bad_triangles": {
                             "total_count": 21025,
@@ -5521,7 +6151,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.5435585585585585,
+                        "average_pivot_approximation_without_4_cycles": 2.5435585585585585
                     },
                     "runtime_seconds": 114.91951417922974
                 },
@@ -5530,7 +6162,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 729,
                         "pivot": {
-                            "average_cost": 1133.6
+                            "best_cost": 766,
+                            "average_cost": 1141.07
                         },
                         "bad_triangles": {
                             "total_count": 14862,
@@ -5570,7 +6203,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.910892857142857,
+                        "average_pivot_approximation_without_4_cycles": 2.910892857142857
                     },
                     "runtime_seconds": 100.75880599021912
                 },
@@ -5579,7 +6214,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1237,
                         "pivot": {
-                            "average_cost": 1126.2
+                            "best_cost": 904,
+                            "average_cost": 1117.71
                         },
                         "bad_triangles": {
                             "total_count": 10365,
@@ -5619,7 +6255,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.122094972067039,
+                        "average_pivot_approximation_without_4_cycles": 3.122094972067039
                     },
                     "runtime_seconds": 92.36568999290466
                 },
@@ -5628,7 +6266,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1970,
                         "pivot": {
-                            "average_cost": 974.6
+                            "best_cost": 868,
+                            "average_cost": 982.05
                         },
                         "bad_triangles": {
                             "total_count": 5389,
@@ -5668,13 +6307,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.398096885813149,
+                        "average_pivot_approximation_without_4_cycles": 3.398096885813149
                     },
                     "runtime_seconds": 82.12048387527466
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -5683,7 +6330,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1165.7
+                    "best_cost": 769,
+                    "average_cost": 1156.93
                 },
                 "bad_triangles": {
                     "total_count": 25634,
@@ -5705,7 +6353,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 242,
                         "pivot": {
-                            "average_cost": 1228.0
+                            "best_cost": 890,
+                            "average_cost": 1199.7
                         },
                         "bad_triangles": {
                             "total_count": 21969,
@@ -5745,7 +6394,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.625164113785558,
+                        "average_pivot_approximation_without_4_cycles": 2.625164113785558
                     },
                     "runtime_seconds": 115.2821741104126
                 },
@@ -5754,7 +6405,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 766,
                         "pivot": {
-                            "average_cost": 1211.6
+                            "best_cost": 892,
+                            "average_cost": 1178.32
                         },
                         "bad_triangles": {
                             "total_count": 15438,
@@ -5794,7 +6446,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.888039215686274,
+                        "average_pivot_approximation_without_4_cycles": 2.888039215686274
                     },
                     "runtime_seconds": 103.06263399124146
                 },
@@ -5803,7 +6457,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1277,
                         "pivot": {
-                            "average_cost": 1157.8
+                            "best_cost": 955,
+                            "average_cost": 1134.69
                         },
                         "bad_triangles": {
                             "total_count": 10643,
@@ -5843,7 +6498,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.1258677685950413,
+                        "average_pivot_approximation_without_4_cycles": 3.1258677685950413
                     },
                     "runtime_seconds": 92.71060109138489
                 },
@@ -5852,7 +6509,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1999,
                         "pivot": {
-                            "average_cost": 1009.8
+                            "best_cost": 838,
+                            "average_cost": 999.11
                         },
                         "bad_triangles": {
                             "total_count": 5650,
@@ -5892,13 +6550,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.3753716216216216,
+                        "average_pivot_approximation_without_4_cycles": 3.3753716216216216
                     },
                     "runtime_seconds": 82.13155317306519
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         },
         {
@@ -5907,7 +6573,8 @@
             },
             "complete_graph": {
                 "pivot": {
-                    "average_cost": 1286.1
+                    "best_cost": 775,
+                    "average_cost": 1173.67
                 },
                 "bad_triangles": {
                     "total_count": 25712,
@@ -5929,7 +6596,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 251,
                         "pivot": {
-                            "average_cost": 1261.9
+                            "best_cost": 794,
+                            "average_cost": 1193.13
                         },
                         "bad_triangles": {
                             "total_count": 21952,
@@ -5969,7 +6637,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.5224735729386896,
+                        "average_pivot_approximation_without_4_cycles": 2.5224735729386896
                     },
                     "runtime_seconds": 114.46042323112488
                 },
@@ -5978,7 +6648,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 775,
                         "pivot": {
-                            "average_cost": 1225.6
+                            "best_cost": 950,
+                            "average_cost": 1186.93
                         },
                         "bad_triangles": {
                             "total_count": 15543,
@@ -6018,7 +6689,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 2.79936320754717,
+                        "average_pivot_approximation_without_4_cycles": 2.79936320754717
                     },
                     "runtime_seconds": 100.29500699043274
                 },
@@ -6027,7 +6700,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1236,
                         "pivot": {
-                            "average_cost": 1147.9
+                            "best_cost": 948,
+                            "average_cost": 1150.45
                         },
                         "bad_triangles": {
                             "total_count": 10972,
@@ -6067,7 +6741,9 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.011649214659686,
+                        "average_pivot_approximation_without_4_cycles": 3.011649214659686
                     },
                     "runtime_seconds": 94.79582285881042
                 },
@@ -6076,7 +6752,8 @@
                     "edge_deleted_graph": {
                         "num_edges_deleted": 1957,
                         "pivot": {
-                            "average_cost": 1040.8
+                            "best_cost": 868,
+                            "average_cost": 1009.76
                         },
                         "bad_triangles": {
                             "total_count": 5897,
@@ -6116,13 +6793,21 @@
                     },
                     "approximations": {
                         "sparse_lp_to_ilp_ratio_with_4_cycles": 1.0,
-                        "all_pairs_lp_to_ilp_ratio": 1.0
+                        "all_pairs_lp_to_ilp_ratio": 1.0,
+                        "average_pivot_approximation_with_4_cycles": 3.226070287539936,
+                        "average_pivot_approximation_without_4_cycles": 3.226070287539936
                     },
                     "runtime_seconds": 84.20545697212219
                 }
             },
             "complete_graph_sparse_approximations": {
                 "sparse_lp_to_ilp_ratio": 1.0
+            },
+            "approximations": {
+                "complete_graph": {
+                    "best_pivot_approximation": null,
+                    "average_pivot_approximation": null
+                }
             }
         }
     ]
