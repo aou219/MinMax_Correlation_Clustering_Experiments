@@ -64,3 +64,42 @@ pivot_all_pairs_ratio = edge_pivot_average_cost / edge_all_pairs_ilp_cost
 The outliers are concentrated in clique-based instances: 463 of the 491 cases are clique graphs.
 
 Balanced two-clique instances can show many high-ratio cases, but the effect is not limited to balanced cliques. The safer conclusion is that high Pivot/all-pairs ILP ratios are common in clique-structured instances, especially after substantial edge deletion.
+
+<!-- SPARSE_REAL_ILP_TABLES_START -->
+## Sparse ILP versus real all-pairs ILP
+
+This section compares the sparse ILP objective value against the real all-pairs ILP objective value on the same edge-deleted graph. The comparison is made both without and with the additional 4-cycle constraints.
+
+### Overall comparison
+
+| Comparison | Comparable runs | Different runs | Different % | Same runs | Same % |
+| --- | --- | --- | --- | --- | --- |
+| Sparse ILP without 4-cycle constraints | 12097 | 994 | 8.22% | 11103 | 91.78% |
+| Sparse ILP with 4-cycle constraints | 12097 | 31 | 0.26% | 12066 | 99.74% |
+
+### Comparison by graph family
+
+| Graph family | Comparable runs | Different without 4-cycles | Different without 4-cycles % | Different with 4-cycles | Different with 4-cycles % |
+| --- | --- | --- | --- | --- | --- |
+| clique | 3685 | 218 | 5.92% | 10 | 0.27% |
+| facebook | 12 | 4 | 33.33% | 0 | 0.00% |
+| random | 8400 | 772 | 9.19% | 21 | 0.25% |
+
+### Effect of adding 4-cycle constraints
+
+| Quantity | Value |
+| --- | --- |
+| Discrepancies without 4-cycle constraints | 994 |
+| Discrepancies with 4-cycle constraints | 31 |
+| Discrepancies removed by adding 4-cycle constraints | 963 |
+| Relative reduction | 96.88% |
+
+### Difference magnitudes
+
+| Comparison | Mean absolute difference among different runs | Max absolute difference | Sparse ILP cost at max difference | Real ILP cost at max difference | File | Seed | `p_delete` |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Sparse ILP without 4-cycle constraints | 1.2726 | 5 | 21 | 26 | random_n30_p05.json | 19 | 0.40 |
+| Sparse ILP with 4-cycle constraints | 1 | 1 | 1 | 2 | clq_n10_2x5.json | 20 | 0.40 |
+
+Interpretation: adding the 4-cycle constraints makes the sparse ILP much closer to the real all-pairs ILP. The sparse formulation without those constraints differs more often, while the formulation with 4-cycle constraints differs only in rare cases.
+<!-- SPARSE_REAL_ILP_TABLES_END -->
