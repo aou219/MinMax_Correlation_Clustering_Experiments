@@ -1,480 +1,271 @@
-# Correlation Clustering Experiments
+# Correlation Clustering under Random Edge Deletion
 
-This repository contains experiments for a thesis project on **correlation clustering** on signed graphs.
+This repository contains the code and experiment data for a BSc thesis on the
+robustness of correlation clustering methods when signed edges are deleted.
+It compares the randomized Pivot algorithm, integer and linear programming
+formulations, and lower bounds based on bad triangles. It also studies whether
+bad 4-cycle constraints recover information that is lost after edge deletion.
 
-The project compares Pivot, ILP, LP relaxations, bad triangles, edge-disjoint bad triangles, edge deletion, and bad 4-cycle constraints on different graph families.
+The experiments cover three graph families:
 
-The experiments are run on:
+- independently signed random complete graphs;
+- synthetic graphs with planted clique structure;
+- Facebook ego-networks from the SNAP Facebook social-circles dataset.
 
-- random signed graphs
-- synthetic clique/community graphs
-- real-world Facebook ego-networks from the SNAP Facebook social circles dataset
+## Problem
 
----
+For a signed graph `G = (V, E+ union E-)`, correlation clustering seeks a
+partition of the vertices that minimizes disagreements:
 
-## Research Questions
+- a positive edge whose endpoints are assigned to different clusters;
+- a negative edge whose endpoints are assigned to the same cluster.
 
-### RQ1 — Edge deletion
+Let `x_ij = 0` when vertices `i` and `j` are in the same cluster and
+`x_ij = 1` otherwise. The objective is:
 
-How does the clustering cost and clustering structure change when edges are removed?
+```text
+minimize
+    sum(x_ij                 for each positive edge (i,j))
+  + sum(1 - x_ij             for each negative edge (i,j))
+```
 
-### RQ2 — Input structure
-
-For which types of input graphs do Pivot, LP, and ILP perform better or worse?
-
-The project compares:
-
-- random graphs
-- clique/community graphs
-- Facebook ego-networks
-
-### RQ3 — LP vs ILP
-
-How close is the LP relaxation to the ILP optimum, and when is ILP still practically solvable?
-
----
-
-## Problem Setting
-
-The project studies correlation clustering on signed graphs.
-
-For a pair of vertices \(i,j\), the clustering variable is:
-
-- \(x_{ij} = 0\): vertices are in the same cluster
-- \(x_{ij} = 1\): vertices are in different clusters
-
-The objective is to minimize disagreements:
-
-- a positive edge contributes cost 1 if its endpoints are placed in different clusters
-- a negative edge contributes cost 1 if its endpoints are placed in the same cluster
-
-The cost is:
-
-\[
-\sum_{(i,j)\in E^+} x_{ij}
-+
-\sum_{(i,j)\in E^-} (1 - x_{ij})
-\]
-
-Lower cost is better.
-
----
+Random edge deletion changes an observed edge to a missing edge. The tested
+deletion probabilities are `0.05`, `0.15`, `0.25`, and `0.40`.
 
 ## Methods
 
-### Pivot heuristic
+### Pivot
 
-The randomized Pivot algorithm is used as an approximation algorithm. Multiple Pivot seeds are tested, and both the best and average Pivot costs are stored.
+Pivot selects an unclustered vertex and clusters it with its observed positive
+neighbours. Because its output depends on the pivot order, each instance is run
+with 100 pivot seeds. Both the best and average disagreement costs are stored.
 
-### ILP
+### Full ILP and LP
 
-The integer linear programming formulation is used to compute the optimal clustering cost when this is computationally feasible.
+The all-pairs formulation contains a variable for every vertex pair. Triangle
+inequalities enforce a valid clustering. Binary variables give the Full ILP
+optimum; variables in the interval `[0, 1]` give the LP lower bound.
 
-The ILP uses triangle inequalities to enforce valid clustering structure.
+### Observed-edge formulations
 
-### LP relaxation
+The sparse formulations use only observed edges. They are evaluated both
+without and with constraints for induced bad 4-cycles: cycles with three
+positive edges, one negative edge, and two missing diagonals.
 
-The LP relaxation allows variables \(x_{ij}\) to take fractional values between 0 and 1. This gives a lower bound on the ILP optimum.
+### Bad-triangle lower bound
 
-The ratio `LP/ILP` measures how tight the LP relaxation is.
+A bad triangle contains two positive edges and one negative edge. Every valid
+clustering must disagree with at least one of its edges. A greedy set of
+edge-disjoint bad triangles therefore gives a lower bound on the optimum.
 
-### Bad triangles
+## Experimental Data
 
-A bad triangle is a triangle with exactly two positive edges and one negative edge.
+### Random signed graphs
 
-At least one edge in every bad triangle must be violated in any clustering. Therefore, bad triangles help explain why some instances have higher optimum cost.
+- graph sizes `n = 5, 10, 15, 20, 25, 30`
+- positive-edge probabilities `p_pos = 0.2, 0.3, ..., 0.8`
+- 50 graph seeds per `(n, p_pos)` setting
+- 2,100 complete instances and 8,400 edge-deleted runs
 
-The project computes:
+### Planted-clique graphs
 
-- total number of bad triangles
-- greedy minimum edge-disjoint bad triangle count
-- greedy maximum edge-disjoint bad triangle count
-- ratios comparing edge-disjoint bad triangles to the ILP cost
-
-### Bad 4-cycle constraints
-
-For sparse edge-deleted graphs, bad 4-cycle constraints are added and compared.
-
-A bad 4-cycle is used when:
-
-- all four cycle edges are present
-- exactly one cycle edge is negative
-- both diagonals are missing
-
-The experiments compare sparse ILP and LP solutions:
-
-- without bad 4-cycle constraints
-- with bad 4-cycle constraints
-
-This makes it possible to test whether the constraints change:
-
-- the objective cost
-- the clustering structure
-- or both
-
----
-
-## Data
-
-### Random graphs
-
-Random signed complete graphs are generated for:
-
-- \(n = 5, 10, 15, 20, 25, 30\)
-- \(p^+ = 0.2, 0.3, ..., 0.8\)
-
-Here, \(p^+\) is the probability that an edge is positive.
-
-### Clique/community graphs
-
-Synthetic clique/community graphs are generated with planted cluster structures.
-
-Examples:
-
-- balanced structures: `2x15`, `3x10`, `4x25`
-- unbalanced structures: `15_10_5`, `20_5_5`, `60_25_10_5`
+- graph sizes `n = 10, 15, 20, 25, 30, 100`
+- positive-edge probability 0.9 inside planted cliques
+- positive-edge probability 0.1 between planted cliques
+- balanced and unbalanced clique-size decompositions
+- 50 seeds for `n <= 30` and 20 seeds for `n = 100`
+- 910 complete instances and 3,640 edge-deleted runs
 
 ### Facebook ego-networks
 
-The Facebook experiments use full ego-networks from the SNAP Facebook social circles dataset.
+- ego IDs 414, 686, 698, and 3980
+- an observed friendship is positive;
+- a missing friendship between included vertices is negative;
+- the ego vertex itself is excluded;
+- 4 complete instances and 16 edge-deleted runs.
 
-Each ego-network contains:
+Full optimization results are available for three ego-networks, giving 12
+Facebook runs for analyses that require an ILP optimum.
 
-- the ego user's friends
-- friendship edges between those friends
-
-The ego node itself is excluded, because otherwise it becomes a dominant supernode connected to almost everyone.
-
-For the signed graph construction:
-
-- existing friendships are treated as positive edges
-- missing friendships inside the ego-network are treated as negative edges
-
-The Facebook experiments are real-world structured cases, but they are not meant to represent the entire Facebook graph.
-
----
-
-## Repository Structure
+## Repository Layout
 
 ```text
 .
-├── data
-│   └── facebook
-├── results
-│   ├── experiments_results_clique
-│   ├── experiments_results_facebook
-│   ├── experiments_results_random
-│   ├── figures
-│   ├── processed
-│   └── raw
-├── scripts
-│   ├── make_deep_thesis_patterns.py
-│   └── make_thesis_results_file.py
-└── src
-    ├── bad_triangles.py
-    ├── check_facebook_circles.py
-    ├── cost.py
-    ├── draw_graphs.py
-    ├── draw_graphs_clique.py
-    ├── edge_deletion.py
-    ├── experiment_clique.py
-    ├── experiment_facebook.py
-    ├── experiment_helpers.py
-    ├── experiment_random.py
-    ├── facebook_sampling.py
-    ├── graph_generation.py
-    ├── ilp_solver.py
-    ├── lp_formulations.py
-    └── pivot.py
+├── data/facebook/                         SNAP ego-network input files
+├── results/
+│   ├── experiments_results_random/        raw random-graph JSON results
+│   ├── experiments_results_clique/        raw planted-clique JSON results
+│   ├── experiments_results_facebook/      raw Facebook JSON results
+│   └── processed/
+│       ├── all_runs_flat.csv               combined analysis table
+│       ├── figures/                        generated thesis figures
+│       └── tables/                         generated summary tables
+├── scripts/
+│   ├── make_all_runs_flat.py               JSON-to-CSV processing
+│   ├── make_general_pdelete_figures.py     aggregate family figures
+│   └── make_specific_pdelete_figures.py    parameter-specific figures
+└── src/
+    ├── all_pairs_solver.py                 Full ILP and LP formulations
+    ├── bad_triangles.py                    bad-triangle routines
+    ├── edge_deletion.py                    random edge deletion
+    ├── experiment_helpers.py               shared experiment pipeline
+    ├── experiment_random.py                one random instance
+    ├── experiment_clique.py                one planted-clique instance
+    ├── experiment_facebook.py              one Facebook instance
+    ├── graph_generation.py                 synthetic graph generators
+    ├── ilp_solver.py                       observed-edge formulations
+    ├── lp_formulations.py                  LP routines
+    └── pivot.py                            Pivot implementation
 ```
 
----
+The repository contains additional analysis scripts used during development.
+The three scripts listed above form the shortest route from the stored JSON
+experiments to the main processed dataset and figures.
 
-## Raw Results
+## Installation
 
-Raw JSON results are stored in:
+Python 3.11 or a compatible recent Python version is recommended. Create a
+virtual environment from the repository root:
 
-```text
-results/experiments_results_random/
-results/experiments_results_clique/
-results/experiments_results_facebook/
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-The raw results are grouped by graph family and graph size.
+The optimization code uses `gurobipy`. Running the ILP and LP experiments
+requires a working Gurobi installation and license. Academic licenses are
+available separately from Gurobi.
 
-### Random results
+## Running One Instance
 
-```text
-results/experiments_results_random/n5/
-results/experiments_results_random/n10/
-results/experiments_results_random/n15/
-results/experiments_results_random/n20/
-results/experiments_results_random/n25/
-results/experiments_results_random/n30/
+The files in `src/experiment_random.py`, `src/experiment_clique.py`, and
+`src/experiment_facebook.py` contain a parameter block near the top of their
+main section. Set the graph parameters there and run the file from the
+repository root:
+
+```bash
+python src/experiment_random.py
+python src/experiment_clique.py
+python src/experiment_facebook.py
 ```
 
-### Clique/community results
+These entry points are intended for inspecting or testing one configuration.
+Large instances, especially the all-pairs ILP and bad 4-cycle computations,
+can require substantial time and memory. Set `draw_graph = False` when figures
+for an individual run are not needed.
 
-```text
-results/experiments_results_clique/n10/
-results/experiments_results_clique/n15/
-results/experiments_results_clique/n20/
-results/experiments_results_clique/n25/
-results/experiments_results_clique/n30/
-results/experiments_results_clique/n100/
+## Rebuilding the Processed Dataset
+
+The raw experiment records are stored as JSON below the three
+`results/experiments_results_*` directories. Rebuild the combined CSV with:
+
+```bash
+python scripts/make_all_runs_flat.py
 ```
 
-### Facebook results
-
-```text
-results/experiments_results_facebook/full/
-```
-
----
-
-## Processed Thesis Results
-
-Processed thesis-ready results are stored in:
-
-```text
-results/processed/
-```
-
-Start with these two files:
-
-```text
-results/processed/reports/01_key_results.md
-results/processed/reports/02_deep_patterns.md
-```
-
-### Main reports
-
-```text
-results/processed/reports/01_key_results.md
-```
-
-Main result overview per research question.
-
-```text
-results/processed/reports/02_deep_patterns.md
-```
-
-Deeper analysis of bad triangles, edge-disjoint bad triangles, p_positive, edge deletion, and bad 4-cycles.
-
----
-
-## Processed Tables
-
-### Random graphs
-
-```text
-results/processed/tables/random/random_by_n_p.csv
-results/processed/tables/random/random_trend_by_n.csv
-results/processed/tables/random/random_trend_by_p_positive.csv
-results/processed/tables/random/random_p_bad_triangle_trend.csv
-results/processed/tables/random/random_np_bad_triangle_detail.csv
-```
-
-These tables study how graph size \(n\) and \(p^+\) affect Pivot, LP, ILP, bad triangles, and cost.
-
-### Clique/community graphs
-
-```text
-results/processed/tables/clique/clique_by_structure.csv
-```
-
-This table compares balanced and unbalanced planted community structures.
-
-### Facebook ego-networks
-
-```text
-results/processed/tables/facebook/facebook_full_ego_summary.csv
-```
-
-This table summarizes the Facebook full ego-network results.
-
-### Bad triangles
-
-```text
-results/processed/tables/bad_triangles/bad_triangle_bounds_by_graph_family.csv
-```
-
-This table compares edge-disjoint bad triangle lower bounds with ILP costs.
-
-### Four-cycle constraints
-
-```text
-results/processed/tables/four_cycles/four_cycle_effect_by_graph_family.csv
-results/processed/tables/four_cycles/four_cycle_effect_by_file.csv
-results/processed/tables/four_cycles/four_cycle_effect_detail.csv
-```
-
-These tables show how often 4-cycle constraints change the cost or produce a different clustering.
-
----
-
-## How to Read the Ratios
-
-### Pivot/ILP
-
-```text
-Pivot/ILP = 1.000
-```
-
-means Pivot found an optimal solution.
-
-```text
-Pivot/ILP = 1.400
-```
-
-means Pivot cost is 40% higher than the ILP optimum.
-
-Higher is worse.
-
-### LP/ILP
-
-```text
-LP/ILP = 1.000
-```
-
-means the LP relaxation is tight and matches the ILP optimum.
-
-```text
-LP/ILP = 0.700
-```
-
-means the LP lower bound is only 70% of the ILP optimum.
-
-Closer to 1 is better.
-
-### Max edge-disjoint bad triangles / ILP
-
-```text
-max edge-disjoint bad triangles / ILP = 1.000
-```
-
-means the greedy edge-disjoint bad-triangle lower bound fully explains the ILP cost.
-
-A lower value means that the ILP cost is not fully explained by local disjoint bad triangles and may depend more on global graph structure.
-
----
-
-## Main Findings
-
-### Edge deletion
-
-Edge deletion usually lowers the absolute ILP cost, because fewer edges remain in the objective.
-
-However, Pivot often becomes relatively worse after edge deletion, especially on clique/community graphs. This suggests that deleted edges remove useful structural information.
-
-### Random graphs
-
-For random graphs, the difficulty depends strongly on \(p^+\).
-
-The number of bad triangles changes with \(p^+\). Since a bad triangle has exactly two positive edges and one negative edge, inconsistent local structure is most common when positive edges are frequent but negative edges still occur often enough.
-
-Random graphs with many bad triangles tend to have higher ILP costs and looser LP relaxations.
-
-### Clique/community graphs
-
-LP performs very well on clique/community graphs and often exactly matches the ILP optimum.
-
-Pivot performs worse on larger and more unbalanced community structures, especially after edge deletion.
-
-### Facebook ego-networks
-
-Facebook ego-networks behave between random graphs and synthetic clique/community graphs.
-
-They have real social structure, but not the clean planted structure of the synthetic clique instances.
-
-For small and medium ego-networks, ILP can still be solved. Larger ego-networks become computationally expensive, especially when 4-cycle constraints are included.
-
-### Bad triangles
-
-Bad triangles help explain why some graphs have higher clustering cost.
-
-The maximum edge-disjoint bad-triangle count gives a lower bound on the ILP cost. When this bound is close to the ILP cost, local bad-triangle structure explains much of the optimum.
-
-When it is far from the ILP cost, the difficulty is caused by more global structure.
-
-### 4-cycle constraints
-
-For edge-deleted sparse graphs, the experiments compare the ILP cost **without** bad 4-cycle constraints to the ILP cost **with** bad 4-cycle constraints.
-
-This comparison is important because bad 4-cycle constraints do not always change the objective value. In many cases, the optimal cost stays the same, but the selected clustering can still change.
-
-In the processed results:
-
-- ILP costs with and without 4-cycle constraints can be compared in `2624` runs.
-- The objective cost changed in `89` runs, which is `3.4%` of comparable runs.
-- The objective cost stayed the same in `2535` runs.
-- The clustering comparison `same_clustering_4_cycle` is available in `2624` runs.
-- The clustering stayed the same in `2022` runs.
-- The clustering changed in `602` runs, which is `22.9%` of runs with known clustering comparison.
-- A same-cost but different-clustering outcome occurred in `518` runs.
-
-This means that 4-cycle constraints usually do not change the ILP objective cost, but they can still affect the structure of the optimal clustering. Therefore, the analysis considers both the numerical cost difference and the clustering difference.
-
----
-
-## Reproducing Processed Results
-
-The processed thesis summaries are generated from:
+This writes:
 
 ```text
 results/processed/all_runs_flat.csv
 ```
 
-To regenerate the processed reports and tables, run:
+If that file already exists, the script first creates
+`results/processed/all_runs_flat.csv.bak`.
 
-```bash
-python3 scripts/make_thesis_results_file.py
-python3 scripts/make_deep_thesis_patterns.py
-```
-
-The main output files are:
+For the dataset used in the thesis, the command should report:
 
 ```text
-results/processed/reports/01_key_results.md
-results/processed/reports/02_deep_patterns.md
+random:   8400 rows
+clique:   3640 rows
+facebook:   16 rows
+total:   12056 rows
 ```
 
----
+Only 12 Facebook rows contain comparable Full ILP values.
 
-## Running Experiments
+## Rebuilding the Main Figures
 
-Example commands:
+After rebuilding `all_runs_flat.csv`, generate the aggregate and detailed
+edge-deletion figures with:
 
 ```bash
-python3 src/experiment_random.py
-python3 src/experiment_clique.py
-python3 src/experiment_facebook.py
+python scripts/make_general_pdelete_figures.py
+python scripts/make_specific_pdelete_figures.py
 ```
 
-Some experiments, especially ILP or 4-cycle experiments on larger Facebook ego-networks, can take a long time.
-
----
-
-## Requirements
-
-Install dependencies with:
-
-```bash
-pip install -r requirements.txt
-```
-
-The ILP and LP experiments use Gurobi, so a working Gurobi installation and license may be required.
-
----
-
-## Notes
-
-Generated Python cache files such as `__pycache__` are not part of the experiment results and can be ignored.
-
-The most important files for thesis writing are:
+The outputs are written to:
 
 ```text
-results/processed/reports/01_key_results.md
-results/processed/reports/02_deep_patterns.md
+results/processed/figures/p_delete_effect/general/
+results/processed/figures/p_delete_effect/specific/
 ```
-MD
+
+Both scripts accept a different input CSV when needed:
+
+```bash
+python scripts/make_general_pdelete_figures.py --csv path/to/results.csv
+```
+
+The general plots first average within each graph size and then across graph
+sizes. This prevents graph sizes with more tested configurations from receiving
+more weight. The specific plots retain distinctions such as
+`p_pos`, clique balance, graph size, and Facebook ego ID.
+
+## Interpreting the Main Ratios
+
+### Best-Pivot approximation ratio
+
+```text
+best Pivot cost over 100 runs / Full ILP cost
+```
+
+A value of 1 means that the best Pivot run found an optimal cost. A value of
+1.2 means that its cost was 20% above the optimum. Lower is better.
+
+### LP integrality ratio
+
+```text
+LP lower bound / Full ILP cost
+```
+
+A value close to 1 indicates a tight LP relaxation. Lower values indicate a
+larger gap between the LP lower bound and the integer optimum.
+
+### Greedy bad-triangle bound ratio
+
+```text
+number of greedily selected edge-disjoint bad triangles / Full ILP cost
+```
+
+A value close to 1 means that this local lower bound accounts for most of the
+optimal cost. Because the implementation is greedy, it need not find the
+largest possible edge-disjoint set.
+
+### Observed-edge ILP ratio
+
+```text
+observed-edge ILP objective / Full ILP objective
+```
+
+A value of 1 denotes equal objective values. The experiments compare this
+ratio before and after adding bad 4-cycle constraints.
+
+## Reproducibility Notes
+
+- Graph generation and edge deletion use stored integer seeds.
+- Each deletion probability is applied separately to its corresponding
+  complete graph instance.
+- Raw JSON files retain the graph parameters and results used to construct the
+  processed CSV.
+- Gurobi version, hardware, and available threads can affect runtime, but an
+  optimal solve should not change the reported objective value.
+- Facebook ego 686 is retained in the dataset but excluded from comparisons
+  that require an available Full ILP optimum.
+
+## Citation
+
+This repository accompanies the BSc thesis *Robustness of Pivot, LP, and ILP
+Correlation Clustering under Random Edge Deletion* by Amira Ouchene. A formal
+citation can be added here after the final thesis version is archived.
