@@ -16,7 +16,7 @@ from experiment_helpers import (
 # Change these by hand.
 # ============================================================
 
-N_VALUES = [100]
+N_VALUES = [2]
 P_DELETE_VALUES = [0.15]
 P_POSITIVE_VALUES = [0.4]
 SEEDS = [1] 
