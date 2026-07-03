@@ -118,15 +118,15 @@ def exact(pos_adj_mx, r, r2):
         frac_values.append(tot)
     frac_val = max(frac_values)
 
-    return distances, L_t_vals, neighborsR, neighborsR2, clock, frac_val 
+    return distances, L_t_vals, neighborsR, neighborsR2, clock, frac_val
 
 
 # In[1]:
 
 
 #KMZ Phase 2 (Rounding Algorithm)
-#input: distances, L_0 values, R and R2 neighborhoods, radii r and r2 
-#output: set of clusters (as a list of lists) and time 
+#input: distances, L_0 values, R and R2 neighborhoods, radii r and r2
+#output: set of clusters (as a list of lists) and time
 def cluster(distances, L_t_vals, neighborsR, neighborsR2, r, r2):
     t0 = time.time()
     #store the clusters in this list
@@ -134,9 +134,9 @@ def cluster(distances, L_t_vals, neighborsR, neighborsR2, r, r2):
     n = np.shape(distances)[0]
     #yet unclustered vertices
     num_unclustered = n
-    #indicator list indexed by the vertices: 1 if unclustered, 0 if clustered 
-    V_t = np.ones([n])  
-    while num_unclustered > 0: 
+    #indicator list indexed by the vertices: 1 if unclustered, 0 if clustered
+    V_t = np.ones([n])
+    while num_unclustered > 0:
         #find the vertex maximizing L_t
         max_key = max(L_t_vals, key=L_t_vals.get)
         #initialize new cluster with maximizing vertex
@@ -149,7 +149,7 @@ def cluster(distances, L_t_vals, neighborsR, neighborsR2, r, r2):
                 cluster.append(neighborsR2[max_key][j])
         #append the new cluster to the list of clusters
         clustering.append(cluster)
-        #update the number of unclustered vertices remaining 
+        #update the number of unclustered vertices remaining
         num_unclustered = num_unclustered - len(cluster)
         #update L_t
         for k in range(len(cluster)):
@@ -157,13 +157,13 @@ def cluster(distances, L_t_vals, neighborsR, neighborsR2, r, r2):
             del L_t_vals[cluster[k]]
             #mark clustered vertices as clustered
             V_t[cluster[k]] = 0
-            #update remaining L_t values 
+            #update remaining L_t values
             for key in L_t_vals:
                 if distances[cluster[k]][key] <= r:
                     L_t_vals[key] = L_t_vals[key] - (r - distances[cluster[k]][key])
     t1 = time.time()
     clock = t1 - t0
-    return clustering, clock 
+    return clustering, clock
 
 
 # In[17]:
@@ -301,7 +301,7 @@ def MinMaxLPneighbors(n, distances, r, r2):
                     L_t_vals[u] = L_t_vals[u] + r - distances[u][v]
                     neighborsR[u].append(v)
                     L_t_vals[v] = L_t_vals[v] + r - distances[u][v]
-                    neighborsR[v].append(u) 
+                    neighborsR[v].append(u)
     return L_t_vals, neighborsR, neighborsR2
 
 
