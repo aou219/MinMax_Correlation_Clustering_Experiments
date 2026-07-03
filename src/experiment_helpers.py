@@ -8,7 +8,13 @@ from graph_generation import matrix_to_graph
 from pivot import run_pivot
 from cost import calculate_clustering_cost
 from edge_deletion import delete_edges
-from min_max import min_max_cc,  vertex_disagreement, max_disagreement
+from min_max import min_max_cc, vertex_disagreement, max_disagreement
+from min_max_lp import (
+    MinMaxLP,
+    cluster as min_max_lp_cluster,
+    DegreeDist,
+    LocalObj,
+)
 
 # ============================================================
 # Solver imports
@@ -277,6 +283,114 @@ def compute_bad_triangle_lp_bounds(
 
 
 # ============================================================
+# Min-max helpers
+# ============================================================
+
+def compute_min_max_cc_data(S, compute_min_max, param_1=2, param_2=2):
+    """
+    Compute the min_max.py heuristic/result that you were already printing.
+    Now it is returned in a clean dictionary so it can be printed and saved.
+    """
+    if not compute_min_max:
+        return {
+            "clustering": None,
+            "cluster_count": None,
+            "max_disagreement": None,
+            "runtime_seconds": None,
+        }
+
+    start = time.time()
+    clustering = min_max_cc(S, param_1, param_2)
+    runtime = time.time() - start
+
+    return {
+        "clustering": clustering,
+        "cluster_count": len(clustering) if clustering is not None else None,
+        "max_disagreement": max_disagreement(clustering, S),
+        "runtime_seconds": round(runtime, 6),
+    }
+
+
+def compute_min_max_lp_data(
+    S,
+    compute_min_max_lp,
+    r=0.1,
+    r2=0.5,
+    method=0,
+    norm=np.inf,
+):
+    """
+    Run the adapted min_max_lp.py LP + rounding code directly on your
+    signed matrix S.
+
+    Matrix convention used by min_max_lp.py now matches the rest of
+    your project:
+        1  = positive edge
+       -1  = negative edge
+        0  = deleted / unobserved edge
+
+    The LP/local objective ignores deleted/unobserved edges instead of
+    treating them as negative edges.
+    """
+    if not compute_min_max_lp:
+        return {
+            "lp_cost": None,
+            "rounding_cost": None,
+            "max_disagreement_vertex": None,
+            "clustering": None,
+            "cluster_count": None,
+            "lp_runtime_seconds": None,
+            "rounding_runtime_seconds": None,
+            "total_runtime_seconds": None,
+        }
+
+    total_start = time.time()
+
+    lp_cost, distances, L_t_vals, neighborsR, neighborsR2, lp_runtime = MinMaxLP(
+        S,
+        r,
+        r2,
+        method,
+    )
+
+    clustering, rounding_runtime = min_max_lp_cluster(
+        distances,
+        L_t_vals,
+        neighborsR,
+        neighborsR2,
+        r,
+        r2,
+    )
+
+    pos_degrees = DegreeDist(S)
+
+    disagreement_vector, rounding_cost, max_disagreement_vertex = LocalObj(
+        S,
+        clustering,
+        pos_degrees,
+        norm,
+    )
+
+    total_runtime = time.time() - total_start
+
+    return {
+        "lp_cost": lp_cost,
+        "rounding_cost": rounding_cost,
+        "max_disagreement_vertex": max_disagreement_vertex,
+        "disagreement_vector": disagreement_vector,
+        "clustering": clustering,
+        "cluster_count": len(clustering),
+        "r": r,
+        "r2": r2,
+        "method": method,
+        "norm": "inf" if norm == np.inf else norm,
+        "lp_runtime_seconds": round(lp_runtime, 6),
+        "rounding_runtime_seconds": round(rounding_runtime, 6),
+        "total_runtime_seconds": round(total_runtime, 6),
+    }
+
+
+# ============================================================
 # Main experiment function
 # ============================================================
 
@@ -296,7 +410,14 @@ def run_full_experiment(
     compute_observed_edge_ilp=False,
     compute_observed_edge_four_cycle_lp=False,
     compute_observed_edge_four_cycle_ilp=False,
-    compute_min_max = True
+    compute_min_max=True,
+    compute_min_max_lp=True,
+    min_max_cc_param_1=2,
+    min_max_cc_param_2=2,
+    min_max_lp_r=0.1,
+    min_max_lp_r2=0.5,
+    min_max_lp_method=0,
+    min_max_lp_norm=np.inf,
 ):
     """
     Run one experiment on one signed graph.
@@ -314,8 +435,25 @@ def run_full_experiment(
 
     G = matrix_to_graph(S)
 
-    print("min-max is:",max_disagreement(min_max_cc(S, 2,2),S))
+    # ============================================================
+    # Complete graph: min-max methods
+    # ============================================================
 
+    min_max_cc_results = compute_min_max_cc_data(
+        S,
+        compute_min_max=compute_min_max,
+        param_1=min_max_cc_param_1,
+        param_2=min_max_cc_param_2,
+    )
+
+    min_max_lp_results = compute_min_max_lp_data(
+        S,
+        compute_min_max_lp=compute_min_max_lp,
+        r=min_max_lp_r,
+        r2=min_max_lp_r2,
+        method=min_max_lp_method,
+        norm=min_max_lp_norm,
+    )
 
     # ============================================================
     # Generate incomplete graph by deleting edges
@@ -323,6 +461,26 @@ def run_full_experiment(
 
     S_new, num_edges_deleted = delete_edges(S, p_delete, seed)
     G_new = matrix_to_graph(S_new)
+
+    # ============================================================
+    # Edge-deleted graph: min-max methods
+    # ============================================================
+
+    min_max_cc_results_new = compute_min_max_cc_data(
+        S_new,
+        compute_min_max=compute_min_max,
+        param_1=min_max_cc_param_1,
+        param_2=min_max_cc_param_2,
+    )
+
+    min_max_lp_results_new = compute_min_max_lp_data(
+        S_new,
+        compute_min_max_lp=compute_min_max_lp,
+        r=min_max_lp_r,
+        r2=min_max_lp_r2,
+        method=min_max_lp_method,
+        norm=min_max_lp_norm,
+    )
 
     # ============================================================
     # Complete graph: Pivot
@@ -610,6 +768,18 @@ def run_full_experiment(
         "min_num_bad_triangles": min_num_bad_triangles,
         "max_num_bad_triangles": max_num_bad_triangles,
 
+
+        # ============================================================
+        # START MIN MAX THINGS
+        # ============================================================
+
+        "min_max_cc_results": min_max_cc_results,
+        "min_max_lp_results": min_max_lp_results,
+
+        # ============================================================
+        # END MIN MAX THINGS
+        # ============================================================
+
         "actual_lp_cost": actual_lp_cost,
         "actual_lp_info": actual_lp_info,
         "actual_ilp_cost": actual_ilp_cost,
@@ -630,6 +800,16 @@ def run_full_experiment(
         "all_bad_triangles_new": all_bad_triangles_new,
         "min_num_bad_triangles_new": min_num_bad_triangles_new,
         "max_num_bad_triangles_new": max_num_bad_triangles_new,
+        # ============================================================
+        # START MIN MAX THINGS
+        # ============================================================
+
+        "min_max_cc_results_new": min_max_cc_results_new,
+        "min_max_lp_results_new": min_max_lp_results_new,
+
+        # ============================================================
+        # END MIN MAX THINGS
+        # ============================================================
 
         "actual_lp_cost_new": actual_lp_cost_new,
         "actual_lp_info_new": actual_lp_info_new,
@@ -674,6 +854,29 @@ def build_saveable_results(graph_params, experiment_data):
                 "min_edge_disjoint_count": experiment_data["min_num_bad_triangles"],
                 "max_edge_disjoint_count": experiment_data["max_num_bad_triangles"],
             },
+                # ============================================================
+                # START MIN MAX THINGS
+                # ============================================================
+
+            "min_max_cc": {
+                "max_disagreement": experiment_data["min_max_cc_results"]["max_disagreement"],
+                "cluster_count": experiment_data["min_max_cc_results"]["cluster_count"],
+                "runtime_seconds": experiment_data["min_max_cc_results"]["runtime_seconds"],
+            },
+            "min_max_lp_rounding": {
+                "lp_cost": experiment_data["min_max_lp_results"]["lp_cost"],
+                "rounding_cost": experiment_data["min_max_lp_results"]["rounding_cost"],
+                "cluster_count": experiment_data["min_max_lp_results"]["cluster_count"],
+                "r": experiment_data["min_max_lp_results"]["r"],
+                "r2": experiment_data["min_max_lp_results"]["r2"],
+                "method": experiment_data["min_max_lp_results"]["method"],
+                "lp_runtime_seconds": experiment_data["min_max_lp_results"]["lp_runtime_seconds"],
+                "rounding_runtime_seconds": experiment_data["min_max_lp_results"]["rounding_runtime_seconds"],
+            },
+                # ============================================================
+                # END MIN MAX THINGS
+                # ============================================================
+
             "actual_all_pairs_lp_relaxation": {
                 "cost": experiment_data["actual_lp_cost"],
                 "solve_info": experiment_data["actual_lp_info"],
@@ -707,6 +910,29 @@ def build_saveable_results(graph_params, experiment_data):
                 "min_edge_disjoint_count": experiment_data["min_num_bad_triangles_new"],
                 "max_edge_disjoint_count": experiment_data["max_num_bad_triangles_new"],
             },
+                # ============================================================
+                # START MIN MAX THINGS
+                # ============================================================
+
+            "min_max_cc": {
+                "max_disagreement": experiment_data["min_max_cc_results_new"]["max_disagreement"],
+                "cluster_count": experiment_data["min_max_cc_results_new"]["cluster_count"],
+                "runtime_seconds": experiment_data["min_max_cc_results_new"]["runtime_seconds"],
+            },
+            "min_max_lp_rounding": {
+                "lp_cost": experiment_data["min_max_lp_results_new"]["lp_cost"],
+                "rounding_cost": experiment_data["min_max_lp_results_new"]["rounding_cost"],
+                "cluster_count": experiment_data["min_max_lp_results_new"]["cluster_count"],
+                "r": experiment_data["min_max_lp_results_new"]["r"],
+                "r2": experiment_data["min_max_lp_results_new"]["r2"],
+                "method": experiment_data["min_max_lp_results_new"]["method"],
+                "lp_runtime_seconds": experiment_data["min_max_lp_results_new"]["lp_runtime_seconds"],
+                "rounding_runtime_seconds": experiment_data["min_max_lp_results_new"]["rounding_runtime_seconds"],
+            },
+                # ============================================================
+                # END MIN MAX THINGS
+                # ============================================================
+
             "actual_all_pairs_lp_relaxation": {
                 "cost": experiment_data["actual_lp_cost_new"],
                 "solve_info": experiment_data["actual_lp_info_new"],
@@ -769,6 +995,25 @@ def print_standard_results(graph_type, graph_params, experiment_data):
         print_if_not_none("Minimum amount of disjoint bad triangles", experiment_data["min_num_bad_triangles"])
         print_if_not_none("Maximum amount of disjoint bad triangles", experiment_data["max_num_bad_triangles"])
 
+    # ============================================================
+    # START MIN MAX THINGS
+    # ============================================================
+
+    if experiment_data["min_max_cc_results"]["max_disagreement"] is not None:
+        print_subsection("Min-max from min_max.py")
+        print("Min-max max disagreement:", experiment_data["min_max_cc_results"]["max_disagreement"])
+        print("Min-max cluster count:", experiment_data["min_max_cc_results"]["cluster_count"])
+
+    if experiment_data["min_max_lp_results"]["lp_cost"] is not None:
+        print_subsection("Min-max LP + rounding from min_max_lp.py")
+        print("Min-max LP cost:", experiment_data["min_max_lp_results"]["lp_cost"])
+        print("Min-max LP rounding cost:", experiment_data["min_max_lp_results"]["rounding_cost"])
+        print("Min-max LP cluster count:", experiment_data["min_max_lp_results"]["cluster_count"])
+
+    # ============================================================
+    # END MIN MAX THINGS
+    # ============================================================
+
     if experiment_data["actual_lp_cost"] is not None:
         print_subsection("Actual all-pairs LP relaxation")
         print("Actual LP cost:", experiment_data["actual_lp_cost"])
@@ -805,6 +1050,28 @@ def print_standard_results(graph_type, graph_params, experiment_data):
         print("Total number of bad triangles:", len(experiment_data["all_bad_triangles_new"]))
         print_if_not_none("Minimum amount of disjoint bad triangles", experiment_data["min_num_bad_triangles_new"])
         print_if_not_none("Maximum amount of disjoint bad triangles", experiment_data["max_num_bad_triangles_new"])
+
+
+    # ============================================================
+    # START MIN MAX THINGS
+    # ============================================================
+
+
+    if experiment_data["min_max_cc_results_new"]["max_disagreement"] is not None:
+        print_subsection("Min-max from min_max.py")
+        print("Min-max max disagreement on edge-deleted graph:", experiment_data["min_max_cc_results_new"]["max_disagreement"])
+        print("Min-max cluster count:", experiment_data["min_max_cc_results_new"]["cluster_count"])
+
+    if experiment_data["min_max_lp_results_new"]["lp_cost"] is not None:
+        print_subsection("Min-max LP + rounding from min_max_lp.py")
+        print("Min-max LP cost on edge-deleted graph:", experiment_data["min_max_lp_results_new"]["lp_cost"])
+        print("Min-max LP rounding cost on edge-deleted graph:", experiment_data["min_max_lp_results_new"]["rounding_cost"])
+        print("Min-max LP cluster count:", experiment_data["min_max_lp_results_new"]["cluster_count"])
+
+
+    # ============================================================
+    # END MIN MAX THINGS
+    # ============================================================
 
     if experiment_data["actual_lp_cost_new"] is not None:
         print_subsection("Actual all-pairs LP relaxation")

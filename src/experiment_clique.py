@@ -39,7 +39,7 @@ COMPUTE_BAD_TRIANGLES = True
 COMPUTE_DISJOINT_BAD_TRIANGLES = False
 COMPUTE_BAD_TRIANGLE_PRIMAL_BOUND = False
 COMPUTE_BAD_TRIANGLE_DUAL_BOUND = False
-
+COMPUTE_MIN_MAX = True
 # Main formulation you want: all_pairs_solver.py
 COMPUTE_ACTUAL_LP = True
 COMPUTE_ACTUAL_ILP = False
@@ -116,6 +116,7 @@ if __name__ == "__main__":
                             compute_observed_edge_ilp=COMPUTE_OBSERVED_EDGE_ILP,
                             compute_observed_edge_four_cycle_lp=COMPUTE_OBSERVED_EDGE_FOUR_CYCLE_LP,
                             compute_observed_edge_four_cycle_ilp=COMPUTE_OBSERVED_EDGE_FOUR_CYCLE_ILP,
+                            compute_min_max = COMPUTE_MIN_MAX
                         )
 
                         # ============================================================
