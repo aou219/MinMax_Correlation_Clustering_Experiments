@@ -16,6 +16,47 @@ import time
 
 
 # In[15]:
+def _validate_signed_matrix(S):
+    """
+    Validate your project matrix format.
+
+    Expected off-diagonal values:
+        1  = positive edge
+       -1  = negative edge
+        0  = deleted / unobserved edge
+
+    The diagonal is ignored by the objective and then treated as positive
+    internally for neighborhood/degree computations.
+    """
+    S = np.asarray(S)
+
+    if S.ndim != 2 or S.shape[0] != S.shape[1]:
+        raise ValueError("S must be a square matrix")
+
+    allowed = {-1, 0, 1}
+    values = set(np.unique(S).tolist())
+    if not values.issubset(allowed):
+        raise ValueError(f"S may only contain -1, 0, 1. Found: {sorted(values)}")
+
+    return S.astype(int, copy=False)
+
+
+def positive_adjacency_from_signed(S):
+    """
+    Convert only for internal metric computations.
+
+    This does NOT change the interpretation of the signed graph objective:
+        1  -> positive
+       -1  -> negative
+        0  -> deleted / unobserved
+
+    The returned matrix is only a positive-neighborhood indicator matrix.
+    """
+    S = _validate_signed_matrix(S)
+    pos_adj_mx = (S == 1).astype(int)
+    np.fill_diagonal(pos_adj_mx, 1)
+    return pos_adj_mx
+
 
 
 #Computing the correlation metric distances
@@ -23,6 +64,8 @@ import time
 #output: correlation metric distances, L_0 values, r and r2 neighborhoods, time, fractional cost
 def exact(pos_adj_mx, r, r2):
     t0 = time.time()
+    S = _validate_signed_matrix(pos_adj_mx)
+    pos_adj_mx = positive_adjacency_from_signed(S)
     n = np.shape(pos_adj_mx)[0]
     if not(np.array_equal(np.diagonal(pos_adj_mx), np.ones([n]))):
            raise Exception('Diagonal not all 1s')
@@ -67,6 +110,7 @@ def exact(pos_adj_mx, r, r2):
         tot = 0
         neg_deg = n - np.dot(np.ones([n]), pos_adj_mx[v])
         for w in range(n):
+            ## NEEDS TO CHANGE
             if pos_adj_mx[w,v] == 0:
                 tot = tot + 1 - distances[v][w]
             else:
@@ -137,6 +181,7 @@ def LocalObj(pos_adj_mx, clustering, pos_degrees, norm):
             pos_disag = pos_degrees[clus[j]]
             neg_disag = 0
             for k in range(len(clus)):
+                ## NEEDS TO CHANGE
                 if pos_adj_mx[clus[j]][clus[k]] == 1:
                     pos_disag = pos_disag - 1 
                 else:
@@ -198,11 +243,13 @@ def MinMaxLPonly(pos_adj_mx, method):
         neg_deg = n - np.dot(np.ones([n]), pos_adj_mx[v])
         for w in range(n):
             if w < v:
+                ## NEEDS TO CHANGE
                 if pos_adj_mx[w,v] == 0:
                     cons = cons + x[w,v]
                 else:
                     cons = cons - x[w,v]
             if w > v:
+                ## NEEDS TO CHANGE
                 if pos_adj_mx[v,w] == 0:
                     cons = cons + x[v,w]
                 else:
@@ -302,11 +349,13 @@ def MinMaxLP(pos_adj_mx, r, r2, method):
         neg_deg = n - np.dot(np.ones([n]), pos_adj_mx[v])
         for w in range(n):
             if w < v:
+                ## NEEDS TO CHANGE
                 if pos_adj_mx[w,v] == 0:
                     cons = cons + x[w,v]
                 else:
                     cons = cons - x[w,v]
             if w > v:
+                ## NEEDS TO CHANGE
                 if pos_adj_mx[v,w] == 0:
                     cons = cons + x[v,w]
                 else:
@@ -356,6 +405,8 @@ def MinMaxLP(pos_adj_mx, r, r2, method):
 #input: positive adjacency matrix
 #output: clustering, as a dictionary and as a list of lists
 def PivotAlg(pos_adj_mx):
+    S = _validate_signed_matrix(pos_adj_mx)
+    pos_adj_mx = positive_adjacency_from_signed(S)
     n = np.shape(pos_adj_mx)[0]
     #random perumtation of vertices
     perm = np.random.permutation(n)
