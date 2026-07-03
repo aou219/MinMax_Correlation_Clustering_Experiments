@@ -18,8 +18,8 @@ from experiment_helpers import (
 
 N_VALUES = [100]
 P_DELETE_VALUES = [0.15]
-P_POSITIVE_VALUES = [0.5]
-SEEDS = [1]
+P_POSITIVE_VALUES = [0.4]
+SEEDS = [1] 
 PIVOT_SEEDS = list(range(1, 11))
 
 # ============================================================
@@ -34,6 +34,7 @@ COMPUTE_BAD_TRIANGLES = True
 COMPUTE_DISJOINT_BAD_TRIANGLES = False
 COMPUTE_BAD_TRIANGLE_PRIMAL_BOUND = False
 COMPUTE_BAD_TRIANGLE_DUAL_BOUND = False
+COMPUTE_MIN_MAX = True
 
 # Main formulation you want: all_pairs_solver.py
 COMPUTE_ACTUAL_LP = True
@@ -112,6 +113,7 @@ if __name__ == "__main__":
                         compute_observed_edge_ilp=COMPUTE_OBSERVED_EDGE_ILP,
                         compute_observed_edge_four_cycle_lp=COMPUTE_OBSERVED_EDGE_FOUR_CYCLE_LP,
                         compute_observed_edge_four_cycle_ilp=COMPUTE_OBSERVED_EDGE_FOUR_CYCLE_ILP,
+                        compute_min_max = COMPUTE_MIN_MAX
                     )
 
                     # ============================================================

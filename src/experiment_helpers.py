@@ -8,6 +8,7 @@ from graph_generation import matrix_to_graph
 from pivot import run_pivot
 from cost import calculate_clustering_cost
 from edge_deletion import delete_edges
+from min_max import min_max_cc,  vertex_disagreement, max_disagreement
 
 # ============================================================
 # Solver imports
@@ -295,6 +296,7 @@ def run_full_experiment(
     compute_observed_edge_ilp=False,
     compute_observed_edge_four_cycle_lp=False,
     compute_observed_edge_four_cycle_ilp=False,
+    compute_min_max = True
 ):
     """
     Run one experiment on one signed graph.
@@ -311,6 +313,9 @@ def run_full_experiment(
     n = S.shape[0]
 
     G = matrix_to_graph(S)
+
+    print("min-max is:",max_disagreement(min_max_cc(S, 2,2),S))
+
 
     # ============================================================
     # Generate incomplete graph by deleting edges

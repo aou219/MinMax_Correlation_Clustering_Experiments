@@ -19,7 +19,7 @@ from experiment_helpers import (
 # Change these by hand.
 # ============================================================
 
-EGO_IDS = ["348", "0"]
+EGO_IDS = ["348" ]
 P_DELETE_VALUES = [0.05]
 SEEDS = [1]
 PIVOT_SEEDS = list(range(1, 11))
@@ -67,8 +67,8 @@ if __name__ == "__main__":
         for p_delete in P_DELETE_VALUES:
             for seed in SEEDS:
 
-                edges_file = f"data/facebook/{ego_id}.edges"
-                circles_file = f"data/facebook/{ego_id}.circles"
+                edges_file = f"data/facebook/facebook_3/{ego_id}.edges"
+                circles_file = f"data/facebook/facebook_3/{ego_id}.circles"
 
                 results_file = f"results/experiments_results_facebook/full/fb_ego{ego_id}_manual.json"
                 if SAVE_RESULTS:
