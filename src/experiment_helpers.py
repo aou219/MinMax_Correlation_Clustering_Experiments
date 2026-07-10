@@ -12,8 +12,8 @@ from min_max import min_max_cc, vertex_disagreement, max_disagreement
 from min_max_lp import (
     MinMaxLP,
     cluster as min_max_lp_cluster,
-    DegreeDist,
     LocalObj,
+    DegreeDist,
 )
 
 # ============================================================
@@ -283,7 +283,7 @@ def compute_bad_triangle_lp_bounds(
 
 
 # ============================================================
-# Min-max helpers
+# Min-max helpers: min_max.py
 # ============================================================
 
 def compute_min_max_cc_data(S, compute_min_max, param_1=2, param_2=2):
@@ -310,6 +310,9 @@ def compute_min_max_cc_data(S, compute_min_max, param_1=2, param_2=2):
         "runtime_seconds": round(runtime, 6),
     }
 
+# ============================================================
+# Min-max helpers: min_max_lp.py
+# ============================================================
 
 def compute_min_max_lp_data(
     S,
@@ -320,25 +323,30 @@ def compute_min_max_lp_data(
     norm=np.inf,
 ):
     """
-    Run the adapted min_max_lp.py LP + rounding code directly on your
-    signed matrix S.
+    Run MinMaxLP, its rounding algorithm, and LocalObj from min_max_lp.py.
 
-    Matrix convention used by min_max_lp.py now matches the rest of
-    your project:
-        1  = positive edge
-       -1  = negative edge
-        0  = deleted / unobserved edge
+    Expected LocalObj signature in min_max_lp.py:
+        LocalObj(S, clustering, norm)
 
-    The LP/local objective ignores deleted/unobserved edges instead of
-    treating them as negative edges.
+    Signed-matrix convention:
+         1 = positive edge
+        -1 = negative edge
+         0 = deleted / unobserved edge
     """
+    norm_for_json = "inf" if norm == np.inf else norm
+
     if not compute_min_max_lp:
         return {
             "lp_cost": None,
             "rounding_cost": None,
             "max_disagreement_vertex": None,
+            "disagreement_vector": None,
             "clustering": None,
             "cluster_count": None,
+            "r": r,
+            "r2": r2,
+            "method": method,
+            "norm": norm_for_json,
             "lp_runtime_seconds": None,
             "rounding_runtime_seconds": None,
             "total_runtime_seconds": None,
@@ -346,12 +354,14 @@ def compute_min_max_lp_data(
 
     total_start = time.time()
 
-    lp_cost, distances, L_t_vals, neighborsR, neighborsR2, lp_runtime = MinMaxLP(
-        S,
-        r,
-        r2,
-        method,
-    )
+    (
+        lp_cost,
+        distances,
+        L_t_vals,
+        neighborsR,
+        neighborsR2,
+        lp_runtime,
+    ) = MinMaxLP(S, r, r2, method)
 
     clustering, rounding_runtime = min_max_lp_cluster(
         distances,
@@ -363,8 +373,11 @@ def compute_min_max_lp_data(
     )
 
     pos_degrees = DegreeDist(S)
-
-    disagreement_vector, rounding_cost, max_disagreement_vertex = LocalObj(
+    (
+        disagreement_vector,
+        rounding_cost,
+        max_disagreement_vertex,
+    ) = LocalObj(
         S,
         clustering,
         pos_degrees,
@@ -383,7 +396,7 @@ def compute_min_max_lp_data(
         "r": r,
         "r2": r2,
         "method": method,
-        "norm": "inf" if norm == np.inf else norm,
+        "norm": norm_for_json,
         "lp_runtime_seconds": round(lp_runtime, 6),
         "rounding_runtime_seconds": round(rounding_runtime, 6),
         "total_runtime_seconds": round(total_runtime, 6),
@@ -412,10 +425,10 @@ def run_full_experiment(
     compute_observed_edge_four_cycle_ilp=False,
     compute_min_max=True,
     compute_min_max_lp=True,
-    min_max_cc_param_1=2,
-    min_max_cc_param_2=2,
-    min_max_lp_r=0.1,
-    min_max_lp_r2=0.5,
+    min_max_cc_param_1=8,
+    min_max_cc_param_2=3,
+    min_max_lp_r=0.4,
+    min_max_lp_r2=0.4,
     min_max_lp_method=0,
     min_max_lp_norm=np.inf,
 ):
@@ -448,33 +461,6 @@ def run_full_experiment(
 
     min_max_lp_results = compute_min_max_lp_data(
         S,
-        compute_min_max_lp=compute_min_max_lp,
-        r=min_max_lp_r,
-        r2=min_max_lp_r2,
-        method=min_max_lp_method,
-        norm=min_max_lp_norm,
-    )
-
-    # ============================================================
-    # Generate incomplete graph by deleting edges
-    # ============================================================
-
-    S_new, num_edges_deleted = delete_edges(S, p_delete, seed)
-    G_new = matrix_to_graph(S_new)
-
-    # ============================================================
-    # Edge-deleted graph: min-max methods
-    # ============================================================
-
-    min_max_cc_results_new = compute_min_max_cc_data(
-        S_new,
-        compute_min_max=compute_min_max,
-        param_1=min_max_cc_param_1,
-        param_2=min_max_cc_param_2,
-    )
-
-    min_max_lp_results_new = compute_min_max_lp_data(
-        S_new,
         compute_min_max_lp=compute_min_max_lp,
         r=min_max_lp_r,
         r2=min_max_lp_r2,
@@ -584,6 +570,33 @@ def run_full_experiment(
         all_bad_triangles,
         compute_primal_bound=compute_bad_triangle_primal_bound,
         compute_dual_bound=compute_bad_triangle_dual_bound,
+    )
+
+    # ============================================================
+    # Generate incomplete graph by deleting edges
+    # ============================================================
+
+    S_new, num_edges_deleted = delete_edges(S, p_delete, seed)
+    G_new = matrix_to_graph(S_new)
+
+    # ============================================================
+    # Incomplete graph: min-max methods
+    # ============================================================
+
+    min_max_cc_results_new = compute_min_max_cc_data(
+        S_new,
+        compute_min_max=compute_min_max,
+        param_1=min_max_cc_param_1,
+        param_2=min_max_cc_param_2,
+    )
+
+    min_max_lp_results_new = compute_min_max_lp_data(
+        S_new,
+        compute_min_max_lp=compute_min_max_lp,
+        r=min_max_lp_r,
+        r2=min_max_lp_r2,
+        method=min_max_lp_method,
+        norm=min_max_lp_norm,
     )
 
     # ============================================================
@@ -777,7 +790,7 @@ def run_full_experiment(
         "min_max_lp_results": min_max_lp_results,
 
         # ============================================================
-        # END MIN MAX THINGS
+        # START MIN MAX THINGS
         # ============================================================
 
         "actual_lp_cost": actual_lp_cost,
@@ -859,19 +872,27 @@ def build_saveable_results(graph_params, experiment_data):
                 # ============================================================
 
             "min_max_cc": {
-                "max_disagreement": experiment_data["min_max_cc_results"]["max_disagreement"],
+                "computed": experiment_data["min_max_cc_results"]["max_disagreement"] is not None,
+                "clustering": experiment_data["min_max_cc_results"]["clustering"],
                 "cluster_count": experiment_data["min_max_cc_results"]["cluster_count"],
+                "max_disagreement": experiment_data["min_max_cc_results"]["max_disagreement"],
                 "runtime_seconds": experiment_data["min_max_cc_results"]["runtime_seconds"],
             },
             "min_max_lp_rounding": {
+                "computed": experiment_data["min_max_lp_results"]["lp_cost"] is not None,
                 "lp_cost": experiment_data["min_max_lp_results"]["lp_cost"],
                 "rounding_cost": experiment_data["min_max_lp_results"]["rounding_cost"],
+                "max_disagreement_vertex": experiment_data["min_max_lp_results"]["max_disagreement_vertex"],
+                "disagreement_vector": experiment_data["min_max_lp_results"]["disagreement_vector"],
+                "clustering": experiment_data["min_max_lp_results"]["clustering"],
                 "cluster_count": experiment_data["min_max_lp_results"]["cluster_count"],
                 "r": experiment_data["min_max_lp_results"]["r"],
                 "r2": experiment_data["min_max_lp_results"]["r2"],
                 "method": experiment_data["min_max_lp_results"]["method"],
+                "norm": experiment_data["min_max_lp_results"]["norm"],
                 "lp_runtime_seconds": experiment_data["min_max_lp_results"]["lp_runtime_seconds"],
                 "rounding_runtime_seconds": experiment_data["min_max_lp_results"]["rounding_runtime_seconds"],
+                "total_runtime_seconds": experiment_data["min_max_lp_results"]["total_runtime_seconds"],
             },
                 # ============================================================
                 # END MIN MAX THINGS
@@ -915,19 +936,27 @@ def build_saveable_results(graph_params, experiment_data):
                 # ============================================================
 
             "min_max_cc": {
-                "max_disagreement": experiment_data["min_max_cc_results_new"]["max_disagreement"],
+                "computed": experiment_data["min_max_cc_results_new"]["max_disagreement"] is not None,
+                "clustering": experiment_data["min_max_cc_results_new"]["clustering"],
                 "cluster_count": experiment_data["min_max_cc_results_new"]["cluster_count"],
+                "max_disagreement": experiment_data["min_max_cc_results_new"]["max_disagreement"],
                 "runtime_seconds": experiment_data["min_max_cc_results_new"]["runtime_seconds"],
             },
             "min_max_lp_rounding": {
+                "computed": experiment_data["min_max_lp_results_new"]["lp_cost"] is not None,
                 "lp_cost": experiment_data["min_max_lp_results_new"]["lp_cost"],
                 "rounding_cost": experiment_data["min_max_lp_results_new"]["rounding_cost"],
+                "max_disagreement_vertex": experiment_data["min_max_lp_results_new"]["max_disagreement_vertex"],
+                "disagreement_vector": experiment_data["min_max_lp_results_new"]["disagreement_vector"],
+                "clustering": experiment_data["min_max_lp_results_new"]["clustering"],
                 "cluster_count": experiment_data["min_max_lp_results_new"]["cluster_count"],
                 "r": experiment_data["min_max_lp_results_new"]["r"],
                 "r2": experiment_data["min_max_lp_results_new"]["r2"],
                 "method": experiment_data["min_max_lp_results_new"]["method"],
+                "norm": experiment_data["min_max_lp_results_new"]["norm"],
                 "lp_runtime_seconds": experiment_data["min_max_lp_results_new"]["lp_runtime_seconds"],
                 "rounding_runtime_seconds": experiment_data["min_max_lp_results_new"]["rounding_runtime_seconds"],
+                "total_runtime_seconds": experiment_data["min_max_lp_results_new"]["total_runtime_seconds"],
             },
                 # ============================================================
                 # END MIN MAX THINGS

@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[12]:
-
-
 import networkx as nx
 import numpy as np
 import scipy
@@ -15,60 +12,45 @@ import gurobipy as grb
 import time
 
 
-# In[15]:
-def _validate_signed_matrix(S):
-    """
-    Validate your project matrix format.
-
-    Expected off-diagonal values:
-        1  = positive edge
-       -1  = negative edge
-        0  = deleted / unobserved edge
-
-    The diagonal is ignored by the objective and then treated as positive
-    internally for neighborhood/degree computations.
-    """
-    S = np.asarray(S)
-
-    if S.ndim != 2 or S.shape[0] != S.shape[1]:
-        raise ValueError("S must be a square matrix")
-
-    allowed = {-1, 0, 1}
-    values = set(np.unique(S).tolist())
-    if not values.issubset(allowed):
-        raise ValueError(f"S may only contain -1, 0, 1. Found: {sorted(values)}")
-
-    return S.astype(int, copy=False)
-
-
 def positive_adjacency_from_signed(S):
-    """
-    Convert only for internal metric computations.
-
-    This does NOT change the interpretation of the signed graph objective:
-        1  -> positive
-       -1  -> negative
-        0  -> deleted / unobserved
-
-    The returned matrix is only a positive-neighborhood indicator matrix.
-    """
-    S = _validate_signed_matrix(S)
+    #create a positive adjacency matrix from signed matrix S
     pos_adj_mx = (S == 1).astype(int)
+    #every vertex is included in its own positive neighborhood
     np.fill_diagonal(pos_adj_mx, 1)
     return pos_adj_mx
 
-
+def add_min_max_vertex_constraints(M, x, S):
+    n = np.shape(S)[0]
+    for v in range(n):
+        cons = grb.LinExpr()
+        for w in range(n):
+            if w == v:
+                continue
+            #deleted edge contributes nothing
+            if S[v,w] == 0:
+                continue
+            if w < v:
+                edge_var = x[w,v]
+            else:
+                edge_var = x[v,w]
+            #positive edge contributes x_vw
+            if S[v,w] == 1:
+                cons = cons + edge_var
+            #negative edge contributes 1 - x_vw
+            elif S[v,w] == -1:
+                cons = cons + 1 - edge_var
+        M.addConstr(x[0,0] >= cons)
 
 #Computing the correlation metric distances
-#input: positive adjacency matrix, radii r and r2 for rounding algorithm
+#input: signed matrix, radii r and r2 for rounding algorithm
 #output: correlation metric distances, L_0 values, r and r2 neighborhoods, time, fractional cost
-def exact(pos_adj_mx, r, r2):
+def exact(S, r, r2):
     t0 = time.time()
-    S = _validate_signed_matrix(pos_adj_mx)
+    #create positive adjacency matrix for positive-neighborhood computations
     pos_adj_mx = positive_adjacency_from_signed(S)
-    n = np.shape(pos_adj_mx)[0]
+    n = np.shape(S)[0]
     if not(np.array_equal(np.diagonal(pos_adj_mx), np.ones([n]))):
-           raise Exception('Diagonal not all 1s')
+        raise Exception('Diagonal not all 1s')
     #initialize a dictionary that stores the L_t values of each vertex
     L_t_vals = {}
     #initialize the dictionaries that store the r and r2 neighborhoods of each vertex
@@ -78,18 +60,24 @@ def exact(pos_adj_mx, r, r2):
         L_t_vals.update({k: 0})
         neighborsR.update({k: []})
         neighborsR2.update({k: []})
-    neg_adj_mx = np.subtract(np.ones([n,n]), pos_adj_mx)
     #for each pair of nodes, compute common positive neighborhood
     pos_len_2 = matrix_power(pos_adj_mx, 2)
     #compute the vector of positive degrees
     pos_degrees = np.matmul(pos_adj_mx, np.ones(n))
     #initialize the correlation metric distances
     distances = np.zeros([n,n])
-    #compute exact correlation metric using sizes of common positive and negative neighborhoods
+    #compute exact correlation metric using sizes of positive neighborhoods
     for u in range(n):
         for w in range(n-u-1):
             v = u + w + 1
-            distances[u][v] = 1 - ((pos_len_2[u][v])/(pos_degrees[u] + pos_degrees[v] - pos_len_2[u][v]))
+            distances[u][v] = 1 - (
+                (pos_len_2[u][v]) /
+                (
+                    pos_degrees[u]
+                    + pos_degrees[v]
+                    - pos_len_2[u][v]
+                )
+            )
             distances[v][u] = distances[u][v]
             #add to r2-neighborhood
             if distances[u][v] <= r2:
@@ -103,26 +91,24 @@ def exact(pos_adj_mx, r, r2):
                     neighborsR[v].append(u)
     t1 = time.time()
     clock = t1 - t0
-
     #for analysis only: compute the fractional cost of the correlation metric
     frac_values = []
     for v in range(n):
         tot = 0
-        neg_deg = n - np.dot(np.ones([n]), pos_adj_mx[v])
         for w in range(n):
-            ## NEEDS TO CHANGE
-            if pos_adj_mx[w,v] == 0:
+            if w == v:
+                continue
+            #negative edge contributes 1 - distance
+            if S[v,w] == -1:
                 tot = tot + 1 - distances[v][w]
-            else:
+            #positive edge contributes distance
+            if S[v,w] == 1:
                 tot = tot + distances[v][w]
+            #deleted edge contributes nothing
         frac_values.append(tot)
     frac_val = max(frac_values)
 
     return distances, L_t_vals, neighborsR, neighborsR2, clock, frac_val
-
-
-# In[1]:
-
 
 #KMZ Phase 2 (Rounding Algorithm)
 #input: distances, L_0 values, R and R2 neighborhoods, radii r and r2
@@ -165,13 +151,11 @@ def cluster(distances, L_t_vals, neighborsR, neighborsR2, r, r2):
     clock = t1 - t0
     return clustering, clock
 
-
-# In[17]:
-
-
 #input: positive adjacency matrix, clustering (as a list of lists), vector of positive degrees, p in lp norm
 #output: vector of disagreements, objective value (max disagreements at a vertex), maximizing vertex
-def LocalObj(pos_adj_mx, clustering, pos_degrees, norm):
+def LocalObj(S, clustering, pos_degrees, norm):
+    #create positive adjacency matrix
+    pos_adj_mx = positive_adjacency_from_signed(S)
     n = len(pos_degrees)
     disag_vector = np.zeros(n)
     num_clusters = len(clustering)
@@ -181,43 +165,35 @@ def LocalObj(pos_adj_mx, clustering, pos_degrees, norm):
             pos_disag = pos_degrees[clus[j]]
             neg_disag = 0
             for k in range(len(clus)):
-                ## NEEDS TO CHANGE
+                #positive edges inside the cluster are not disagreements
                 if pos_adj_mx[clus[j]][clus[k]] == 1:
-                    pos_disag = pos_disag - 1 
-                else:
+                    pos_disag = pos_disag - 1
+                #negative edges inside the cluster are disagreements
+                elif S[clus[j]][clus[k]] == -1:
                     neg_disag = neg_disag + 1
-            disag_vector[clus[j]] = pos_disag + neg_disag 
+                #deleted edges contribute nothing
+            disag_vector[clus[j]] = pos_disag + neg_disag
     alg_obj_val = np.linalg.norm(disag_vector, norm)
+
     if norm == math.inf:
         obj_vx = np.argmax(disag_vector)
     else:
-        obj_vx = math.inf 
+        obj_vx = math.inf
     return disag_vector, alg_obj_val, obj_vx
-
-
-# In[18]:
-
 
 #input: positive adjacency matrix
 #output: vector of positive degrees
-def DegreeDist(pos_adj_mx):
+def DegreeDist(S):
+    #create positive adjacency matrix
+    pos_adj_mx = positive_adjacency_from_signed(S)
     n = np.shape(pos_adj_mx)[0]
     degrees = np.dot(pos_adj_mx, np.ones(n))
     return degrees
 
-
-# In[2]:
-
-
-#input: positive adjacency matrix, LP solver (in Gurobi)
+#input: signed matrix, LP solver (in Gurobi)
 #output: LP objective value, LP solution
-def MinMaxLPonly(pos_adj_mx, method):
-
-    n = np.shape(pos_adj_mx)[0]
-
-    if not(np.array_equal(np.diagonal(pos_adj_mx), np.ones([n]))):
-        raise Exception('Diagonal not all 1s')
-
+def MinMaxLPonly(S, method):
+    n = np.shape(S)[0]
     upper_bounds = np.ones(int(n*(n-1)/2)+1)
     upper_bounds[int(n*(n-1)/2)] = grb.GRB.INFINITY
     M = grb.Model('my_model')
@@ -227,7 +203,7 @@ def MinMaxLPonly(pos_adj_mx, method):
             K.append((i,i+j+1))
     K.append((0,0))
     l = grb.tuplelist(K)
-    x = M.addVars(l, name = 'x', ub = upper_bounds)
+    x = M.addVars(l, name='x', ub=upper_bounds)
     for i in range(n-2):
         for j in range(n-2-i):
             for k in range(n-2-i-j):
@@ -237,45 +213,17 @@ def MinMaxLPonly(pos_adj_mx, method):
                 M.addConstr(x[u,v] + x[v,w] >= x[u,w])
                 M.addConstr(x[u,v] + x[u,w] >= x[v,w])
                 M.addConstr(x[v,w] + x[u,w] >= x[u,v])
-
-    for v in range(n):
-        cons = x[0,0]
-        neg_deg = n - np.dot(np.ones([n]), pos_adj_mx[v])
-        for w in range(n):
-            if w < v:
-                ## NEEDS TO CHANGE
-                if pos_adj_mx[w,v] == 0:
-                    cons = cons + x[w,v]
-                else:
-                    cons = cons - x[w,v]
-            if w > v:
-                ## NEEDS TO CHANGE
-                if pos_adj_mx[v,w] == 0:
-                    cons = cons + x[v,w]
-                else:
-                    cons = cons - x[v,w]
-        M.addConstr(cons >= neg_deg)
-
-
+    add_min_max_vertex_constraints(M, x, S)
     M.setObjective(x[0,0], grb.GRB.MINIMIZE)
-
     M.setParam('Method', method)
-
     M.optimize()
-
     distances = np.zeros([n,n])
     for u in range(n):
         for w in range(n-u-1):
             v = u + w + 1
-            distances[u][v] = x[u, v].x
-            distances[v][u] = x[u, v].x
-
+            distances[u][v] = x[u,v].x
+            distances[v][u] = x[u,v].x
     return M.objVal, distances
-
-
-# In[20]:
-
-
 #input: number of vertices, distances, radii r and r2 for rounding algorithm
 #output: L_0 values, R and R2 neighborhoods
 def MinMaxLPneighbors(n, distances, r, r2):
@@ -305,35 +253,20 @@ def MinMaxLPneighbors(n, distances, r, r2):
     return L_t_vals, neighborsR, neighborsR2
 
 
-# In[3]:
-
-
 #Combines MinMaxLPonly and MinMaxLPneighbors
-def MinMaxLP(pos_adj_mx, r, r2, method):
-
+def MinMaxLP(S, r, r2, method):
     t0 = time.time()
-
-    n = np.shape(pos_adj_mx)[0]
-
-    if not(np.array_equal(np.diagonal(pos_adj_mx), np.ones([n]))):
-        raise Exception('Diagonal not all 1s')
-
+    n = np.shape(S)[0]
     upper_bounds = np.ones(int(n*(n-1)/2)+1)
     upper_bounds[int(n*(n-1)/2)] = grb.GRB.INFINITY
-
-
     M = grb.Model('my_model')
-
     K = []
-
     for i in range(n):
         for j in range(n-i-1):
             K.append((i,i+j+1))
     K.append((0,0))
     l = grb.tuplelist(K)
-
-    x = M.addVars(l, name = 'x', ub = upper_bounds)
-
+    x = M.addVars(l, name='x', ub=upper_bounds)
     for i in range(n-2):
         for j in range(n-2-i):
             for k in range(n-2-i-j):
@@ -343,32 +276,10 @@ def MinMaxLP(pos_adj_mx, r, r2, method):
                 M.addConstr(x[u,v] + x[v,w] >= x[u,w])
                 M.addConstr(x[u,v] + x[u,w] >= x[v,w])
                 M.addConstr(x[v,w] + x[u,w] >= x[u,v])
-
-    for v in range(n):
-        cons = x[0,0]
-        neg_deg = n - np.dot(np.ones([n]), pos_adj_mx[v])
-        for w in range(n):
-            if w < v:
-                ## NEEDS TO CHANGE
-                if pos_adj_mx[w,v] == 0:
-                    cons = cons + x[w,v]
-                else:
-                    cons = cons - x[w,v]
-            if w > v:
-                ## NEEDS TO CHANGE
-                if pos_adj_mx[v,w] == 0:
-                    cons = cons + x[v,w]
-                else:
-                    cons = cons - x[v,w]
-        M.addConstr(cons >= neg_deg)
-
-
+    add_min_max_vertex_constraints(M, x, S)
     M.setObjective(x[0,0], grb.GRB.MINIMIZE)
-
     M.setParam('Method', method)
-
     M.optimize()
-
     L_t_vals = {}
     neighborsR = {}
     neighborsR2 = {}
@@ -376,13 +287,12 @@ def MinMaxLP(pos_adj_mx, r, r2, method):
         L_t_vals.update({k: 0})
         neighborsR.update({k: []})
         neighborsR2.update({k: []})
-
     distances = np.zeros([n,n])
     for u in range(n):
         for w in range(n-u-1):
             v = u + w + 1
-            distances[u][v] = x[u, v].x
-            distances[v][u] = x[u, v].x
+            distances[u][v] = x[u,v].x
+            distances[v][u] = x[u,v].x
             if distances[u][v] <= r2:
                 neighborsR2[u].append(v)
                 neighborsR2[v].append(u)
@@ -391,45 +301,6 @@ def MinMaxLP(pos_adj_mx, r, r2, method):
                     neighborsR[u].append(v)
                     L_t_vals[v] = L_t_vals[v] + r - distances[u][v]
                     neighborsR[v].append(u)
-
     t1 = time.time()
     clock = t1 - t0
-
-    return M.objVal, distances, L_t_vals, neighborsR, neighborsR2, clock
-
-
-# In[22]:
-
-
-#Pivot algorithm of Ailon, Charikar, and Newman
-#input: positive adjacency matrix
-#output: clustering, as a dictionary and as a list of lists
-def PivotAlg(pos_adj_mx):
-    S = _validate_signed_matrix(pos_adj_mx)
-    pos_adj_mx = positive_adjacency_from_signed(S)
-    n = np.shape(pos_adj_mx)[0]
-    #random perumtation of vertices
-    perm = np.random.permutation(n)
-    #keys will be pivots, values will be clusters
-    pivot_clusters = {}
-    pivot_clusters_list = []
-    for i in range(n):
-        #perm[i] clustered: 0 yes, 1 no
-        clustered = 0
-        for key in pivot_clusters.keys():
-            #check if perm[i] has a positive edge to an existing pivot (key)
-            if pos_adj_mx[perm[i]][key] == 1:
-                #add to perm[i] to the pivot's cluster
-                pivot_clusters[key].append(perm[i])
-                #mark perm[i] as clustered
-                clustered = 1
-                break
-        #if perm[i] not clustered by existing pivot
-        if clustered == 0:
-            #make perm[i] a new pivot
-            pivot_clusters.update({perm[i]: [perm[i]]})
-    for key in pivot_clusters.keys():
-        clus = pivot_clusters[key]
-        pivot_clusters_list.append(clus)
-    #output as dictionary and as list of lists
-    return pivot_clusters, pivot_clusters_list
+    return M.objVal,distances,L_t_vals, neighborsR,neighborsR2,clock

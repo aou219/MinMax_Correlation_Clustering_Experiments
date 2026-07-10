@@ -19,7 +19,7 @@ from experiment_helpers import (
 # Change these by hand.
 # ============================================================
 
-EGO_IDS = ["348" ]
+EGO_IDS = ["698" ]
 P_DELETE_VALUES = [0.05]
 SEEDS = [1]
 PIVOT_SEEDS = list(range(1, 11))
@@ -31,14 +31,15 @@ PIVOT_SEEDS = list(range(1, 11))
 SAVE_RESULTS = False
 
 COMPUTE_PIVOT = False
-COMPUTE_BAD_TRIANGLES = True
+COMPUTE_BAD_TRIANGLES = False
 COMPUTE_DISJOINT_BAD_TRIANGLES = False
 COMPUTE_BAD_TRIANGLE_PRIMAL_BOUND = False
 COMPUTE_BAD_TRIANGLE_DUAL_BOUND = False
 COMPUTE_MIN_MAX = True
+COMPUTE_MIN_MAX_LP = True
 
 # Main formulation you want: all_pairs_solver.py
-COMPUTE_ACTUAL_LP = True
+COMPUTE_ACTUAL_LP = False
 COMPUTE_ACTUAL_ILP = False
 
 # Old observed-edge formulation from ilp_solver.py
@@ -130,7 +131,8 @@ if __name__ == "__main__":
                     compute_observed_edge_ilp=COMPUTE_OBSERVED_EDGE_ILP,
                     compute_observed_edge_four_cycle_lp=COMPUTE_OBSERVED_EDGE_FOUR_CYCLE_LP,
                     compute_observed_edge_four_cycle_ilp=COMPUTE_OBSERVED_EDGE_FOUR_CYCLE_ILP,
-                    compute_min_max = COMPUTE_MIN_MAX
+                    compute_min_max = COMPUTE_MIN_MAX,
+                    compute_min_max_lp = COMPUTE_MIN_MAX_LP
                 )
 
                 # ============================================================

@@ -16,10 +16,10 @@ from experiment_helpers import (
 # Change these by hand.
 # ============================================================
 
-N_VALUES = [2]
+N_VALUES = [50]
 P_DELETE_VALUES = [0.15]
-P_POSITIVE_VALUES = [0.4]
-SEEDS = [1] 
+P_POSITIVE_VALUES = [0.6]
+SEEDS = [1]
 PIVOT_SEEDS = list(range(1, 11))
 
 # ============================================================
