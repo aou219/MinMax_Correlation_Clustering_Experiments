@@ -279,6 +279,7 @@ def MinMaxLP(S, r, r2, method):
     add_min_max_vertex_constraints(M, x, S)
     M.setObjective(x[0,0], grb.GRB.MINIMIZE)
     M.setParam('Method', method)
+    M.setParam("Crossover", 0)
     M.optimize()
     L_t_vals = {}
     neighborsR = {}

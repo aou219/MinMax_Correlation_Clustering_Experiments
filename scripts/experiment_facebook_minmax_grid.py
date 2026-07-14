@@ -4,20 +4,26 @@ import math
 import os
 import time
 from pathlib import Path
-
+import sys
 import numpy as np
 
-from src.facebook_sampling import (
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SRC_DIR = PROJECT_ROOT / "src"
+
+sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(SRC_DIR))
+
+from facebook_sampling import (
     load_facebook_ego_edges,
     load_facebook_circles,
     build_complete_signed_matrix_from_facebook_sample,
 )
 
-from src.edge_deletion import delete_edges
-from src.pivot import run_pivot
-from src.cost import calculate_clustering_cost
-from src.min_max import min_max_cc, max_disagreement
-from src.min_max_lp import (
+from edge_deletion import delete_edges
+from pivot import run_pivot
+from cost import calculate_clustering_cost
+from min_max import min_max_cc, max_disagreement
+from min_max_lp import (
     MinMaxLP,
     cluster as min_max_lp_cluster,
     LocalObj,
