@@ -1,14 +1,22 @@
-#!/usr/bin/env python3
 """
-Run missing min-max results for Facebook graphs, with a grid over min_max_cc
-parameters.
+Run Facebook MinMaxLP and MinMaxCC experiments for multiple edge-deletion seeds.
 
 Important:
-- MinMaxLP is run only ONCE per original Facebook row for the complete graph
-  and only ONCE per original Facebook row for the edge-deleted graph.
-- min_max_cc is run for every (d_hat, lambda) pair.
-- Full clusterings and disagreement vectors are NOT stored.
-- Output is written to a separate expanded CSV, so the 16-row template stays safe.
+- The complete Facebook graph is reconstructed once per ego graph.
+- Complete MinMaxLP is computed once per ego graph.
+- Complete MinMaxCC is computed once per (ego_id, d_hat, lambda).
+- Edge deletion is repeated for every requested seed.
+- Edge MinMaxLP is computed once per (ego_id, p_delete, seed).
+- Edge MinMaxCC is computed for every
+  (ego_id, p_delete, seed, d_hat, lambda).
+- Existing rows are preserved and skipped, so this script can resume.
+- Old output rows without a seed column are treated as seed 1.
+
+Default seeds:
+    1 through 30
+
+Default ego order:
+    3980, 698, 414, 686
 
 Default input:
     results/processed/minmax_facebook_template_flat.csv
@@ -52,13 +60,19 @@ from src.facebook_sampling import (  # noqa: E402
     load_facebook_ego_edges,
 )
 
+DEFAULT_INPUT_CSV = (
+    REPO_ROOT / "results/processed/all_runs_flat.csv"
+)
 
-DEFAULT_INPUT_CSV = REPO_ROOT / "results/processed/minmax_facebook_template_flat.csv"
-DEFAULT_OUTPUT_CSV = REPO_ROOT / "results/processed/minmax_facebook_grid_runs_flat.csv"
+DEFAULT_OUTPUT_CSV = (
+    REPO_ROOT
+    / "results/processed/research_tables/minmax_facebook_grid_runs_flat.csv"
+)
 
 BASE_COLUMNS = [
     "ego_id",
     "n",
+    "seed",
     "complete_pivot_best_cost",
     "complete_pivot_average_cost",
     "complete_ilp_cost",
@@ -70,7 +84,6 @@ BASE_COLUMNS = [
     "edge_all_pairs_lp_cost",
 ]
 
-# No clustering columns and no disagreement-vector column.
 MINMAX_SUFFIXES = [
     "min_max_cc_computed",
     "min_max_cc_cluster_count",
@@ -78,7 +91,6 @@ MINMAX_SUFFIXES = [
     "min_max_cc_d_hat",
     "min_max_cc_lambda",
     "min_max_cc_runtime_seconds",
-
     "min_max_lp_computed",
     "min_max_lp_cost",
     "min_max_lp_rounding_cost",
@@ -104,12 +116,14 @@ OUTPUT_COLUMNS = BASE_COLUMNS + MINMAX_COLUMNS
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run Facebook min-max grid results without storing clusterings."
+        description=(
+            "Run Facebook MinMaxLP and MinMaxCC for multiple "
+            "edge-deletion seeds."
+        )
     )
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT_CSV)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_CSV)
 
-    # MinMaxLP parameters. These are not part of the cc grid and are run once per row.
     parser.add_argument("--r", type=float, default=0.4)
     parser.add_argument("--r2", type=float, default=0.4)
     parser.add_argument("--method", type=int, default=0)
@@ -119,33 +133,47 @@ def parse_args() -> argparse.Namespace:
         help="Use 'inf' for max disagreement or a numeric p-norm.",
     )
 
-    # min_max_cc parameter grid.
     parser.add_argument(
         "--lambda-values",
         default="5,8,12",
-        help="Comma-separated lambda values for min_max_cc. Example: 5,8,12",
+        help="Comma-separated lambda values.",
     )
     parser.add_argument(
         "--min-d-hat",
         type=int,
         default=1,
-        help="Smallest d_hat power of 2 to include. Default is 1.",
+        help="Smallest d_hat power of two to include.",
     )
-
+    parser.add_argument(
+        "--seeds",
+        default="1-30",
+        help=(
+            "Seeds to run. Examples: '1-30', '2-30', or '1,4,7'. "
+            "Use '2-30' when seed 1 is already complete."
+        ),
+    )
+    parser.add_argument(
+        "--ego-order",
+        default="3980,698,414,686",
+        help=(
+            "Comma-separated Facebook ego IDs in processing order. "
+            "Default: 3980,698,414,686."
+        ),
+    )
     parser.add_argument(
         "--limit",
         type=int,
-        help="Maximum number of original Facebook rows to process.",
+        help="Maximum number of template rows to process.",
     )
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="Replace the output file if it already exists.",
+        help="Replace the output instead of resuming it.",
     )
     parser.add_argument(
         "--continue-on-error",
         action="store_true",
-        help="Continue after a row fails.",
+        help="Continue after a failed seed.",
     )
     return parser.parse_args()
 
@@ -156,25 +184,39 @@ def parse_norm(raw: str) -> float:
     return float(raw)
 
 
-def parse_required_int(value: str | None, name: str) -> int:
-    if value in ("", None):
-        raise ValueError(f"Missing required integer field: {name}")
-    return int(float(value))
-
-
-def parse_required_float(value: str | None, name: str) -> float:
-    if value in ("", None):
-        raise ValueError(f"Missing required float field: {name}")
-    return float(value)
-
-
 def parse_int_list(raw: str) -> list[int]:
     values = [int(part.strip()) for part in raw.split(",") if part.strip()]
     if not values:
-        raise ValueError("At least one lambda value is required.")
-    if any(value < 4 for value in values):
-        raise ValueError("All lambda values should be 4 or bigger.")
+        raise ValueError("At least one integer value is required.")
     return values
+
+
+def parse_seed_spec(raw: str) -> list[int]:
+    seeds: list[int] = []
+
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+
+        if "-" in part:
+            start_raw, end_raw = part.split("-", 1)
+            start = int(start_raw)
+            end = int(end_raw)
+
+            if end < start:
+                raise ValueError(f"Invalid seed range: {part}")
+
+            seeds.extend(range(start, end + 1))
+        else:
+            seeds.append(int(part))
+
+    seeds = sorted(set(seeds))
+
+    if not seeds:
+        raise ValueError("At least one seed is required.")
+
+    return seeds
 
 
 def scalar_cell(value: Any) -> str:
@@ -191,19 +233,11 @@ def scalar_cell(value: Any) -> str:
     return str(value)
 
 
-def max_positive_degree(S: np.ndarray) -> int:
-    """
-    Maximum number of positive observed edges incident to any node.
-    Positive edges have value 1 in the signed matrix.
-    """
-    return int((S == 1).sum(axis=1).max())
+def max_positive_degree(matrix: np.ndarray) -> int:
+    return int((matrix == 1).sum(axis=1).max())
 
 
 def powers_of_two_up_to(max_value: int, min_value: int = 1) -> list[int]:
-    """
-    Powers of two up to max_value, starting at at least min_value.
-    Example: max_value=17 gives [1, 2, 4, 8, 16].
-    """
     if max_value < 1:
         return [1]
 
@@ -246,12 +280,7 @@ def get_all_nodes_from_edges_and_circles(
     return sorted(edge_nodes | circle_nodes)
 
 
-def reconstruct_facebook_matrix(row: dict[str, str]) -> np.ndarray:
-    ego_id = str(row.get("ego_id", "")).strip()
-
-    if not ego_id:
-        raise ValueError("Missing ego_id for Facebook row")
-
+def reconstruct_facebook_matrix(ego_id: str) -> np.ndarray:
     edges_file = locate_facebook_file(ego_id, "edges")
     circles_file = locate_facebook_file(ego_id, "circles")
 
@@ -290,7 +319,6 @@ def flatten_results(
         f"{prefix}_min_max_cc_runtime_seconds": scalar_cell(
             cc_result["runtime_seconds"]
         ),
-
         f"{prefix}_min_max_lp_computed": scalar_cell(
             lp_result["lp_cost"] is not None
         ),
@@ -327,7 +355,7 @@ def atomic_write_csv(
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
 
-    file_descriptor, temporary_name = tempfile.mkstemp(
+    descriptor, temporary_name = tempfile.mkstemp(
         prefix=path.name + ".",
         suffix=".tmp",
         dir=path.parent,
@@ -335,7 +363,12 @@ def atomic_write_csv(
     )
 
     try:
-        with os.fdopen(file_descriptor, "w", newline="", encoding="utf-8") as handle:
+        with os.fdopen(
+            descriptor,
+            "w",
+            newline="",
+            encoding="utf-8",
+        ) as handle:
             writer = csv.DictWriter(handle, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(rows)
@@ -350,129 +383,387 @@ def atomic_write_csv(
         raise
 
 
-def output_row_exists(
-    output_rows: list[dict[str, str]],
-    base_row: dict[str, str],
-    d_hat: int,
-    lambda_param: int,
-) -> bool:
-    """
-    Resume support: skip a grid row if the output already has this
-    ego_id, p_delete, d_hat, and lambda combination.
-    """
-    ego_id = base_row.get("ego_id", "")
-    p_delete = base_row.get("p_delete", "")
+def normalize_existing_row(row: dict[str, str]) -> dict[str, str]:
+    normalized = {
+        column: row.get(column, "")
+        for column in OUTPUT_COLUMNS
+    }
 
-    for row in output_rows:
-        if (
-            row.get("ego_id", "") == ego_id
-            and row.get("p_delete", "") == p_delete
-            and row.get("complete_min_max_cc_d_hat", "") == str(d_hat)
-            and row.get("complete_min_max_cc_lambda", "") == str(lambda_param)
-            and row.get("complete_min_max_lp_cost", "") != ""
-            and row.get("edge_min_max_lp_cost", "") != ""
-        ):
-            return True
+    if not str(normalized.get("seed", "")).strip():
+        normalized["seed"] = "1"
 
-    return False
+    return normalized
 
 
-def load_existing_output(path: Path, overwrite: bool) -> list[dict[str, str]]:
+def load_existing_output(
+    path: Path,
+    overwrite: bool,
+) -> list[dict[str, str]]:
     if overwrite or not path.exists():
         return []
 
     with path.open("r", newline="", encoding="utf-8-sig") as handle:
         reader = csv.DictReader(handle)
-        if reader.fieldnames is None:
-            return []
-        return list(reader)
+        return [normalize_existing_row(row) for row in reader]
+
+
+def output_key(
+    ego_id: str,
+    p_delete: str,
+    seed: int,
+    d_hat: int,
+    lambda_param: int,
+) -> tuple[str, str, str, str, str]:
+    return (
+        str(ego_id),
+        f"{float(p_delete):.8f}",
+        str(seed),
+        str(d_hat),
+        str(lambda_param),
+    )
+
+
+def seed_grid_is_complete(
+    completed_keys: set[tuple[str, str, str, str, str]],
+    ego_id: str,
+    p_delete: float,
+    seed: int,
+    d_hat_values: list[int],
+    lambda_values: list[int],
+) -> bool:
+    """
+    Return True only when every expected (d_hat, lambda) row for this
+    ego_id, p_delete, and seed is already present.
+
+    This check happens before edge deletion and before solving MinMaxLP,
+    so completed seeds are skipped without repeating expensive work.
+    """
+    return all(
+        output_key(
+            ego_id=ego_id,
+            p_delete=str(p_delete),
+            seed=seed,
+            d_hat=d_hat,
+            lambda_param=lambda_param,
+        )
+        in completed_keys
+        for d_hat in d_hat_values
+        for lambda_param in lambda_values
+    )
+
+
+def existing_output_keys(
+    rows: list[dict[str, str]],
+) -> set[tuple[str, str, str, str, str]]:
+    keys = set()
+
+    for row in rows:
+        try:
+            keys.add(
+                output_key(
+                    ego_id=row.get("ego_id", ""),
+                    p_delete=row.get("p_delete", "0"),
+                    seed=int(float(row.get("seed", "1") or "1")),
+                    d_hat=int(
+                        float(
+                            row.get(
+                                "complete_min_max_cc_d_hat",
+                                "0",
+                            )
+                        )
+                    ),
+                    lambda_param=int(
+                        float(
+                            row.get(
+                                "complete_min_max_cc_lambda",
+                                "0",
+                            )
+                        )
+                    ),
+                )
+            )
+        except (TypeError, ValueError):
+            continue
+
+    return keys
+
+
+def template_value(row: dict[str, str], column: str) -> str:
+    return str(row.get(column, "")).strip()
+
+
+def existing_lp_result(
+    rows: list[dict[str, str]],
+    ego_id: str,
+    prefix: str,
+) -> dict[str, Any] | None:
+    """
+    Reconstruct a MinMaxLP result dictionary from an existing output row.
+    This prevents recomputing the complete-graph LP after a restart.
+    """
+    for row in rows:
+        if str(row.get("ego_id", "")).strip() != str(ego_id):
+            continue
+
+        lp_cost = str(row.get(f"{prefix}_min_max_lp_cost", "")).strip()
+        if not lp_cost:
+            continue
+
+        return {
+            "lp_cost": float(lp_cost),
+            "rounding_cost": float(
+                row.get(f"{prefix}_min_max_lp_rounding_cost", 0) or 0
+            ),
+            "max_disagreement_vertex": float(
+                row.get(
+                    f"{prefix}_min_max_lp_max_disagreement_vertex",
+                    0,
+                )
+                or 0
+            ),
+            "cluster_count": int(
+                float(
+                    row.get(f"{prefix}_min_max_lp_cluster_count", 0)
+                    or 0
+                )
+            ),
+            "r": float(row.get(f"{prefix}_min_max_lp_r", 0.4) or 0.4),
+            "r2": float(row.get(f"{prefix}_min_max_lp_r2", 0.4) or 0.4),
+            "method": int(
+                float(row.get(f"{prefix}_min_max_lp_method", 0) or 0)
+            ),
+            "norm": row.get(f"{prefix}_min_max_lp_norm", "inf") or "inf",
+            "lp_runtime_seconds": float(
+                row.get(
+                    f"{prefix}_min_max_lp_runtime_seconds",
+                    0,
+                )
+                or 0
+            ),
+            "rounding_runtime_seconds": float(
+                row.get(
+                    f"{prefix}_min_max_lp_rounding_runtime_seconds",
+                    0,
+                )
+                or 0
+            ),
+            "total_runtime_seconds": float(
+                row.get(
+                    f"{prefix}_min_max_lp_total_runtime_seconds",
+                    0,
+                )
+                or 0
+            ),
+        }
+
+    return None
+
+
+def existing_complete_cc_results(
+    rows: list[dict[str, str]],
+) -> dict[tuple[str, int, int], dict[str, Any]]:
+    """
+    Load already-computed complete-graph MinMaxCC results from the output CSV.
+    The complete graph does not depend on p_delete or deletion seed.
+    """
+    cache: dict[tuple[str, int, int], dict[str, Any]] = {}
+
+    for row in rows:
+        ego_id = str(row.get("ego_id", "")).strip()
+        d_hat_raw = str(
+            row.get("complete_min_max_cc_d_hat", "")
+        ).strip()
+        lambda_raw = str(
+            row.get("complete_min_max_cc_lambda", "")
+        ).strip()
+        disagreement_raw = str(
+            row.get("complete_min_max_cc_max_disagreement", "")
+        ).strip()
+
+        if not ego_id or not d_hat_raw or not lambda_raw or not disagreement_raw:
+            continue
+
+        key = (
+            ego_id,
+            int(float(d_hat_raw)),
+            int(float(lambda_raw)),
+        )
+
+        if key in cache:
+            continue
+
+        cache[key] = {
+            "cluster_count": int(
+                float(
+                    row.get(
+                        "complete_min_max_cc_cluster_count",
+                        0,
+                    )
+                    or 0
+                )
+            ),
+            "max_disagreement": float(disagreement_raw),
+            "runtime_seconds": float(
+                row.get(
+                    "complete_min_max_cc_runtime_seconds",
+                    0,
+                )
+                or 0
+            ),
+        }
+
+    return cache
 
 
 def main() -> None:
     args = parse_args()
     norm = parse_norm(args.norm)
     lambda_values = parse_int_list(args.lambda_values)
+    seeds = parse_seed_spec(args.seeds)
+    ego_order = [
+        ego_id.strip()
+        for ego_id in args.ego_order.split(",")
+        if ego_id.strip()
+    ]
 
     input_csv = args.input
     output_csv = args.output
 
     if not input_csv.is_absolute():
         input_csv = REPO_ROOT / input_csv
+
     if not output_csv.is_absolute():
         output_csv = REPO_ROOT / output_csv
 
     if not input_csv.exists():
         raise FileNotFoundError(f"Input CSV not found: {input_csv}")
 
-    if output_csv.exists() and args.overwrite:
-        print(f"Overwriting existing output: {output_csv}")
-
-    with input_csv.open("r", newline="", encoding="utf-8-sig") as handle:
+    with input_csv.open(
+        "r",
+        newline="",
+        encoding="utf-8-sig",
+    ) as handle:
         reader = csv.DictReader(handle)
+
         if reader.fieldnames is None:
             raise ValueError(f"CSV has no header: {input_csv}")
 
-        missing = [column for column in BASE_COLUMNS if column not in reader.fieldnames]
+        required_input_columns = [
+            column
+            for column in BASE_COLUMNS
+            if column != "seed"
+        ]
+        missing = [
+            column
+            for column in required_input_columns
+            if column not in reader.fieldnames
+        ]
+
         if missing:
             raise ValueError(
-                "Input CSV is missing required columns: " + ", ".join(missing)
+                "Input CSV is missing required columns: "
+                + ", ".join(missing)
             )
 
-        input_rows = list(reader)
+        all_rows = list(reader)
 
-    output_rows = load_existing_output(output_csv, overwrite=args.overwrite)
+        template_rows = [
+            row
+            for row in all_rows
+            if row.get("graph_family", "").strip().lower() == "facebook"
+            and str(row.get("ego_id", "")).strip() in ego_order
+        ]
 
-    processed_original_rows = 0
-    written_grid_rows = 0
-    failures = 0
+        order_index = {
+            ego_id: index
+            for index, ego_id in enumerate(ego_order)
+        }
 
-    for index, base_row in enumerate(input_rows):
-        if args.limit is not None and processed_original_rows >= args.limit:
-            break
-
-        label = (
-            f"source row {index + 1}/{len(input_rows)} | "
-            f"ego_id={base_row.get('ego_id')} | "
-            f"n={base_row.get('n')} | "
-            f"p_delete={base_row.get('p_delete')}"
+        template_rows.sort(
+            key=lambda row: (
+                order_index[str(row.get("ego_id", "")).strip()],
+                float(row.get("p_delete", 0) or 0),
+            )
         )
 
+        if not template_rows:
+            raise ValueError(
+                "No requested Facebook rows found in all_runs_flat.csv."
+            )
+
+    output_rows = load_existing_output(
+        output_csv,
+        overwrite=args.overwrite,
+    )
+    completed_keys = existing_output_keys(output_rows)
+
+    matrix_cache: dict[str, np.ndarray] = {}
+    complete_lp_cache: dict[str, dict[str, Any]] = {}
+    complete_cc_cache = existing_complete_cc_results(output_rows)
+
+    for ego_id in ego_order:
+        cached_lp = existing_lp_result(
+            output_rows,
+            ego_id=ego_id,
+            prefix="complete",
+        )
+        if cached_lp is not None:
+            complete_lp_cache[ego_id] = cached_lp
+
+    processed_template_rows = 0
+    new_grid_rows = 0
+    failures = 0
+
+    print("Input:", input_csv)
+    print("Output:", output_csv)
+    print("Seeds:", seeds)
+    print("Ego order:", ego_order)
+    print("Existing grid rows:", len(output_rows))
+    print(
+        "Complete LPs loaded from existing output:",
+        sorted(complete_lp_cache.keys()),
+    )
+
+    for row_index, template_row in enumerate(template_rows):
+        if (
+            args.limit is not None
+            and processed_template_rows >= args.limit
+        ):
+            break
+
+        ego_id = template_value(template_row, "ego_id")
+        p_delete_raw = template_value(template_row, "p_delete")
+
+        if not ego_id:
+            raise ValueError(
+                f"Missing ego_id in template row {row_index + 1}"
+            )
+
+        if not p_delete_raw:
+            raise ValueError(
+                f"Missing p_delete in template row {row_index + 1}"
+            )
+
+        p_delete = float(p_delete_raw)
+
         print("\n" + "=" * 80)
-        print(label)
-        print("=" * 80, flush=True)
+        print(
+            f"Template row {row_index + 1}/{len(template_rows)} | "
+            f"ego_id={ego_id} | p_delete={p_delete}"
+        )
+        print("=" * 80)
 
-        try:
-            complete_matrix = reconstruct_facebook_matrix(base_row)
+        if ego_id not in matrix_cache:
+            print("Reconstructing complete graph once...")
+            matrix_cache[ego_id] = reconstruct_facebook_matrix(ego_id)
 
-            p_delete = parse_required_float(base_row["p_delete"], "p_delete")
-            # Your Facebook template no longer stores seed. The old full runs used seed 1.
-            seed = parse_required_int(base_row.get("seed", "1"), "seed")
+        complete_matrix = matrix_cache[ego_id]
 
-            edge_matrix, deleted_count = delete_edges(
-                complete_matrix,
-                p_delete,
-                seed,
+        if ego_id not in complete_lp_cache:
+            print(
+                "No existing complete MinMaxLP found; computing it once..."
             )
-
-            print(f"Deleted edges reconstructed: {deleted_count}", flush=True)
-
-            max_d_hat = max(
-                max_positive_degree(complete_matrix),
-                max_positive_degree(edge_matrix),
-            )
-            d_hat_values = powers_of_two_up_to(
-                max_d_hat,
-                min_value=max(1, args.min_d_hat),
-            )
-
-            print(f"d_hat values: {d_hat_values}", flush=True)
-            print(f"lambda values: {lambda_values}", flush=True)
-
-            # MinMaxLP does not depend on d_hat or lambda.
-            # Therefore, run it once for the complete graph and once for the
-            # edge-deleted graph, then reuse the results for every cc grid row.
-            print("Running MinMaxLP once for complete graph...", flush=True)
-            complete_lp = compute_min_max_lp_data(
+            complete_lp_cache[ego_id] = compute_min_max_lp_data(
                 complete_matrix,
                 compute_min_max_lp=True,
                 r=args.r,
@@ -480,100 +771,185 @@ def main() -> None:
                 method=args.method,
                 norm=norm,
             )
+        else:
+            print("Reusing existing complete MinMaxLP from output CSV.")
 
-            print("Running MinMaxLP once for edge-deleted graph...", flush=True)
-            edge_lp = compute_min_max_lp_data(
-                edge_matrix,
-                compute_min_max_lp=True,
-                r=args.r,
-                r2=args.r2,
-                method=args.method,
-                norm=norm,
+        complete_lp = complete_lp_cache[ego_id]
+
+        # Edge deletion cannot increase the positive degree, so the d_hat grid
+        # is determined by the complete graph and can be known before deletion.
+        d_hat_values = powers_of_two_up_to(
+            max_positive_degree(complete_matrix),
+            min_value=max(1, args.min_d_hat),
+        )
+
+        for seed in seeds:
+            print("\n" + "-" * 80)
+            print(
+                f"ego_id={ego_id} | p_delete={p_delete} | seed={seed}"
             )
+            print("-" * 80)
 
-            for d_hat in d_hat_values:
-                for lambda_param in lambda_values:
-                    if output_row_exists(
-                        output_rows,
-                        base_row,
-                        d_hat=d_hat,
-                        lambda_param=lambda_param,
-                    ):
+            if seed_grid_is_complete(
+                completed_keys=completed_keys,
+                ego_id=ego_id,
+                p_delete=p_delete,
+                seed=seed,
+                d_hat_values=d_hat_values,
+                lambda_values=lambda_values,
+            ):
+                print(
+                    "Skipping complete seed before deletion/LP: "
+                    f"ego_id={ego_id}, p_delete={p_delete}, seed={seed}"
+                )
+                continue
+
+            try:
+                edge_matrix, deleted_count = delete_edges(
+                    complete_matrix,
+                    p_delete,
+                    seed,
+                )
+
+                print("Deleted edges:", deleted_count)
+
+                print(
+                    "Running edge MinMaxLP once for this deletion...",
+                    flush=True,
+                )
+                edge_lp = compute_min_max_lp_data(
+                    edge_matrix,
+                    compute_min_max_lp=True,
+                    r=args.r,
+                    r2=args.r2,
+                    method=args.method,
+                    norm=norm,
+                )
+
+                print("d_hat values:", d_hat_values)
+                print("lambda values:", lambda_values)
+
+                for d_hat in d_hat_values:
+                    for lambda_param in lambda_values:
+                        key = output_key(
+                            ego_id=ego_id,
+                            p_delete=str(p_delete),
+                            seed=seed,
+                            d_hat=d_hat,
+                            lambda_param=lambda_param,
+                        )
+
+                        if key in completed_keys:
+                            print(
+                                "Skipping existing row: "
+                                f"seed={seed}, d_hat={d_hat}, "
+                                f"lambda={lambda_param}"
+                            )
+                            continue
+
+                        complete_cache_key = (
+                            ego_id,
+                            d_hat,
+                            lambda_param,
+                        )
+
+                        if complete_cache_key not in complete_cc_cache:
+                            print(
+                                "Running complete MinMaxCC once: "
+                                f"d_hat={d_hat}, "
+                                f"lambda={lambda_param}"
+                            )
+                            complete_cc_cache[
+                                complete_cache_key
+                            ] = compute_min_max_cc_data(
+                                complete_matrix,
+                                compute_min_max=True,
+                                param_1=d_hat,
+                                param_2=lambda_param,
+                            )
+
+                        complete_cc = complete_cc_cache[
+                            complete_cache_key
+                        ]
+
                         print(
-                            f"Skipping existing grid row: "
-                            f"d_hat={d_hat}, lambda={lambda_param}",
+                            "Running edge MinMaxCC: "
+                            f"seed={seed}, d_hat={d_hat}, "
+                            f"lambda={lambda_param}"
+                        )
+                        edge_cc = compute_min_max_cc_data(
+                            edge_matrix,
+                            compute_min_max=True,
+                            param_1=d_hat,
+                            param_2=lambda_param,
+                        )
+
+                        new_row = {
+                            column: template_row.get(column, "")
+                            for column in BASE_COLUMNS
+                            if column != "seed"
+                        }
+                        new_row["seed"] = str(seed)
+
+                        new_row.update(
+                            flatten_results(
+                                "complete",
+                                complete_cc,
+                                complete_lp,
+                                d_hat,
+                                lambda_param,
+                            )
+                        )
+                        new_row.update(
+                            flatten_results(
+                                "edge",
+                                edge_cc,
+                                edge_lp,
+                                d_hat,
+                                lambda_param,
+                            )
+                        )
+
+                        normalized_new_row = {
+                            column: new_row.get(column, "")
+                            for column in OUTPUT_COLUMNS
+                        }
+
+                        output_rows.append(normalized_new_row)
+                        completed_keys.add(key)
+                        new_grid_rows += 1
+
+                        atomic_write_csv(
+                            output_csv,
+                            OUTPUT_COLUMNS,
+                            output_rows,
+                        )
+
+                        print(
+                            "Saved checkpoint. "
+                            f"New grid rows: {new_grid_rows}",
                             flush=True,
                         )
-                        continue
 
-                    print(
-                        f"Running min_max_cc for d_hat={d_hat}, "
-                        f"lambda={lambda_param}",
-                        flush=True,
-                    )
+            except Exception as error:
+                failures += 1
+                print(
+                    f"ERROR for ego_id={ego_id}, "
+                    f"p_delete={p_delete}, seed={seed}: {error}",
+                    file=sys.stderr,
+                    flush=True,
+                )
 
-                    complete_cc = compute_min_max_cc_data(
-                        complete_matrix,
-                        compute_min_max=True,
-                        param_1=d_hat,
-                        param_2=lambda_param,
-                    )
+                if not args.continue_on_error:
+                    raise
 
-                    edge_cc = compute_min_max_cc_data(
-                        edge_matrix,
-                        compute_min_max=True,
-                        param_1=d_hat,
-                        param_2=lambda_param,
-                    )
-
-                    new_row = {
-                        column: base_row.get(column, "")
-                        for column in BASE_COLUMNS
-                    }
-
-                    new_row.update(
-                        flatten_results(
-                            "complete",
-                            complete_cc,
-                            complete_lp,
-                            d_hat,
-                            lambda_param,
-                        )
-                    )
-
-                    new_row.update(
-                        flatten_results(
-                            "edge",
-                            edge_cc,
-                            edge_lp,
-                            d_hat,
-                            lambda_param,
-                        )
-                    )
-
-                    output_rows.append(new_row)
-                    written_grid_rows += 1
-
-                    atomic_write_csv(output_csv, OUTPUT_COLUMNS, output_rows)
-                    print(
-                        f"Saved checkpoint. Total new grid rows: {written_grid_rows}",
-                        flush=True,
-                    )
-
-            processed_original_rows += 1
-
-        except Exception as error:
-            failures += 1
-            print(f"ERROR: {error}", file=sys.stderr, flush=True)
-
-            if not args.continue_on_error:
-                raise
+        processed_template_rows += 1
 
     print("\nFinished.")
-    print(f"Processed original rows this run: {processed_original_rows}")
-    print(f"New grid rows written this run: {written_grid_rows}")
-    print(f"Failed original rows this run: {failures}")
-    print(f"Output CSV: {output_csv}")
+    print("Processed template rows:", processed_template_rows)
+    print("New grid rows written:", new_grid_rows)
+    print("Failures:", failures)
+    print("Output:", output_csv)
 
 
 if __name__ == "__main__":
