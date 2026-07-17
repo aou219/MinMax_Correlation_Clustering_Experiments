@@ -1,738 +1,299 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
 import csv
 from collections import defaultdict
 from pathlib import Path
+from typing import Any, Iterable
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_INPUT = REPO_ROOT / "results/processed/research_tables/minmax_facebook_grid_runs_flat.csv"
+DEFAULT_MINMAX_OUTPUT = REPO_ROOT / "results/processed/research_tables/facebook_minmax_table.csv"
+DEFAULT_CC_OUTPUT = REPO_ROOT / "results/processed/research_tables/facebook_correlation_clustering_table.csv"
 
 
-INPUT_FILE = Path(
-    "results/processed/research_tables/"
-    "minmax_facebook_grid_runs_flat.csv"
-)
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser()
+    p.add_argument("--input", type=Path, default=DEFAULT_INPUT)
+    p.add_argument("--minmax-output", type=Path, default=DEFAULT_MINMAX_OUTPUT)
+    p.add_argument("--cc-output", type=Path, default=DEFAULT_CC_OUTPUT)
+    p.add_argument("--d-hat", type=int, default=8)
+    p.add_argument("--lambda-value", type=int, default=5)
+    return p.parse_args()
 
-MINMAX_OUTPUT = Path(
-    "results/processed/research_tables/"
-    "facebook_minmax_table.csv"
-)
 
-CC_OUTPUT = Path(
-    "results/processed/research_tables/"
-    "facebook_correlation_clustering_table.csv"
-)
+def resolve(path: Path) -> Path:
+    return path if path.is_absolute() else REPO_ROOT / path
 
-def to_float(value):
-    """Convert a CSV value to float, or return None."""
+
+def to_float(value: Any) -> float | None:
     if value is None:
         return None
-
-    value = str(value).strip()
-
-    if value == "":
+    text = str(value).strip()
+    if not text:
         return None
-
     try:
-        return float(value)
+        return float(text)
     except ValueError:
         return None
 
 
-def get_seed(row):
-    """
-    Return the stored deletion seed.
+def rounded(value: float | None, digits: int = 6) -> str | float:
+    return "" if value is None else round(value, digits)
 
-    Older input files without a seed column are treated as seed 1.
-    """
+
+def average(values: Iterable[Any]) -> float | None:
+    nums = [x for x in (to_float(v) for v in values) if x is not None]
+    return None if not nums else sum(nums) / len(nums)
+
+
+def ratio(cc: Any, lp: Any) -> float | None:
+    cc_num, lp_num = to_float(cc), to_float(lp)
+    if cc_num is None or lp_num is None or lp_num == 0:
+        return None
+    return cc_num / lp_num
+
+
+def get_seed(row: dict[str, str]) -> str:
     seed = str(row.get("seed", "")).strip()
-    return seed if seed else "1"
+    return seed or "1"
 
 
-def read_rows(path):
-    with path.open(
-        "r",
-        newline="",
-        encoding="utf-8-sig",
-    ) as file:
-        return list(csv.DictReader(file))
+def read_rows(path: Path) -> list[dict[str, str]]:
+    with path.open("r", newline="", encoding="utf-8-sig") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames is None:
+            raise ValueError(f"CSV has no header: {path}")
+        return list(reader)
 
 
-def write_rows(path, rows, fieldnames):
-    path.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    with path.open(
-        "w",
-        newline="",
-        encoding="utf-8",
-    ) as file:
-        writer = csv.DictWriter(
-            file,
-            fieldnames=fieldnames,
-            extrasaction="ignore",
-        )
-
+def write_rows(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
 
 
-def average(values):
-    numeric_values = [
-        number
-        for number in (
-            to_float(value)
-            for value in values
-        )
-        if number is not None
-    ]
-
-    if not numeric_values:
-        return None
-
-    return sum(numeric_values) / len(numeric_values)
+def fixed_rows(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[dict[str, str]]:
+    out = []
+    for row in rows:
+        d = to_float(row.get("edge_min_max_cc_d_hat"))
+        l = to_float(row.get("edge_min_max_cc_lambda"))
+        if d is not None and l is not None and int(d) == d_hat and int(l) == lam:
+            out.append(row)
+    if not out:
+        raise ValueError(f"No rows found for d_hat={d_hat}, lambda={lam}")
+    return out
 
 
-def ratio(value, bound):
-    value = to_float(value)
-    bound = to_float(bound)
-
-    if value is None or bound is None or bound == 0:
-        return None
-
-    return value / bound
-
-
-def ratio_distance_from_one(value, bound):
-    current_ratio = ratio(value, bound)
-
-    if current_ratio is None:
-        return None
-
-    return abs(current_ratio - 1.0)
-
-
-def numeric_or_infinity(value):
-    number = to_float(value)
-
-    if number is None:
-        return float("inf")
-
-    return number
-
-
-def is_better_candidate(current_best, candidate):
-    """
-    Select the MinMaxCC result whose ratio to its corresponding
-    MinMaxLP value is closest to 1.
-
-    Ties are resolved deterministically using:
-      1. lower ratio distance from 1;
-      2. lower MinMaxCC value;
-      3. lower seed;
-      4. lower d_hat;
-      5. lower lambda.
-    """
-    if candidate["_ratio_distance"] is None:
-        return False
-
-    if current_best is None:
-        return True
-
-    candidate_key = (
-        candidate["_ratio_distance"],
-        numeric_or_infinity(candidate["minmaxcc_best"]),
-        numeric_or_infinity(candidate["_seed"]),
-        numeric_or_infinity(candidate["d_hat"]),
-        numeric_or_infinity(candidate["lambda"]),
-    )
-
-    current_key = (
-        current_best["_ratio_distance"],
-        numeric_or_infinity(current_best["minmaxcc_best"]),
-        numeric_or_infinity(current_best["_seed"]),
-        numeric_or_infinity(current_best["d_hat"]),
-        numeric_or_infinity(current_best["lambda"]),
-    )
-
-    return candidate_key < current_key
-
-
-def make_minmax_table(rows):
-    """
-    Create 20 aggregated Facebook MinMax rows:
-
-      - 4 complete-graph rows:
-            one per ego_id
-
-      - 16 edge-deleted rows:
-            one per ego_id and p_delete
-
-    For every edge-deleted group:
-
-      minmaxcc_best
-          The MinMaxCC value whose MinMaxCC / MinMaxLP ratio
-          is closest to 1 across all seeds and all tested
-          d_hat/lambda combinations.
-
-      min_max_lp_cost_best
-          The MinMaxLP value belonging to the same seed and
-          instance as the selected minmaxcc_best value.
-
-      minmaxcc_average
-          Average MinMaxCC value across all seeds and all
-          d_hat/lambda combinations.
-
-      min_max_lp_cost_average
-          Average MinMaxLP value across seeds. Each seed is
-          counted once because its LP value is repeated for
-          every d_hat/lambda row in the grid.
-
-    The seed belonging to the best result is used internally
-    but is not written to the output table.
-    """
-
-    best_candidates = {}
-
-    # All unique MinMaxCC observations:
-    # group_key -> observation_key -> value
-    cc_values = defaultdict(dict)
-
-    # One MinMaxLP value per seed:
-    # group_key -> seed -> value
-    lp_values_by_seed = defaultdict(dict)
+def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[dict[str, Any]]:
+    complete_by_ego: dict[str, dict[str, str]] = {}
+    edge_groups: dict[tuple[str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    metadata: dict[tuple[str, str], dict[str, str]] = {}
 
     for row in rows:
-        ego_id = str(row.get("ego_id", "")).strip()
-
-        if not ego_id:
+        ego = str(row.get("ego_id", "")).strip()
+        if not ego:
             continue
-
         n = str(row.get("n", "")).strip()
         seed = get_seed(row)
         p_delete = str(row.get("p_delete", "")).strip()
 
-        # ============================================================
-        # Complete graph
-        # ============================================================
+        cd = to_float(row.get("complete_min_max_cc_d_hat"))
+        cl = to_float(row.get("complete_min_max_cc_lambda"))
+        if cd is not None and cl is not None and int(cd) == d_hat and int(cl) == lam:
+            complete_by_ego.setdefault(ego, row)
 
-        complete_key = (
-            ego_id,
-            "0",
-            "complete",
-        )
-
-        complete_cc = row.get(
-            "complete_min_max_cc_max_disagreement",
-            "",
-        )
-
-        complete_lp = row.get(
-            "complete_min_max_lp_cost",
-            "",
-        )
-
-        complete_d_hat = row.get(
-            "complete_min_max_cc_d_hat",
-            "",
-        )
-
-        complete_lambda = row.get(
-            "complete_min_max_cc_lambda",
-            "",
-        )
-
-        # The complete graph is copied into many seed/p_delete rows.
-        # Deduplicate it using its d_hat/lambda combination.
-        complete_cc_observation_key = (
-            str(complete_d_hat).strip(),
-            str(complete_lambda).strip(),
-        )
-
-        if to_float(complete_cc) is not None:
-            cc_values[complete_key].setdefault(
-                complete_cc_observation_key,
-                complete_cc,
-            )
-
-        # There is only one complete-graph LP instance per ego_id.
-        if to_float(complete_lp) is not None:
-            lp_values_by_seed[complete_key].setdefault(
-                "complete",
-                complete_lp,
-            )
-
-        complete_ratio = ratio(
-            complete_cc,
-            complete_lp,
-        )
-
-        complete_candidate = {
-            "ego_id": ego_id,
-            "n": n,
-            "p_delete": "0",
-            "graph_variant": "complete",
-            "minmaxcc_best": complete_cc,
-            "minmaxcc_average": "",
-            "min_max_lp_cost_best": complete_lp,
-            "min_max_lp_cost_average": "",
-            "min_max_cc_to_lp_ratio": (
-                ""
-                if complete_ratio is None
-                else round(complete_ratio, 6)
-            ),
-            "d_hat": complete_d_hat,
-            "lambda": complete_lambda,
-            "min_max_lp_rounding_cost": row.get(
-                "complete_min_max_lp_rounding_cost",
-                "",
-            ),
-            "min_max_lp_runtime_seconds": row.get(
-                "complete_min_max_lp_runtime_seconds",
-                "",
-            ),
-            "_ratio_distance": ratio_distance_from_one(
-                complete_cc,
-                complete_lp,
-            ),
-            "_seed": "0",
+        cc = to_float(row.get("edge_min_max_cc_max_disagreement"))
+        if cc is None or not p_delete:
+            continue
+        lp = to_float(row.get("edge_min_max_lp_cost"))
+        r = ratio(cc, lp)
+        key = (ego, p_delete)
+        metadata.setdefault(key, {"n": n})
+        obs = {
+            "seed": seed,
+            "cc": cc,
+            "lp": lp,
+            "ratio": r,
+            "lp_rounding": row.get("edge_min_max_lp_rounding_cost", ""),
+            "lp_runtime": row.get("edge_min_max_lp_runtime_seconds", ""),
         }
+        old = edge_groups[key].get(seed)
+        if old is None:
+            edge_groups[key][seed] = obs
+        elif abs(old["cc"] - cc) > 1e-8:
+            raise ValueError(f"Conflicting duplicate for ego={ego}, p_delete={p_delete}, seed={seed}")
 
-        if is_better_candidate(
-            best_candidates.get(complete_key),
-            complete_candidate,
-        ):
-            best_candidates[complete_key] = complete_candidate
+    output: list[dict[str, Any]] = []
 
-        # ============================================================
-        # Edge-deleted graph
-        # ============================================================
+    for ego, row in complete_by_ego.items():
+        cc = to_float(row.get("complete_min_max_cc_max_disagreement"))
+        lp = to_float(row.get("complete_min_max_lp_cost"))
+        r = ratio(cc, lp)
+        output.append({
+            "ego_id": ego,
+            "n": str(row.get("n", "")).strip(),
+            "p_delete": 0,
+            "graph_variant": "complete",
+            "d_hat": d_hat,
+            "lambda": lam,
+            "number_of_seeds": 1,
+            "minmaxcc_best": rounded(cc),
+            "minmaxcc_average": rounded(cc),
+            "minmaxcc_worst": rounded(cc),
+            "min_max_lp_cost_best": rounded(lp),
+            "min_max_lp_cost_average": rounded(lp),
+            "min_max_lp_cost_worst": rounded(lp),
+            "minmaxcc_best_to_lp_ratio": rounded(r),
+            "minmaxcc_average_to_lp_ratio": rounded(r),
+            "minmaxcc_worst_to_lp_ratio": rounded(r),
+            "best_seed": "",
+            "worst_seed": "",
+            "min_max_lp_rounding_cost_best_seed": row.get("complete_min_max_lp_rounding_cost", ""),
+            "min_max_lp_runtime_seconds_best_seed": row.get("complete_min_max_lp_runtime_seconds", ""),
+        })
 
-        edge_key = (
-            ego_id,
-            p_delete,
-            "edge_deleted",
-        )
+    for key, by_seed in edge_groups.items():
+        ego, p_delete = key
+        obs = list(by_seed.values())
+        ratio_obs = [x for x in obs if x["ratio"] is not None]
 
-        edge_cc = row.get(
-            "edge_min_max_cc_max_disagreement",
-            "",
-        )
+        if ratio_obs:
+            best = min(ratio_obs, key=lambda x: (x["ratio"], x["cc"], int(float(x["seed"]))))
+            worst = max(ratio_obs, key=lambda x: (x["ratio"], x["cc"], -int(float(x["seed"]))))
+        else:
+            best = min(obs, key=lambda x: (x["cc"], int(float(x["seed"]))))
+            worst = max(obs, key=lambda x: (x["cc"], -int(float(x["seed"]))))
 
-        edge_lp = row.get(
-            "edge_min_max_lp_cost",
-            "",
-        )
-
-        edge_d_hat = row.get(
-            "edge_min_max_cc_d_hat",
-            "",
-        )
-
-        edge_lambda = row.get(
-            "edge_min_max_cc_lambda",
-            "",
-        )
-
-        # One CC observation per seed, d_hat and lambda.
-        edge_cc_observation_key = (
-            seed,
-            str(edge_d_hat).strip(),
-            str(edge_lambda).strip(),
-        )
-
-        if to_float(edge_cc) is not None:
-            cc_values[edge_key].setdefault(
-                edge_cc_observation_key,
-                edge_cc,
-            )
-
-        # The same edge LP is repeated for every d_hat/lambda
-        # combination. Count it only once per seed.
-        if to_float(edge_lp) is not None:
-            existing_lp = lp_values_by_seed[edge_key].get(seed)
-
-            if existing_lp is None:
-                lp_values_by_seed[edge_key][seed] = edge_lp
-            else:
-                existing_number = to_float(existing_lp)
-                new_number = to_float(edge_lp)
-
-                if (
-                    existing_number is not None
-                    and new_number is not None
-                    and abs(existing_number - new_number) > 1e-8
-                ):
-                    raise ValueError(
-                        "Conflicting edge MinMaxLP values for "
-                        f"ego_id={ego_id}, p_delete={p_delete}, "
-                        f"seed={seed}: {existing_lp} versus {edge_lp}"
-                    )
-
-        edge_ratio = ratio(
-            edge_cc,
-            edge_lp,
-        )
-
-        edge_candidate = {
-            "ego_id": ego_id,
-            "n": n,
+        output.append({
+            "ego_id": ego,
+            "n": metadata[key]["n"],
             "p_delete": p_delete,
             "graph_variant": "edge_deleted",
-            "minmaxcc_best": edge_cc,
-            "minmaxcc_average": "",
-            "min_max_lp_cost_best": edge_lp,
-            "min_max_lp_cost_average": "",
-            "min_max_cc_to_lp_ratio": (
-                ""
-                if edge_ratio is None
-                else round(edge_ratio, 6)
-            ),
-            "d_hat": edge_d_hat,
-            "lambda": edge_lambda,
-            "min_max_lp_rounding_cost": row.get(
-                "edge_min_max_lp_rounding_cost",
-                "",
-            ),
-            "min_max_lp_runtime_seconds": row.get(
-                "edge_min_max_lp_runtime_seconds",
-                "",
-            ),
-            "_ratio_distance": ratio_distance_from_one(
-                edge_cc,
-                edge_lp,
-            ),
-            "_seed": seed,
-        }
+            "d_hat": d_hat,
+            "lambda": lam,
+            "number_of_seeds": len(obs),
+            "minmaxcc_best": rounded(best["cc"]),
+            "minmaxcc_average": rounded(average(x["cc"] for x in obs)),
+            "minmaxcc_worst": rounded(worst["cc"]),
+            "min_max_lp_cost_best": rounded(best["lp"]),
+            "min_max_lp_cost_average": rounded(average(x["lp"] for x in obs)),
+            "min_max_lp_cost_worst": rounded(worst["lp"]),
+            "minmaxcc_best_to_lp_ratio": rounded(best["ratio"]),
+            "minmaxcc_average_to_lp_ratio": rounded(average(x["ratio"] for x in ratio_obs)),
+            "minmaxcc_worst_to_lp_ratio": rounded(worst["ratio"]),
+            "best_seed": best["seed"] if best["ratio"] is not None else "",
+            "worst_seed": worst["seed"] if worst["ratio"] is not None else "",
+            "min_max_lp_rounding_cost_best_seed": best["lp_rounding"] if best["ratio"] is not None else "",
+            "min_max_lp_runtime_seconds_best_seed": best["lp_runtime"] if best["ratio"] is not None else "",
+        })
 
-        if is_better_candidate(
-            best_candidates.get(edge_key),
-            edge_candidate,
-        ):
-            best_candidates[edge_key] = edge_candidate
-
-    output_rows = []
-
-    for group_key in sorted(
-        best_candidates,
-        key=lambda item: (
-            int(item[0]),
-            0 if item[2] == "complete" else 1,
-            float(item[1]),
-        ),
-    ):
-        output_row = dict(
-            best_candidates[group_key]
-        )
-
-        average_cc = average(
-            cc_values[group_key].values()
-        )
-
-        average_lp = average(
-            lp_values_by_seed[group_key].values()
-        )
-
-        output_row["minmaxcc_average"] = (
-            ""
-            if average_cc is None
-            else round(average_cc, 6)
-        )
-
-        output_row["min_max_lp_cost_average"] = (
-            ""
-            if average_lp is None
-            else round(average_lp, 6)
-        )
-
-        output_row.pop("_ratio_distance", None)
-        output_row.pop("_seed", None)
-
-        output_rows.append(output_row)
-
-    return output_rows
+    output.sort(key=lambda r: (int(float(r["ego_id"])), 0 if r["graph_variant"] == "complete" else 1, float(r["p_delete"])))
+    return output
 
 
-def make_correlation_clustering_table(rows):
-    """
-    Create 20 correlation-clustering rows:
-
-      - one complete row per ego_id;
-      - one edge-deleted row per ego_id and p_delete.
-
-    Edge-deleted Pivot and all-pairs LP values are averaged over
-    the seeds. Grid repetitions over d_hat/lambda are deduplicated.
-    """
-
-    complete_values = {}
-
-    edge_values = defaultdict(
-        lambda: {
-            "n": "",
-            "pivot_by_seed": {},
-            "lp_by_seed": {},
-        }
-    )
+def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    complete: dict[str, dict[str, Any]] = {}
+    edge: dict[tuple[str, str], dict[str, Any]] = defaultdict(lambda: {"n": "", "pivot": {}, "lp": {}})
 
     for row in rows:
-        ego_id = str(row.get("ego_id", "")).strip()
-
-        if not ego_id:
+        ego = str(row.get("ego_id", "")).strip()
+        if not ego:
             continue
-
         n = str(row.get("n", "")).strip()
         seed = get_seed(row)
         p_delete = str(row.get("p_delete", "")).strip()
 
-        if ego_id not in complete_values:
-            complete_values[ego_id] = {
-                "ego_id": ego_id,
-                "n": n,
-                "p_delete": "0",
-                "graph_variant": "complete",
-                "pivot_best_cost_average": row.get(
-                    "complete_pivot_best_cost",
-                    "",
-                ),
-                "lp_cost_average": row.get(
-                    "complete_lp_cost",
-                    "",
-                ),
-            }
+        cp = to_float(row.get("complete_pivot_best_cost"))
+        clp = to_float(row.get("complete_lp_cost"))
+        current = complete.setdefault(ego, {
+            "ego_id": ego,
+            "n": n,
+            "p_delete": 0,
+            "graph_variant": "complete",
+            "number_of_seeds": 1,
+            "pivot_best_cost_average": "",
+            "lp_cost_average": "",
+        })
+        if current["pivot_best_cost_average"] == "" and cp is not None:
+            current["pivot_best_cost_average"] = rounded(cp)
+        if current["lp_cost_average"] == "" and clp is not None:
+            current["lp_cost_average"] = rounded(clp)
 
-        edge_key = (
-            ego_id,
-            p_delete,
-        )
-
-        group = edge_values[edge_key]
+        group = edge[(ego, p_delete)]
         group["n"] = n
+        ep = to_float(row.get("edge_pivot_best_cost"))
+        elp = to_float(row.get("edge_all_pairs_lp_cost"))
+        if ep is not None:
+            group["pivot"].setdefault(seed, ep)
+        if elp is not None:
+            group["lp"].setdefault(seed, elp)
 
-        edge_pivot = row.get(
-            "edge_pivot_best_cost",
-            "",
-        )
-
-        edge_lp = row.get(
-            "edge_all_pairs_lp_cost",
-            "",
-        )
-
-        if to_float(edge_pivot) is not None:
-            group["pivot_by_seed"].setdefault(
-                seed,
-                edge_pivot,
-            )
-
-        if to_float(edge_lp) is not None:
-            group["lp_by_seed"].setdefault(
-                seed,
-                edge_lp,
-            )
-
-    output_rows = list(
-        complete_values.values()
-    )
-
-    for (
-        ego_id,
-        p_delete,
-    ), group in edge_values.items():
-        pivot_average = average(
-            group["pivot_by_seed"].values()
-        )
-
-        lp_average = average(
-            group["lp_by_seed"].values()
-        )
-
-        output_rows.append({
-            "ego_id": ego_id,
+    output = list(complete.values())
+    for (ego, p_delete), group in edge.items():
+        seed_ids = set(group["pivot"]) | set(group["lp"])
+        output.append({
+            "ego_id": ego,
             "n": group["n"],
             "p_delete": p_delete,
             "graph_variant": "edge_deleted",
-            "pivot_best_cost_average": (
-                ""
-                if pivot_average is None
-                else round(pivot_average, 6)
-            ),
-            "lp_cost_average": (
-                ""
-                if lp_average is None
-                else round(lp_average, 6)
-            ),
+            "number_of_seeds": len(seed_ids),
+            "pivot_best_cost_average": rounded(average(group["pivot"].values())),
+            "lp_cost_average": rounded(average(group["lp"].values())),
         })
 
-    output_rows.sort(
-        key=lambda row: (
-            int(row["ego_id"]),
-            0 if row["graph_variant"] == "complete" else 1,
-            float(row["p_delete"]),
-        )
-    )
-
-    return output_rows
+    output.sort(key=lambda r: (int(float(r["ego_id"])), 0 if r["graph_variant"] == "complete" else 1, float(r["p_delete"])))
+    return output
 
 
-def validate_output(minmax_rows, correlation_rows):
-    expected_ego_ids = {
-        "414",
-        "686",
-        "698",
-        "3980",
-    }
+def main() -> None:
+    args = parse_args()
+    input_path = resolve(args.input)
+    minmax_output = resolve(args.minmax_output)
+    cc_output = resolve(args.cc_output)
 
-    expected_p_delete_values = {
-        "0.05",
-        "0.15",
-        "0.25",
-        "0.4",
-    }
+    if not input_path.exists():
+        raise FileNotFoundError(f"Input not found: {input_path}")
 
-    expected_total_rows = (
-        len(expected_ego_ids)
-        + len(expected_ego_ids) * len(expected_p_delete_values)
-    )
+    all_rows = read_rows(input_path)
+    selected_rows = fixed_rows(all_rows, args.d_hat, args.lambda_value)
+    minmax_rows = make_minmax_table(selected_rows, args.d_hat, args.lambda_value)
+    cc_rows = make_cc_table(all_rows)
 
-    if len(minmax_rows) != expected_total_rows:
-        raise ValueError(
-            f"Expected {expected_total_rows} MinMax rows, "
-            f"but generated {len(minmax_rows)}."
-        )
-
-    if len(correlation_rows) != expected_total_rows:
-        raise ValueError(
-            f"Expected {expected_total_rows} correlation-clustering rows, "
-            f"but generated {len(correlation_rows)}."
-        )
-
-    for table_name, table_rows in [
-        ("MinMax", minmax_rows),
-        ("correlation clustering", correlation_rows),
-    ]:
-        complete_rows = [
-            row
-            for row in table_rows
-            if row["graph_variant"] == "complete"
-        ]
-
-        edge_rows = [
-            row
-            for row in table_rows
-            if row["graph_variant"] == "edge_deleted"
-        ]
-
-        complete_ego_ids = {
-            row["ego_id"]
-            for row in complete_rows
-        }
-
-        if complete_ego_ids != expected_ego_ids:
-            raise ValueError(
-                f"{table_name} complete ego IDs are incomplete: "
-                f"{sorted(complete_ego_ids)}"
-            )
-
-        found_edge_combinations = {
-            (
-                row["ego_id"],
-                row["p_delete"],
-            )
-            for row in edge_rows
-        }
-
-        expected_edge_combinations = {
-            (
-                ego_id,
-                p_delete,
-            )
-            for ego_id in expected_ego_ids
-            for p_delete in expected_p_delete_values
-        }
-
-        if found_edge_combinations != expected_edge_combinations:
-            missing = (
-                expected_edge_combinations
-                - found_edge_combinations
-            )
-
-            extra = (
-                found_edge_combinations
-                - expected_edge_combinations
-            )
-
-            raise ValueError(
-                f"{table_name} edge combinations are incomplete. "
-                f"Missing: {sorted(missing)}. "
-                f"Extra: {sorted(extra)}."
-            )
-
-
-def main():
-    if not INPUT_FILE.exists():
-        raise FileNotFoundError(
-            f"Input file not found: {INPUT_FILE}"
-        )
-
-    rows = read_rows(INPUT_FILE)
-
-    print("Input:", INPUT_FILE)
-    print("Read grid rows:", len(rows))
-
-    minmax_rows = make_minmax_table(rows)
-
-    correlation_rows = (
-        make_correlation_clustering_table(rows)
-    )
-
-    validate_output(
-        minmax_rows,
-        correlation_rows,
-    )
-
-    minmax_fieldnames = [
-        "ego_id",
-        "n",
-        "p_delete",
-        "graph_variant",
+    minmax_fields = [
+        "ego_id", "n", "p_delete", "graph_variant", "d_hat", "lambda", "number_of_seeds",
         "minmaxcc_best",
-        "minmaxcc_average",
         "min_max_lp_cost_best",
+        "minmaxcc_best_to_lp_ratio",
+
+        "minmaxcc_average",
         "min_max_lp_cost_average",
-        "min_max_cc_to_lp_ratio",
-        "d_hat",
-        "lambda",
-        "min_max_lp_rounding_cost",
-        "min_max_lp_runtime_seconds",
+        "minmaxcc_average_to_lp_ratio",
+
+        "minmaxcc_worst",
+        "min_max_lp_cost_worst",
+        "minmaxcc_worst_to_lp_ratio",
+        "best_seed", "worst_seed",
+        "min_max_lp_rounding_cost_best_seed", "min_max_lp_runtime_seconds_best_seed",
+    ]
+    cc_fields = [
+        "ego_id", "n", "p_delete", "graph_variant", "number_of_seeds",
+        "pivot_best_cost_average", "lp_cost_average",
     ]
 
-    correlation_fieldnames = [
-        "ego_id",
-        "n",
-        "p_delete",
-        "graph_variant",
-        "pivot_best_cost_average",
-        "lp_cost_average",
-    ]
+    write_rows(minmax_output, minmax_rows, minmax_fields)
+    write_rows(cc_output, cc_rows, cc_fields)
 
-    write_rows(
-        MINMAX_OUTPUT,
-        minmax_rows,
-        minmax_fieldnames,
-    )
-
-    write_rows(
-        CC_OUTPUT,
-        correlation_rows,
-        correlation_fieldnames,
-    )
-
-    print()
-    print("Wrote MinMax table:")
-    print(MINMAX_OUTPUT)
-    print("Rows:", len(minmax_rows))
-
-    print()
-    print("Wrote correlation-clustering table:")
-    print(CC_OUTPUT)
-    print("Rows:", len(correlation_rows))
+    print("Input:", input_path)
+    print("Input rows:", len(all_rows))
+    print(f"Fixed parameters: d_hat={args.d_hat}, lambda={args.lambda_value}")
+    print("MinMax table:", minmax_output)
+    print("MinMax rows:", len(minmax_rows))
+    print("Correlation table:", cc_output)
+    print("Correlation rows:", len(cc_rows))
 
 
 if __name__ == "__main__":
