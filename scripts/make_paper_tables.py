@@ -118,7 +118,6 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "cc": cc,
             "lp": lp,
             "ratio": r,
-            "lp_rounding": row.get("edge_min_max_lp_rounding_cost", ""),
             "lp_runtime": row.get("edge_min_max_lp_runtime_seconds", ""),
         }
         old = edge_groups[key].get(seed)
@@ -152,7 +151,6 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "minmaxcc_worst_to_lp_ratio": rounded(r),
             "best_seed": "",
             "worst_seed": "",
-            "min_max_lp_rounding_cost_best_seed": row.get("complete_min_max_lp_rounding_cost", ""),
             "min_max_lp_runtime_seconds_best_seed": row.get("complete_min_max_lp_runtime_seconds", ""),
         })
 
@@ -187,11 +185,17 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "minmaxcc_worst_to_lp_ratio": rounded(worst["ratio"]),
             "best_seed": best["seed"] if best["ratio"] is not None else "",
             "worst_seed": worst["seed"] if worst["ratio"] is not None else "",
-            "min_max_lp_rounding_cost_best_seed": best["lp_rounding"] if best["ratio"] is not None else "",
             "min_max_lp_runtime_seconds_best_seed": best["lp_runtime"] if best["ratio"] is not None else "",
         })
 
-    output.sort(key=lambda r: (int(float(r["ego_id"])), 0 if r["graph_variant"] == "complete" else 1, float(r["p_delete"])))
+    output.sort(
+        key=lambda r: (
+            int(float(r["n"])),
+            int(float(r["ego_id"])),
+            0 if r["graph_variant"] == "complete" else 1,
+            float(r["p_delete"]),
+        )
+    )
     return output
 
 
@@ -245,7 +249,14 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             "lp_cost_average": rounded(average(group["lp"].values())),
         })
 
-    output.sort(key=lambda r: (int(float(r["ego_id"])), 0 if r["graph_variant"] == "complete" else 1, float(r["p_delete"])))
+    output.sort(
+        key=lambda r: (
+            int(float(r["n"])),
+            int(float(r["ego_id"])),
+            0 if r["graph_variant"] == "complete" else 1,
+            float(r["p_delete"]),
+        )
+    )
     return output
 
 
@@ -277,7 +288,7 @@ def main() -> None:
         "min_max_lp_cost_worst",
         "minmaxcc_worst_to_lp_ratio",
         "best_seed", "worst_seed",
-        "min_max_lp_rounding_cost_best_seed", "min_max_lp_runtime_seconds_best_seed",
+        "min_max_lp_runtime_seconds_best_seed",
     ]
     cc_fields = [
         "ego_id", "n", "p_delete",
