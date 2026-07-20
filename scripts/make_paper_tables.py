@@ -118,7 +118,7 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "cc": cc,
             "lp": lp,
             "ratio": r,
-            "lp_runtime": row.get("edge_min_max_lp_runtime_seconds", ""),
+            "runtime": row.get("edge_min_max_lp_runtime_seconds", ""),
         }
         old = edge_groups[key].get(seed)
         if old is None:
@@ -149,9 +149,9 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "minmaxcc_best_to_lp_ratio": rounded(r),
             "minmaxcc_average_to_lp_ratio": rounded(r),
             "minmaxcc_worst_to_lp_ratio": rounded(r),
-            "best_seed": "",
-            "worst_seed": "",
-            "min_max_lp_runtime_seconds_best_seed": row.get("complete_min_max_lp_runtime_seconds", ""),
+            "min_max_lp_runtime_seconds_average": rounded(
+                to_float(row.get("complete_min_max_lp_runtime_seconds"))
+            ),
         })
 
     for key, by_seed in edge_groups.items():
@@ -183,9 +183,9 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "minmaxcc_best_to_lp_ratio": rounded(best["ratio"]),
             "minmaxcc_average_to_lp_ratio": rounded(average(x["ratio"] for x in ratio_obs)),
             "minmaxcc_worst_to_lp_ratio": rounded(worst["ratio"]),
-            "best_seed": best["seed"] if best["ratio"] is not None else "",
-            "worst_seed": worst["seed"] if worst["ratio"] is not None else "",
-            "min_max_lp_runtime_seconds_best_seed": best["lp_runtime"] if best["ratio"] is not None else "",
+            "min_max_lp_runtime_seconds_average": rounded(
+                average(x["runtime"] for x in obs)
+            ),
         })
 
     output.sort(
@@ -287,8 +287,7 @@ def main() -> None:
         "minmaxcc_worst",
         "min_max_lp_cost_worst",
         "minmaxcc_worst_to_lp_ratio",
-        "best_seed", "worst_seed",
-        "min_max_lp_runtime_seconds_best_seed",
+        "min_max_lp_runtime_seconds_average",
     ]
     cc_fields = [
         "ego_id", "n", "p_delete",
