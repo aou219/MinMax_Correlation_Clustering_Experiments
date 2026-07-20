@@ -1,4 +1,3 @@
-import random
 import numpy as np
 
 
@@ -12,7 +11,7 @@ def load_facebook_ego_edges(edges_file):
     edges = set()
     nodes = set()
 
-    with open(edges_file, "r") as f:
+    with open(edges_file, "r", encoding="utf-8") as f:
         for line in f:
             if line.strip() == "":
                 continue
@@ -36,98 +35,32 @@ def load_facebook_ego_edges(edges_file):
     return nodes, edges
 
 
-def load_facebook_circles(circles_file):
+def build_complete_signed_matrix_from_facebook_sample(
+    sampled_nodes,
+    facebook_edges,
+):
     """
-    Load one Facebook circles file.
-
-    Expected format:
-        circle_name node1 node2 node3 ...
-    """
-    circles = []
-
-    with open(circles_file, "r") as f:
-        for line in f:
-            if line.strip() == "":
-                continue
-
-            parts = line.strip().split()
-
-            if len(parts) < 2:
-                continue
-
-            circle_name = parts[0]
-            circle_nodes = [int(node) for node in parts[1:]]
-
-            circles.append({
-                "name": circle_name,
-                "nodes": circle_nodes
-            })
-
-    return circles
-
-import random
-
-def sample_nodes_from_circles(circles, cluster_sizes, seed=None):
-    rng = random.Random(seed)
-
-    circles_sorted = sorted(
-        circles,
-        key=lambda c: len(c["nodes"]),
-        reverse=True
-    )
-
-    selected_circles = []
-    sampled_nodes = []
-    used_nodes = set()
-
-    circle_idx = 0
-
-    for n_nodes in cluster_sizes:
-
-        # zoek best matching circle (greedy, but realistic)
-        found = False
-
-        for _ in range(len(circles_sorted)):
-
-            circle = circles_sorted[circle_idx % len(circles_sorted)]
-            circle_idx += 1
-
-            available_nodes = circle["nodes"]
-
-            # kleine overlap toegestaan → alleen soft filtering
-            candidate_nodes = list(set(available_nodes))
-
-            if len(candidate_nodes) < n_nodes:
-                continue
-
-            chosen = rng.sample(candidate_nodes, n_nodes)
-
-            selected_circles.append({
-                "name": circle["name"],
-                "nodes": chosen
-            })
-
-            sampled_nodes.extend(chosen)
-            used_nodes.update(chosen)
-
-            found = True
-            break
-
-        if not found:
-            raise ValueError(f"Could not sample {n_nodes} nodes realistically")
-
-    return sampled_nodes, selected_circles
-
-def build_complete_signed_matrix_from_facebook_sample(sampled_nodes, facebook_edges):
-    """
-    Build a complete signed graph from sampled Facebook nodes.
+    Build a complete signed graph from Facebook edge-file nodes.
 
     Rule:
         existing Facebook friendship edge = +1
         missing friendship edge = -1
+        diagonal = 0
+
+    Important:
+        sampled_nodes should contain only nodes occurring in the
+        Facebook .edges file when reproducing the paper instances.
     """
+    sampled_nodes = list(sampled_nodes)
     n = len(sampled_nodes)
-    node_to_index = {node: index for index, node in enumerate(sampled_nodes)}
+
+    if len(set(sampled_nodes)) != n:
+        raise ValueError("sampled_nodes contains duplicate node IDs")
+
+    node_to_index = {
+        node: index
+        for index, node in enumerate(sampled_nodes)
+    }
 
     S = np.zeros((n, n), dtype=int)
 

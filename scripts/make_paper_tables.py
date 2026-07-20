@@ -264,7 +264,7 @@ def main() -> None:
     cc_rows = make_cc_table(all_rows)
 
     minmax_fields = [
-        "ego_id", "n", "p_delete", "graph_variant", "d_hat", "lambda", "number_of_seeds",
+        "ego_id", "n", "p_delete",
         "minmaxcc_best",
         "min_max_lp_cost_best",
         "minmaxcc_best_to_lp_ratio",
@@ -280,7 +280,7 @@ def main() -> None:
         "min_max_lp_rounding_cost_best_seed", "min_max_lp_runtime_seconds_best_seed",
     ]
     cc_fields = [
-        "ego_id", "n", "p_delete", "graph_variant", "number_of_seeds",
+        "ego_id", "n", "p_delete",
         "pivot_best_cost_average", "lp_cost_average",
     ]
 
