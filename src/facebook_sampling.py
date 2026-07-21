@@ -86,18 +86,3 @@ def build_complete_signed_matrix_from_facebook_sample(
 
     return S, node_to_index, positive_count, negative_count
 
-## This is only used for the graph representation
-def matrix_to_graph(matrix):
-    graph = nx.Graph()
-    n = matrix.shape[0]
-
-    for i in range(n):
-        graph.add_node(i)
-    for i in range(n):
-        for j in range(i + 1, n):
-            sign = matrix[i, j]
-
-            if sign != 0:
-                graph.add_edge(i, j, sign=sign)
-
-    return graph
