@@ -36,12 +36,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 DEFAULT_INPUT = (
     REPO_ROOT
-    / "results/processed/research_tables/facebook_minmax_table.csv"
+    / "results/research_tables/facebook_minmax_table.csv"
 )
-
 DEFAULT_OUTPUT_DIR = (
     REPO_ROOT
-    / "results/processed/figures/research_figures"
+    / "results/figures/research_figures"
 )
 
 RATIO_COLUMNS = {
