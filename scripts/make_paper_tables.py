@@ -8,9 +8,9 @@ from pathlib import Path
 from typing import Any, Iterable
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_INPUT = REPO_ROOT / "results/processed/research_tables/minmax_facebook_grid_runs_flat.csv"
-DEFAULT_MINMAX_OUTPUT = REPO_ROOT / "results/processed/research_tables/facebook_minmax_table.csv"
-DEFAULT_CC_OUTPUT = REPO_ROOT / "results/processed/research_tables/facebook_correlation_clustering_table.csv"
+DEFAULT_INPUT = REPO_ROOT / "results/research_tables/minmax_facebook_grid_runs_flat.csv"
+DEFAULT_MINMAX_OUTPUT = REPO_ROOT / "results/research_tables/facebook_minmax_table.csv"
+DEFAULT_CC_OUTPUT = REPO_ROOT / "results/research_tables/facebook_correlation_clustering_table.csv"
 
 
 def parse_args() -> argparse.Namespace:
@@ -118,7 +118,12 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "cc": cc,
             "lp": lp,
             "ratio": r,
-            "runtime": row.get("edge_min_max_lp_runtime_seconds", ""),
+            "minmaxcc_runtime": row.get(
+                "edge_min_max_cc_runtime_seconds", ""
+            ),
+            "lp_runtime": row.get(
+                "edge_min_max_lp_runtime_seconds", ""
+            ),
         }
         old = edge_groups[key].get(seed)
         if old is None:
@@ -149,8 +154,15 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "minmaxcc_best_to_lp_ratio": rounded(r),
             "minmaxcc_average_to_lp_ratio": rounded(r),
             "minmaxcc_worst_to_lp_ratio": rounded(r),
+            "minmaxcc_runtime_seconds_average": rounded(
+                to_float(
+                    row.get("complete_min_max_cc_runtime_seconds")
+                )
+            ),
             "min_max_lp_runtime_seconds_average": rounded(
-                to_float(row.get("complete_min_max_lp_runtime_seconds"))
+                to_float(
+                    row.get("complete_min_max_lp_runtime_seconds")
+                )
             ),
         })
 
@@ -183,8 +195,11 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
             "minmaxcc_best_to_lp_ratio": rounded(best["ratio"]),
             "minmaxcc_average_to_lp_ratio": rounded(average(x["ratio"] for x in ratio_obs)),
             "minmaxcc_worst_to_lp_ratio": rounded(worst["ratio"]),
+            "minmaxcc_runtime_seconds_average": rounded(
+                average(x["minmaxcc_runtime"] for x in obs)
+            ),
             "min_max_lp_runtime_seconds_average": rounded(
-                average(x["runtime"] for x in obs)
+                average(x["lp_runtime"] for x in obs)
             ),
         })
 
@@ -200,54 +215,160 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
 
 
 def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
-    complete: dict[str, dict[str, Any]] = {}
-    edge: dict[tuple[str, str], dict[str, Any]] = defaultdict(lambda: {"n": "", "pivot": {}, "lp": {}})
+    """
+    Build the standard correlation-clustering table.
+
+    Complete graph:
+        The complete graph is independent of the deletion seed. We keep one
+        consistent complete Pivot/LP pair per ego graph.
+
+    Edge-deleted graph:
+        The LP currently available in the experiment table was computed for
+        deletion seed 1. Therefore the reported edge Pivot result is selected
+        explicitly from deletion seed 1 as well.
+
+        This guarantees that:
+
+            edge_pivot_best_cost
+
+        and:
+
+            edge_all_pairs_lp_cost
+
+        come from exactly the same edge-deleted graph.
+
+    Pivot results for deletion seeds 2..30 remain in the raw experiment CSV.
+    They are not mixed with the seed-1 LP in this paper table.
+    """
+
+    complete_rows: dict[str, dict[str, Any]] = {}
+    seed_one_rows: dict[tuple[str, str], dict[str, Any]] = {}
+
+    def numeric_seed(row: dict[str, str]) -> int | None:
+        value = to_float(row.get("seed"))
+        return None if value is None else int(value)
+
+    def set_consistent(
+        current: dict[str, Any],
+        key: str,
+        value: float | None,
+        context: str,
+    ) -> None:
+        if value is None:
+            return
+
+        old = current.get(key)
+
+        if old is None:
+            current[key] = value
+            return
+
+        if abs(float(old) - value) > 1e-8:
+            raise ValueError(
+                f"Conflicting {key} values for {context}: "
+                f"{old} versus {value}"
+            )
 
     for row in rows:
         ego = str(row.get("ego_id", "")).strip()
+        p_delete = str(row.get("p_delete", "")).strip()
+        n = str(row.get("n", "")).strip()
+
         if not ego:
             continue
-        n = str(row.get("n", "")).strip()
-        seed = get_seed(row)
-        p_delete = str(row.get("p_delete", "")).strip()
 
-        cp = to_float(row.get("complete_pivot_best_cost"))
-        clp = to_float(row.get("complete_lp_cost"))
-        current = complete.setdefault(ego, {
-            "ego_id": ego,
-            "n": n,
-            "p_delete": 0,
-            "graph_variant": "complete",
-            "number_of_seeds": 1,
-            "pivot_best_cost_average": "",
-            "lp_cost_average": "",
-        })
-        if current["pivot_best_cost_average"] == "" and cp is not None:
-            current["pivot_best_cost_average"] = rounded(cp)
-        if current["lp_cost_average"] == "" and clp is not None:
-            current["lp_cost_average"] = rounded(clp)
+        # Complete Pivot and LP are repeated in the flat table. Verify that
+        # the repeated values are consistent rather than silently taking an
+        # arbitrary row.
+        complete = complete_rows.setdefault(
+            ego,
+            {
+                "ego_id": ego,
+                "n": n,
+                "p_delete": 0,
+                "graph_variant": "complete",
+                "paired_deletion_seed": "",
+                "pivot_best_cost": None,
+                "lp_cost": None,
+            },
+        )
 
-        group = edge[(ego, p_delete)]
-        group["n"] = n
-        ep = to_float(row.get("edge_pivot_best_cost"))
-        elp = to_float(row.get("edge_all_pairs_lp_cost"))
-        if ep is not None:
-            group["pivot"].setdefault(seed, ep)
-        if elp is not None:
-            group["lp"].setdefault(seed, elp)
+        set_consistent(
+            complete,
+            "pivot_best_cost",
+            to_float(row.get("complete_pivot_best_cost")),
+            f"complete ego={ego}",
+        )
+        set_consistent(
+            complete,
+            "lp_cost",
+            to_float(row.get("complete_lp_cost")),
+            f"complete ego={ego}",
+        )
 
-    output = list(complete.values())
-    for (ego, p_delete), group in edge.items():
-        seed_ids = set(group["pivot"]) | set(group["lp"])
-        output.append({
-            "ego_id": ego,
-            "n": group["n"],
-            "p_delete": p_delete,
-            "graph_variant": "edge_deleted",
-            "number_of_seeds": len(seed_ids),
-            "pivot_best_cost_average": rounded(average(group["pivot"].values())),
-            "lp_cost_average": rounded(average(group["lp"].values())),
-        })
+        # For an edge-deleted comparison, only deletion seed 1 is eligible.
+        if numeric_seed(row) != 1 or not p_delete:
+            continue
+
+        key = (ego, p_delete)
+        edge = seed_one_rows.setdefault(
+            key,
+            {
+                "ego_id": ego,
+                "n": n,
+                "p_delete": p_delete,
+                "graph_variant": "edge_deleted",
+                "paired_deletion_seed": 1,
+                "pivot_best_cost": None,
+                "lp_cost": None,
+            },
+        )
+
+        set_consistent(
+            edge,
+            "pivot_best_cost",
+            to_float(row.get("edge_pivot_best_cost")),
+            f"edge ego={ego}, p_delete={p_delete}, seed=1",
+        )
+        set_consistent(
+            edge,
+            "lp_cost",
+            to_float(row.get("edge_all_pairs_lp_cost")),
+            f"edge ego={ego}, p_delete={p_delete}, seed=1",
+        )
+
+    output: list[dict[str, Any]] = []
+
+    for ego, row in complete_rows.items():
+        pivot = row.pop("pivot_best_cost")
+        lp = row.pop("lp_cost")
+
+        row["pivot_best_cost"] = rounded(pivot)
+        row["lp_cost"] = rounded(lp)
+        row["pivot_to_lp_ratio"] = rounded(ratio(pivot, lp))
+        output.append(row)
+
+    for (ego, p_delete), row in seed_one_rows.items():
+        pivot = row.pop("pivot_best_cost")
+        lp = row.pop("lp_cost")
+
+        if pivot is None:
+            raise ValueError(
+                "Missing seed-1 edge Pivot result for "
+                f"ego={ego}, p_delete={p_delete}. "
+                "Run update_pivot_results.py first."
+            )
+
+        if lp is None:
+            raise ValueError(
+                "Missing seed-1 all-pairs LP result for "
+                f"ego={ego}, p_delete={p_delete}."
+            )
+
+        row["pivot_best_cost"] = rounded(pivot)
+        row["lp_cost"] = rounded(lp)
+        row["pivot_to_lp_ratio"] = rounded(ratio(pivot, lp))
+        output.append(row)
 
     output.sort(
         key=lambda r: (
@@ -257,8 +378,8 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             float(r["p_delete"]),
         )
     )
-    return output
 
+    return output
 
 def main() -> None:
     args = parse_args()
@@ -287,11 +408,18 @@ def main() -> None:
         "minmaxcc_worst",
         "min_max_lp_cost_worst",
         "minmaxcc_worst_to_lp_ratio",
+        "minmaxcc_runtime_seconds_average",
         "min_max_lp_runtime_seconds_average",
     ]
     cc_fields = [
-        "ego_id", "n", "p_delete",
-        "pivot_best_cost_average", "lp_cost_average",
+        "ego_id",
+        "n",
+        "p_delete",
+        "graph_variant",
+        "paired_deletion_seed",
+        "pivot_best_cost",
+        "lp_cost",
+        "pivot_to_lp_ratio",
     ]
 
     write_rows(minmax_output, minmax_rows, minmax_fields)
