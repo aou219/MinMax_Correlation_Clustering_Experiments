@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -11,6 +13,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = REPO_ROOT / "results/research_tables/minmax_facebook_grid_runs_flat.csv"
 DEFAULT_MINMAX_OUTPUT = REPO_ROOT / "results/research_tables/facebook_minmax_table.csv"
 DEFAULT_CC_OUTPUT = REPO_ROOT / "results/research_tables/facebook_correlation_clustering_table.csv"
+DEFAULT_CLIQUE_INPUT = REPO_ROOT / "results/research_tables/archive/all_runs_flat.csv"
+DEFAULT_CLIQUE_CC_OUTPUT = REPO_ROOT / "results/research_tables/clique_correlation_clustering_table.csv"
 
 
 def parse_args() -> argparse.Namespace:
@@ -18,6 +22,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     p.add_argument("--minmax-output", type=Path, default=DEFAULT_MINMAX_OUTPUT)
     p.add_argument("--cc-output", type=Path, default=DEFAULT_CC_OUTPUT)
+    p.add_argument("--clique-input", type=Path, default=DEFAULT_CLIQUE_INPUT)
+    p.add_argument("--clique-cc-output", type=Path, default=DEFAULT_CLIQUE_CC_OUTPUT)
     p.add_argument("--d-hat", type=int, default=8)
     p.add_argument("--lambda-value", type=int, default=5)
     return p.parse_args()
@@ -216,37 +222,35 @@ def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[
 
 def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     """
-    Build the standard correlation-clustering table.
+    Build the Facebook ordinary correlation-clustering table.
+
+    Only ego graphs with an all-pairs LP result are included.
 
     Complete graph:
-        The complete graph is independent of the deletion seed. We keep one
-        consistent complete Pivot/LP pair per ego graph.
+        Use one complete Pivot/LP result per eligible ego graph.
 
     Edge-deleted graph:
-        The LP currently available in the experiment table was computed for
-        deletion seed 1. Therefore the reported edge Pivot result is selected
-        explicitly from deletion seed 1 as well.
+        Use deletion seed 1 so Pivot and LP refer to the same deleted graph.
 
-        This guarantees that:
-
-            edge_pivot_best_cost
-
-        and:
-
-            edge_all_pairs_lp_cost
-
-        come from exactly the same edge-deleted graph.
-
-    Pivot results for deletion seeds 2..30 remain in the raw experiment CSV.
-    They are not mixed with the seed-1 LP in this paper table.
+    Output contains approximation ratios only:
+        averagepivot_approximation =
+            pivot_average_cost / LP cost
+        bestpivot_approximation =
+            pivot_best_cost / LP cost
     """
-
-    complete_rows: dict[str, dict[str, Any]] = {}
-    seed_one_rows: dict[tuple[str, str], dict[str, Any]] = {}
 
     def numeric_seed(row: dict[str, str]) -> int | None:
         value = to_float(row.get("seed"))
         return None if value is None else int(value)
+
+    def has_standard_cc_lp(row: dict[str, str]) -> bool:
+        return any(
+            to_float(row.get(column)) is not None
+            for column in (
+                "complete_lp_cost",
+                "edge_all_pairs_lp_cost",
+            )
+        )
 
     def set_consistent(
         current: dict[str, Any],
@@ -258,28 +262,32 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             return
 
         old = current.get(key)
-
         if old is None:
             current[key] = value
-            return
-
-        if abs(float(old) - value) > 1e-8:
+        elif abs(float(old) - value) > 1e-8:
             raise ValueError(
                 f"Conflicting {key} values for {context}: "
                 f"{old} versus {value}"
             )
 
+    eligible_egos = {
+        str(row.get("ego_id", "")).strip()
+        for row in rows
+        if str(row.get("ego_id", "")).strip()
+        and has_standard_cc_lp(row)
+    }
+
+    complete_rows: dict[str, dict[str, Any]] = {}
+    seed_one_rows: dict[tuple[str, str], dict[str, Any]] = {}
+
     for row in rows:
         ego = str(row.get("ego_id", "")).strip()
+        if not ego or ego not in eligible_egos:
+            continue
+
         p_delete = str(row.get("p_delete", "")).strip()
         n = str(row.get("n", "")).strip()
 
-        if not ego:
-            continue
-
-        # Complete Pivot and LP are repeated in the flat table. Verify that
-        # the repeated values are consistent rather than silently taking an
-        # arbitrary row.
         complete = complete_rows.setdefault(
             ego,
             {
@@ -287,27 +295,39 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                 "n": n,
                 "p_delete": 0,
                 "graph_variant": "complete",
-                "paired_deletion_seed": "",
-                "pivot_best_cost": None,
-                "lp_cost": None,
+                "pivot_best": None,
+                "pivot_average": None,
+                "lp": None,
             },
         )
 
         set_consistent(
             complete,
-            "pivot_best_cost",
+            "pivot_best",
             to_float(row.get("complete_pivot_best_cost")),
             f"complete ego={ego}",
         )
         set_consistent(
             complete,
-            "lp_cost",
+            "pivot_average",
+            to_float(row.get("complete_pivot_average_cost")),
+            f"complete ego={ego}",
+        )
+        set_consistent(
+            complete,
+            "lp",
             to_float(row.get("complete_lp_cost")),
             f"complete ego={ego}",
         )
 
-        # For an edge-deleted comparison, only deletion seed 1 is eligible.
         if numeric_seed(row) != 1 or not p_delete:
+            continue
+
+        edge_best = to_float(row.get("edge_pivot_best_cost"))
+        edge_average = to_float(row.get("edge_pivot_average_cost"))
+        edge_lp = to_float(row.get("edge_all_pairs_lp_cost"))
+
+        if edge_best is None and edge_average is None and edge_lp is None:
             continue
 
         key = (ego, p_delete)
@@ -318,67 +338,337 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                 "n": n,
                 "p_delete": p_delete,
                 "graph_variant": "edge_deleted",
-                "paired_deletion_seed": 1,
-                "pivot_best_cost": None,
-                "lp_cost": None,
+                "pivot_best": None,
+                "pivot_average": None,
+                "lp": None,
             },
         )
 
         set_consistent(
             edge,
-            "pivot_best_cost",
-            to_float(row.get("edge_pivot_best_cost")),
+            "pivot_best",
+            edge_best,
             f"edge ego={ego}, p_delete={p_delete}, seed=1",
         )
         set_consistent(
             edge,
-            "lp_cost",
-            to_float(row.get("edge_all_pairs_lp_cost")),
+            "pivot_average",
+            edge_average,
+            f"edge ego={ego}, p_delete={p_delete}, seed=1",
+        )
+        set_consistent(
+            edge,
+            "lp",
+            edge_lp,
             f"edge ego={ego}, p_delete={p_delete}, seed=1",
         )
 
     output: list[dict[str, Any]] = []
 
-    for ego, row in complete_rows.items():
-        pivot = row.pop("pivot_best_cost")
-        lp = row.pop("lp_cost")
+    def append_row(source: dict[str, Any], context: str) -> None:
+        best = source["pivot_best"]
+        average_cost = source["pivot_average"]
+        lp = source["lp"]
 
-        row["pivot_best_cost"] = rounded(pivot)
-        row["lp_cost"] = rounded(lp)
-        row["pivot_to_lp_ratio"] = rounded(ratio(pivot, lp))
+        if best is None:
+            raise ValueError(f"Missing best Pivot result for {context}.")
+        if average_cost is None:
+            raise ValueError(f"Missing average Pivot result for {context}.")
+        if lp is None:
+            raise ValueError(f"Missing all-pairs LP result for {context}.")
+
+        row = {
+            key: value
+            for key, value in source.items()
+            if key not in {"pivot_best", "pivot_average", "lp"}
+        }
+        row["averagepivot_approximation"] = rounded(
+            ratio(average_cost, lp)
+        )
+        row["bestpivot_approximation"] = rounded(
+            ratio(best, lp)
+        )
         output.append(row)
+
+    for ego, row in complete_rows.items():
+        if (
+            row["pivot_best"] is None
+            and row["pivot_average"] is None
+            and row["lp"] is None
+        ):
+            continue
+        append_row(row, f"complete ego={ego}")
 
     for (ego, p_delete), row in seed_one_rows.items():
-        pivot = row.pop("pivot_best_cost")
-        lp = row.pop("lp_cost")
-
-        if pivot is None:
-            raise ValueError(
-                "Missing seed-1 edge Pivot result for "
-                f"ego={ego}, p_delete={p_delete}. "
-                "Run update_pivot_results.py first."
-            )
-
-        if lp is None:
-            raise ValueError(
-                "Missing seed-1 all-pairs LP result for "
-                f"ego={ego}, p_delete={p_delete}."
-            )
-
-        row["pivot_best_cost"] = rounded(pivot)
-        row["lp_cost"] = rounded(lp)
-        row["pivot_to_lp_ratio"] = rounded(ratio(pivot, lp))
-        output.append(row)
+        append_row(
+            row,
+            f"edge ego={ego}, p_delete={p_delete}, seed=1",
+        )
 
     output.sort(
-        key=lambda r: (
-            int(float(r["n"])),
-            int(float(r["ego_id"])),
-            0 if r["graph_variant"] == "complete" else 1,
-            float(r["p_delete"]),
+        key=lambda row: (
+            int(float(row["n"])),
+            int(float(row["ego_id"])),
+            0 if row["graph_variant"] == "complete" else 1,
+            float(row["p_delete"]),
         )
     )
+    return output
 
+def parse_cluster_sizes(value: Any, file_name: str = "") -> list[int]:
+    """
+    Parse a clique decomposition such as "[5, 5]", "2x10", or a clique
+    filename such as "clq_n20_7_7_6.json".
+    """
+    text = str(value or "").strip()
+
+    if text:
+        try:
+            parsed = ast.literal_eval(text)
+            if isinstance(parsed, (list, tuple)):
+                sizes = [int(x) for x in parsed]
+                if sizes:
+                    return sizes
+        except (ValueError, SyntaxError, TypeError):
+            pass
+
+        match = re.fullmatch(r"\[?\s*(\d+)\s*x\s*(\d+)\s*\]?", text)
+        if match:
+            return [int(match.group(2))] * int(match.group(1))
+
+        sizes = [int(x) for x in re.findall(r"\d+", text)]
+        if sizes:
+            return sizes
+
+    stem = Path(str(file_name or "")).stem
+    match = re.match(r"clq_n\d+_(.+)", stem)
+    if not match:
+        return []
+
+    suffix = match.group(1)
+    repeated = re.fullmatch(r"(\d+)x(\d+)", suffix)
+    if repeated:
+        return [int(repeated.group(2))] * int(repeated.group(1))
+
+    return [int(x) for x in re.findall(r"\d+", suffix)]
+
+
+def clique_balance_label(sizes: list[int]) -> str:
+    """
+    Balanced clique decompositions have equal or nearly equal clique sizes.
+    """
+    if not sizes:
+        raise ValueError("Cannot determine clique balance without cluster sizes.")
+    return "balanced" if max(sizes) - min(sizes) <= 1 else "unbalanced"
+
+
+def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+    """
+    Build the clique ordinary correlation-clustering table.
+
+    Balanced and unbalanced clique instances are merged. The output contains
+    one row per combination of n and p_delete.
+
+    Complete results are deduplicated by graph file and graph seed because
+    they repeat across deletion probabilities.
+
+    For every individual instance:
+        averagepivot_approximation =
+            pivot_average_cost / LP cost
+        bestpivot_approximation =
+            integer pivot_best_cost / LP cost
+
+    The per-instance ratios are then averaged within each n, p_delete group.
+    LP-zero instances are omitted from ratio averages because the ratio is
+    undefined.
+    """
+
+    def graph_identity(row: dict[str, str]) -> str:
+        return (
+            str(row.get("file_path", "")).strip()
+            or str(row.get("file_name", "")).strip()
+            or f'n={row.get("n", "")}|clusters={row.get("cluster_sizes", "")}'
+        )
+
+    def set_consistent(
+        current: dict[str, Any],
+        key: str,
+        value: float | None,
+        context: str,
+    ) -> None:
+        if value is None:
+            return
+
+        old = current.get(key)
+        if old is None:
+            current[key] = value
+        elif abs(float(old) - value) > 1e-8:
+            raise ValueError(
+                f"Conflicting {key} values for {context}: "
+                f"{old} versus {value}"
+            )
+
+    clique_rows = [
+        row
+        for row in rows
+        if str(row.get("graph_family", "")).strip().lower() == "clique"
+        or str(row.get("graph_type", "")).strip().lower() == "clique"
+    ]
+
+    if not clique_rows:
+        raise ValueError("No clique rows found in the clique input table.")
+
+    complete_by_graph_seed: dict[
+        tuple[str, str, int],
+        dict[str, float | None],
+    ] = {}
+
+    edge_groups: dict[
+        tuple[int, str],
+        list[dict[str, float | None]],
+    ] = defaultdict(list)
+
+    for row in clique_rows:
+        n_value = to_float(row.get("n"))
+        if n_value is None:
+            raise ValueError(
+                f"Missing n for clique row: {row.get('file_name', '')}"
+            )
+        n = int(n_value)
+
+        graph_id = graph_identity(row)
+        seed = get_seed(row)
+
+        complete_key = (graph_id, seed, n)
+        complete = complete_by_graph_seed.setdefault(
+            complete_key,
+            {
+                "best": None,
+                "average": None,
+                "lp": None,
+            },
+        )
+
+        set_consistent(
+            complete,
+            "best",
+            to_float(row.get("complete_pivot_best_cost")),
+            f"complete clique graph={graph_id}, seed={seed}",
+        )
+        set_consistent(
+            complete,
+            "average",
+            to_float(row.get("complete_pivot_average_cost")),
+            f"complete clique graph={graph_id}, seed={seed}",
+        )
+        set_consistent(
+            complete,
+            "lp",
+            to_float(row.get("complete_lp_cost")),
+            f"complete clique graph={graph_id}, seed={seed}",
+        )
+
+        p_delete = str(row.get("p_delete", "")).strip()
+        edge_best = to_float(row.get("edge_pivot_best_cost"))
+        edge_average = to_float(row.get("edge_pivot_average_cost"))
+        edge_lp = to_float(row.get("edge_all_pairs_lp_cost"))
+
+        if (
+            not p_delete
+            and edge_best is None
+            and edge_average is None
+            and edge_lp is None
+        ):
+            continue
+
+        if not p_delete:
+            raise ValueError(
+                f"Missing p_delete for edge clique graph={graph_id}."
+            )
+
+        if edge_best is None or edge_average is None or edge_lp is None:
+            raise ValueError(
+                "Incomplete paired edge result for "
+                f"clique graph={graph_id}, p_delete={p_delete}, seed={seed}."
+            )
+
+        edge_groups[(n, p_delete)].append(
+            {
+                "average_ratio": ratio(edge_average, edge_lp),
+                "best_ratio": ratio(edge_best, edge_lp),
+            }
+        )
+
+    complete_groups: dict[
+        int,
+        list[dict[str, float | None]],
+    ] = defaultdict(list)
+
+    for (graph_id, seed, n), values in complete_by_graph_seed.items():
+        best = values["best"]
+        average_cost = values["average"]
+        lp = values["lp"]
+
+        if best is None or average_cost is None or lp is None:
+            raise ValueError(
+                "Incomplete complete Pivot/LP result for "
+                f"clique graph={graph_id}, seed={seed}."
+            )
+
+        complete_groups[n].append(
+            {
+                "average_ratio": ratio(average_cost, lp),
+                "best_ratio": ratio(best, lp),
+            }
+        )
+
+    output: list[dict[str, Any]] = []
+
+    def append_group(
+        n: int,
+        p_delete: str | int,
+        observations: list[dict[str, float | None]],
+    ) -> None:
+        average_ratios = [
+            float(obs["average_ratio"])
+            for obs in observations
+            if obs["average_ratio"] is not None
+        ]
+        best_ratios = [
+            float(obs["best_ratio"])
+            for obs in observations
+            if obs["best_ratio"] is not None
+        ]
+
+        output.append(
+            {
+                "n": n,
+                "p_delete": p_delete,
+                "averagepivot_approximation": (
+                    rounded(average(average_ratios))
+                    if average_ratios
+                    else ""
+                ),
+                "bestpivot_approximation": (
+                    rounded(average(best_ratios))
+                    if best_ratios
+                    else ""
+                ),
+            }
+        )
+
+    for n, observations in complete_groups.items():
+        append_group(n, 0, observations)
+
+    for (n, p_delete), observations in edge_groups.items():
+        append_group(n, p_delete, observations)
+
+    output.sort(
+        key=lambda row: (
+            int(float(row["n"])),
+            float(row["p_delete"]),
+        )
+    )
     return output
 
 def main() -> None:
@@ -386,14 +676,20 @@ def main() -> None:
     input_path = resolve(args.input)
     minmax_output = resolve(args.minmax_output)
     cc_output = resolve(args.cc_output)
+    clique_input = resolve(args.clique_input)
+    clique_cc_output = resolve(args.clique_cc_output)
 
     if not input_path.exists():
         raise FileNotFoundError(f"Input not found: {input_path}")
+    if not clique_input.exists():
+        raise FileNotFoundError(f"Clique input not found: {clique_input}")
 
     all_rows = read_rows(input_path)
     selected_rows = fixed_rows(all_rows, args.d_hat, args.lambda_value)
     minmax_rows = make_minmax_table(selected_rows, args.d_hat, args.lambda_value)
     cc_rows = make_cc_table(all_rows)
+    clique_rows = read_rows(clique_input)
+    clique_cc_rows = make_clique_cc_table(clique_rows)
 
     minmax_fields = [
         "ego_id", "n", "p_delete",
@@ -416,14 +712,19 @@ def main() -> None:
         "n",
         "p_delete",
         "graph_variant",
-        "paired_deletion_seed",
-        "pivot_best_cost",
-        "lp_cost",
-        "pivot_to_lp_ratio",
+        "averagepivot_approximation",
+        "bestpivot_approximation",
+    ]
+    clique_cc_fields = [
+        "n",
+        "p_delete",
+        "averagepivot_approximation",
+        "bestpivot_approximation",
     ]
 
     write_rows(minmax_output, minmax_rows, minmax_fields)
     write_rows(cc_output, cc_rows, cc_fields)
+    write_rows(clique_cc_output, clique_cc_rows, clique_cc_fields)
 
     print("Input:", input_path)
     print("Input rows:", len(all_rows))
@@ -432,6 +733,9 @@ def main() -> None:
     print("MinMax rows:", len(minmax_rows))
     print("Correlation table:", cc_output)
     print("Correlation rows:", len(cc_rows))
+    print("Clique input:", clique_input)
+    print("Clique correlation table:", clique_cc_output)
+    print("Clique correlation rows:", len(clique_cc_rows))
 
 
 if __name__ == "__main__":
