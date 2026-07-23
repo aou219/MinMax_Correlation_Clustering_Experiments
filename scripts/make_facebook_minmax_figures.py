@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Create six Facebook MinMaxCC/LP research figures.
+Create six Facebook MinMaxCC/MinMaxLP ratio figures.
 
 Input:
     results/processed/research_tables/facebook_minmax_table.csv
@@ -16,7 +16,7 @@ Figures:
 5. p_delete (x) versus worst MinMaxCC/LP ratio (y), one line per ego_id
 6. p_delete (x) versus best MinMaxCC/LP ratio (y), one line per ego_id
 
-Rows without a corresponding LP ratio are skipped automatically.
+Rows without a local same-instance MinMaxLP ratio are skipped automatically.
 """
 
 from __future__ import annotations
@@ -44,9 +44,9 @@ DEFAULT_OUTPUT_DIR = (
 )
 
 RATIO_COLUMNS = {
-    "average": "minmaxcc_average_to_lp_ratio",
-    "worst": "minmaxcc_worst_to_lp_ratio",
-    "best": "minmaxcc_best_to_lp_ratio",
+    "average": "minmaxcc_ratio_average",
+    "worst": "minmaxcc_ratio_worst",
+    "best": "minmaxcc_ratio_best",
 }
 
 RAINBOW_COLORS = [
@@ -62,7 +62,7 @@ RAINBOW_COLORS = [
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Create six Facebook MinMaxCC/LP research figures."
+        description="Create six Facebook MinMaxCC/MinMaxLP ratio figures."
     )
     parser.add_argument(
         "--input",
@@ -74,6 +74,15 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
     )
+    parser.add_argument(
+        "--include-external-reference-rows",
+        action="store_true",
+        help=(
+            "Include rows whose ratios use an external or complete-graph "
+            "reference. By default only same-instance locally solved LP "
+            "ratios are plotted."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -81,7 +90,11 @@ def resolve(path: Path) -> Path:
     return path if path.is_absolute() else REPO_ROOT / path
 
 
-def load_data(path: Path) -> pd.DataFrame:
+def load_data(
+    path: Path,
+    *,
+    include_external_reference_rows: bool = False,
+) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(f"Input file not found: {path}")
 
@@ -114,6 +127,25 @@ def load_data(path: Path) -> pd.DataFrame:
     df = df.dropna(subset=["ego_id", "n", "p_delete"]).copy()
     df["ego_id"] = df["ego_id"].astype(int)
     df["n"] = df["n"].astype(int)
+
+    # The MinMax table marks rows based on whether the denominator is a
+    # locally solved LP for the same graph instance. External complete-graph
+    # references remain in the table but are excluded from figures by default.
+    if not include_external_reference_rows:
+        if "lp_reference_source" not in df.columns:
+            raise ValueError(
+                "The input table is missing lp_reference_source, which is "
+                "required to distinguish local same-instance LP ratios from "
+                "external reference ratios."
+            )
+        sources = df["lp_reference_source"].fillna("").astype(str)
+        df = df.loc[sources.str.startswith("computed_")].copy()
+
+    if df.empty:
+        raise ValueError(
+            "No figure-eligible rows remain after applying the LP-reference "
+            "filter."
+        )
 
     return df
 
@@ -304,7 +336,12 @@ def main() -> None:
     input_path = resolve(args.input)
     output_dir = resolve(args.output_dir)
 
-    df = load_data(input_path)
+    df = load_data(
+        input_path,
+        include_external_reference_rows=(
+            args.include_external_reference_rows
+        ),
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print("Input:", input_path)

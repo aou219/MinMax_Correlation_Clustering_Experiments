@@ -11,15 +11,15 @@ Aggregation
 -----------
 Figure 1, x = n:
     For every graph size n, merge all p_delete rows:
-    - line: mean of minmaxcc_average_to_lp_ratio
-    - lower range: minimum minmaxcc_best_to_lp_ratio
-    - upper range: maximum minmaxcc_worst_to_lp_ratio
+    - line: mean of minmaxcc_ratio_average
+    - lower range: minimum minmaxcc_ratio_best
+    - upper range: maximum minmaxcc_ratio_worst
 
 Figure 2, x = p_delete:
     For every p_delete, merge all ego graphs:
-    - line: mean of minmaxcc_average_to_lp_ratio
-    - lower range: minimum minmaxcc_best_to_lp_ratio
-    - upper range: maximum minmaxcc_worst_to_lp_ratio
+    - line: mean of minmaxcc_ratio_average
+    - lower range: minimum minmaxcc_ratio_best
+    - upper range: maximum minmaxcc_ratio_worst
 
 Input:
     results/research_tables/facebook_minmax_table.csv
@@ -59,9 +59,9 @@ DEFAULT_OUTPUT_DIR = (
     / "results/figures/research_figures"
 )
 
-BEST_RATIO = "minmaxcc_best_to_lp_ratio"
-AVERAGE_RATIO = "minmaxcc_average_to_lp_ratio"
-WORST_RATIO = "minmaxcc_worst_to_lp_ratio"
+BEST_RATIO = "minmaxcc_ratio_best"
+AVERAGE_RATIO = "minmaxcc_ratio_average"
+WORST_RATIO = "minmaxcc_ratio_worst"
 
 # Professional publication colors.
 AVERAGE_LINE_COLOR = "#1F4E79"  # dark blue
@@ -87,6 +87,15 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_OUTPUT_DIR,
     )
+    parser.add_argument(
+        "--include-external-reference-rows",
+        action="store_true",
+        help=(
+            "Include rows whose ratios use an external or complete-graph "
+            "reference. By default only same-instance locally solved LP "
+            "ratios are plotted."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -94,7 +103,11 @@ def resolve(path: Path) -> Path:
     return path if path.is_absolute() else REPO_ROOT / path
 
 
-def load_data(path: Path) -> pd.DataFrame:
+def load_data(
+    path: Path,
+    *,
+    include_external_reference_rows: bool = False,
+) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(f"Input file not found: {path}")
 
@@ -153,6 +166,25 @@ def load_data(path: Path) -> pd.DataFrame:
     # Defensive handling in case best and worst appear in reverse order.
     df["ratio_lower"] = df[[BEST_RATIO, WORST_RATIO]].min(axis=1)
     df["ratio_upper"] = df[[BEST_RATIO, WORST_RATIO]].max(axis=1)
+
+    # The MinMax table marks rows based on whether the denominator is a
+    # locally solved LP for the same graph instance. External complete-graph
+    # references remain in the table but are excluded from figures by default.
+    if not include_external_reference_rows:
+        if "lp_reference_source" not in df.columns:
+            raise ValueError(
+                "The input table is missing lp_reference_source, which is "
+                "required to distinguish local same-instance LP ratios from "
+                "external reference ratios."
+            )
+        sources = df["lp_reference_source"].fillna("").astype(str)
+        df = df.loc[sources.str.startswith("computed_")].copy()
+
+    if df.empty:
+        raise ValueError(
+            "No figure-eligible rows remain after applying the LP-reference "
+            "filter."
+        )
 
     return df
 
@@ -409,7 +441,12 @@ def main() -> None:
     output_dir = resolve(args.output_dir)
 
     apply_publication_style()
-    data = load_data(input_path)
+    data = load_data(
+        input_path,
+        include_external_reference_rows=(
+            args.include_external_reference_rows
+        ),
+    )
 
     print("Input:", input_path)
     print("Rows used:", len(data))

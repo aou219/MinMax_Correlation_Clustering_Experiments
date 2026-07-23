@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+"""
+Generate the Facebook MinMax, Facebook ordinary correlation-clustering,
+and clique ordinary correlation-clustering paper tables.
+
+This version keeps make_paper_tables_corrected.py as the baseline and changes
+only the requested aggregation/output rules:
+- no graph_variant or include_in_figures columns;
+- MinMaxCC costs and ratios are summarized independently;
+- ordinary Facebook Pivot edge rows aggregate the 30 deletion seeds using
+  per-seed best-of-100 and mean-of-100 Pivot summaries;
+- clique approximation logic remains unchanged;
+- ordinary Facebook/clique runtimes are merged directly from the separate
+  runtime benchmark, so the generated tables are never silently blank.
+"""
 from __future__ import annotations
 
 import argparse
@@ -7,7 +21,7 @@ import csv
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INPUT = REPO_ROOT / "results/research_tables/minmax_facebook_grid_runs_flat.csv"
@@ -15,6 +29,16 @@ DEFAULT_MINMAX_OUTPUT = REPO_ROOT / "results/research_tables/facebook_minmax_tab
 DEFAULT_CC_OUTPUT = REPO_ROOT / "results/research_tables/facebook_correlation_clustering_table.csv"
 DEFAULT_CLIQUE_INPUT = REPO_ROOT / "results/research_tables/archive/all_runs_flat.csv"
 DEFAULT_CLIQUE_CC_OUTPUT = REPO_ROOT / "results/research_tables/clique_correlation_clustering_table.csv"
+DEFAULT_RUNTIME_BENCHMARK = REPO_ROOT / "results/research_tables/normal_cc_runtime_benchmarks.csv"
+
+
+# Davies, Moseley, and Newman (ICML 2023), Table 1.
+# The paper reports a true LP objective only for these five small Facebook
+# instances. In our local experiment table, FB 414/686/698/3980 already have
+# same-instance LP values; FB 348 uses the published complete-graph LP value.
+DAVIES_COMPLETE_MINMAX_LP = {
+    "348": 39.13,
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -24,6 +48,20 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--cc-output", type=Path, default=DEFAULT_CC_OUTPUT)
     p.add_argument("--clique-input", type=Path, default=DEFAULT_CLIQUE_INPUT)
     p.add_argument("--clique-cc-output", type=Path, default=DEFAULT_CLIQUE_CC_OUTPUT)
+    p.add_argument(
+        "--runtime-benchmark",
+        type=Path,
+        default=DEFAULT_RUNTIME_BENCHMARK,
+        help=(
+            "Separate ordinary Pivot/LP runtime benchmark. These values are "
+            "merged directly into the Facebook and clique CC paper tables."
+        ),
+    )
+    p.add_argument(
+        "--allow-missing-runtimes",
+        action="store_true",
+        help="Write tables even if an expected ordinary CC runtime is missing.",
+    )
     p.add_argument("--d-hat", type=int, default=8)
     p.add_argument("--lambda-value", type=int, default=5)
     return p.parse_args()
@@ -94,6 +132,180 @@ def write_rows(path: Path, rows: list[dict[str, Any]], fields: list[str]) -> Non
         writer.writerows(rows)
 
 
+
+def probability_key(value: Any) -> str:
+    return f"{float(value):.12g}"
+
+
+def runtime_maps(
+    benchmark_rows: Sequence[Mapping[str, str]],
+) -> tuple[
+    dict[tuple[str, str, str], dict[str, str]],
+    dict[tuple[int, str, str], dict[str, str]],
+]:
+    """Index separate ordinary-CC runtime benchmark values."""
+    facebook: dict[tuple[str, str, str], dict[str, str]] = {}
+    clique: dict[tuple[int, str, str], dict[str, str]] = {}
+
+    for row in benchmark_rows:
+        algorithm = str(row.get("algorithm", "")).strip().lower()
+        if algorithm not in {"pivot", "lp"}:
+            continue
+
+        runtime = str(
+            row.get("average_runtime_seconds", "")
+        ).strip()
+        if not runtime:
+            continue
+
+        dataset = str(row.get("dataset", "")).strip().lower()
+        variant = str(
+            row.get("graph_variant", "")
+        ).strip().lower()
+        p_delete = probability_key(row.get("p_delete", 0))
+
+        if dataset == "facebook":
+            ego_value = to_float(row.get("ego_id"))
+            if ego_value is None:
+                continue
+            key = (
+                str(int(ego_value)),
+                variant,
+                p_delete,
+            )
+            facebook.setdefault(key, {})[algorithm] = runtime
+
+        elif dataset == "clique":
+            n_value = to_float(row.get("n"))
+            if n_value is None:
+                continue
+            key = (
+                int(n_value),
+                variant,
+                p_delete,
+            )
+            clique.setdefault(key, {})[algorithm] = runtime
+
+    return facebook, clique
+
+
+def has_ordinary_approximation(
+    row: Mapping[str, Any],
+) -> bool:
+    return any(
+        str(row.get(column, "")).strip()
+        for column in (
+            "averagepivot_approximation",
+            "bestpivot_approximation",
+        )
+    )
+
+
+def merge_runtime_benchmarks(
+    facebook_rows: list[dict[str, Any]],
+    clique_rows: list[dict[str, Any]],
+    benchmark_rows: Sequence[Mapping[str, str]],
+    *,
+    allow_missing: bool,
+) -> None:
+    """Populate every expected ordinary Pivot/LP runtime from the benchmark."""
+    facebook_map, clique_map = runtime_maps(benchmark_rows)
+    missing: list[str] = []
+
+    for row in facebook_rows:
+        p_delete = probability_key(row.get("p_delete", 0))
+        variant = (
+            "complete"
+            if abs(float(p_delete)) < 1e-12
+            else "edge_deleted"
+        )
+        key = (
+            str(int(float(row["ego_id"]))),
+            variant,
+            p_delete,
+        )
+        values = facebook_map.get(key, {})
+
+        row["pivot_runtime_seconds_average"] = values.get(
+            "pivot",
+            "",
+        )
+        row["lp_runtime_seconds_average"] = values.get(
+            "lp",
+            "",
+        )
+
+        if not str(
+            row["pivot_runtime_seconds_average"]
+        ).strip():
+            missing.append(
+                "Facebook Pivot runtime: "
+                f"ego={key[0]}, p_delete={key[2]}"
+            )
+
+        if (
+            has_ordinary_approximation(row)
+            and not str(
+                row["lp_runtime_seconds_average"]
+            ).strip()
+        ):
+            missing.append(
+                "Facebook LP runtime: "
+                f"ego={key[0]}, p_delete={key[2]}"
+            )
+
+    for row in clique_rows:
+        p_delete = probability_key(row.get("p_delete", 0))
+        variant = (
+            "complete"
+            if abs(float(p_delete)) < 1e-12
+            else "edge_deleted"
+        )
+        key = (
+            int(float(row["n"])),
+            variant,
+            p_delete,
+        )
+        values = clique_map.get(key, {})
+
+        row["pivot_runtime_seconds_average"] = values.get(
+            "pivot",
+            "",
+        )
+        row["lp_runtime_seconds_average"] = values.get(
+            "lp",
+            "",
+        )
+
+        if not str(
+            row["pivot_runtime_seconds_average"]
+        ).strip():
+            missing.append(
+                "Clique Pivot runtime: "
+                f"n={key[0]}, p_delete={key[2]}"
+            )
+        if (
+            has_ordinary_approximation(row)
+            and not str(
+                row["lp_runtime_seconds_average"]
+            ).strip()
+        ):
+            missing.append(
+                "Clique LP runtime: "
+                f"n={key[0]}, p_delete={key[2]}"
+            )
+
+    if missing:
+        message = (
+            "Expected ordinary CC runtimes are missing from the "
+            "runtime benchmark:\n- "
+            + "\n- ".join(missing)
+        )
+        if not allow_missing:
+            raise ValueError(message)
+        print("WARNING:", message)
+
+
 def fixed_rows(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[dict[str, str]]:
     out = []
     for row in rows:
@@ -106,155 +318,353 @@ def fixed_rows(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[dict[st
     return out
 
 
-def make_minmax_table(rows: list[dict[str, str]], d_hat: int, lam: int) -> list[dict[str, Any]]:
+def make_minmax_table(
+    rows: list[dict[str, str]],
+    d_hat: int,
+    lam: int,
+) -> list[dict[str, Any]]:
+    """
+    Build the Facebook MinMaxCC table.
+
+    Aggregation over deletion seeds
+    --------------------------------
+    Costs and approximation ratios are summarized independently:
+
+    * minmaxcc_cost_best/average/worst are the minimum, arithmetic mean,
+      and maximum MinMaxCC objective values over the deletion seeds.
+    * minmaxcc_ratio_best/average/worst are the minimum, arithmetic mean,
+      and maximum of the per-seed ratios
+      MinMaxCC(seed) / MinMaxLP-reference(seed).
+    * MinMaxLP cost columns independently report the minimum, arithmetic
+      mean, and maximum LP-reference values.
+
+    Consequently, the seed attaining the best cost does not need to be the
+    seed attaining the best ratio.
+
+    LP-reference policy
+    -------------------
+    * Prefer a locally solved MinMaxLP value for the same graph instance.
+    * For FB348, use the published complete-graph LP objective 39.13 from
+      Davies et al. as an explicitly marked external reference.
+    * Leave LP and ratio fields empty where no true LP objective is available.
+    """
+
     complete_by_ego: dict[str, dict[str, str]] = {}
-    edge_groups: dict[tuple[str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+    edge_groups: dict[
+        tuple[str, str],
+        dict[str, dict[str, Any]],
+    ] = defaultdict(dict)
     metadata: dict[tuple[str, str], dict[str, str]] = {}
+
+    def complete_reference(
+        ego: str,
+        row: dict[str, str],
+    ) -> tuple[float | None, str]:
+        local_lp = to_float(row.get("complete_min_max_lp_cost"))
+        if local_lp is not None:
+            return local_lp, "computed_complete_same_instance"
+
+        published_lp = DAVIES_COMPLETE_MINMAX_LP.get(ego)
+        if published_lp is not None:
+            return published_lp, "davies2023_complete_graph_lp"
+
+        return None, "unavailable"
+
+    def edge_reference(
+        ego: str,
+        row: dict[str, str],
+    ) -> tuple[float | None, str]:
+        local_lp = to_float(row.get("edge_min_max_lp_cost"))
+        if local_lp is not None:
+            return local_lp, "computed_edge_same_instance"
+
+        published_lp = DAVIES_COMPLETE_MINMAX_LP.get(ego)
+        if published_lp is not None:
+            return published_lp, "davies2023_complete_graph_lp"
+
+        return None, "unavailable"
+
+    def validate_duplicate(
+        old: dict[str, Any],
+        new: dict[str, Any],
+        context: str,
+    ) -> None:
+        for field in ("cc", "lp", "ratio"):
+            old_value = to_float(old.get(field))
+            new_value = to_float(new.get(field))
+            if old_value is None and new_value is None:
+                continue
+            if (
+                old_value is None
+                or new_value is None
+                or abs(old_value - new_value) > 1e-8
+            ):
+                raise ValueError(
+                    f"Conflicting duplicate {field} for {context}: "
+                    f"{old.get(field)} versus {new.get(field)}"
+                )
 
     for row in rows:
         ego = str(row.get("ego_id", "")).strip()
         if not ego:
             continue
+
         n = str(row.get("n", "")).strip()
         seed = get_seed(row)
         p_delete = str(row.get("p_delete", "")).strip()
 
-        cd = to_float(row.get("complete_min_max_cc_d_hat"))
-        cl = to_float(row.get("complete_min_max_cc_lambda"))
-        if cd is not None and cl is not None and int(cd) == d_hat and int(cl) == lam:
+        complete_d_hat = to_float(
+            row.get("complete_min_max_cc_d_hat")
+        )
+        complete_lambda = to_float(
+            row.get("complete_min_max_cc_lambda")
+        )
+        if (
+            complete_d_hat is not None
+            and complete_lambda is not None
+            and int(complete_d_hat) == d_hat
+            and int(complete_lambda) == lam
+        ):
             complete_by_ego.setdefault(ego, row)
 
-        cc = to_float(row.get("edge_min_max_cc_max_disagreement"))
+        cc = to_float(
+            row.get("edge_min_max_cc_max_disagreement")
+        )
         if cc is None or not p_delete:
             continue
-        lp = to_float(row.get("edge_min_max_lp_cost"))
-        r = ratio(cc, lp)
-        key = (ego, p_delete)
-        metadata.setdefault(key, {"n": n})
-        obs = {
+
+        lp, lp_source = edge_reference(ego, row)
+        observation = {
             "seed": seed,
             "cc": cc,
             "lp": lp,
-            "ratio": r,
+            "ratio": ratio(cc, lp),
+            "lp_reference_source": lp_source,
             "minmaxcc_runtime": row.get(
-                "edge_min_max_cc_runtime_seconds", ""
+                "edge_min_max_cc_runtime_seconds",
+                "",
             ),
-            "lp_runtime": row.get(
-                "edge_min_max_lp_runtime_seconds", ""
+            "lp_runtime": (
+                row.get(
+                    "edge_min_max_lp_runtime_seconds",
+                    "",
+                )
+                if lp_source == "computed_edge_same_instance"
+                else ""
+            ),
+            "lp_total_runtime": (
+                row.get(
+                    "edge_min_max_lp_total_runtime_seconds",
+                    "",
+                )
+                if lp_source == "computed_edge_same_instance"
+                else ""
             ),
         }
+
+        key = (ego, p_delete)
+        metadata.setdefault(key, {"n": n})
         old = edge_groups[key].get(seed)
         if old is None:
-            edge_groups[key][seed] = obs
-        elif abs(old["cc"] - cc) > 1e-8:
-            raise ValueError(f"Conflicting duplicate for ego={ego}, p_delete={p_delete}, seed={seed}")
+            edge_groups[key][seed] = observation
+        else:
+            validate_duplicate(
+                old,
+                observation,
+                (
+                    f"ego={ego}, p_delete={p_delete}, "
+                    f"seed={seed}"
+                ),
+            )
 
     output: list[dict[str, Any]] = []
 
     for ego, row in complete_by_ego.items():
-        cc = to_float(row.get("complete_min_max_cc_max_disagreement"))
-        lp = to_float(row.get("complete_min_max_lp_cost"))
-        r = ratio(cc, lp)
+        cc = to_float(
+            row.get("complete_min_max_cc_max_disagreement")
+        )
+        if cc is None:
+            continue
+
+        lp, lp_source = complete_reference(ego, row)
+        approximation = ratio(cc, lp)
+
         output.append({
             "ego_id": ego,
             "n": str(row.get("n", "")).strip(),
             "p_delete": 0,
-            "graph_variant": "complete",
             "d_hat": d_hat,
             "lambda": lam,
             "number_of_seeds": 1,
-            "minmaxcc_best": rounded(cc),
-            "minmaxcc_average": rounded(cc),
-            "minmaxcc_worst": rounded(cc),
-            "min_max_lp_cost_best": rounded(lp),
+            "minmaxcc_cost_best": rounded(cc),
+            "minmaxcc_cost_average": rounded(cc),
+            "minmaxcc_cost_worst": rounded(cc),
+            "min_max_lp_cost_minimum": rounded(lp),
             "min_max_lp_cost_average": rounded(lp),
-            "min_max_lp_cost_worst": rounded(lp),
-            "minmaxcc_best_to_lp_ratio": rounded(r),
-            "minmaxcc_average_to_lp_ratio": rounded(r),
-            "minmaxcc_worst_to_lp_ratio": rounded(r),
+            "min_max_lp_cost_maximum": rounded(lp),
+            "minmaxcc_ratio_best": rounded(approximation),
+            "minmaxcc_ratio_average": rounded(approximation),
+            "minmaxcc_ratio_worst": rounded(approximation),
             "minmaxcc_runtime_seconds_average": rounded(
                 to_float(
-                    row.get("complete_min_max_cc_runtime_seconds")
+                    row.get(
+                        "complete_min_max_cc_runtime_seconds"
+                    )
                 )
             ),
             "min_max_lp_runtime_seconds_average": rounded(
-                to_float(
-                    row.get("complete_min_max_lp_runtime_seconds")
+                first_numeric(
+                    row,
+                    "complete_min_max_lp_total_runtime_seconds",
+                    "complete_min_max_lp_runtime_seconds",
                 )
+                if lp_source
+                == "computed_complete_same_instance"
+                else None
             ),
+            "lp_reference_source": lp_source,
         })
 
     for key, by_seed in edge_groups.items():
         ego, p_delete = key
-        obs = list(by_seed.values())
-        ratio_obs = [x for x in obs if x["ratio"] is not None]
+        observations = list(by_seed.values())
 
-        if ratio_obs:
-            best = min(ratio_obs, key=lambda x: (x["ratio"], x["cc"], int(float(x["seed"]))))
-            worst = max(ratio_obs, key=lambda x: (x["ratio"], x["cc"], -int(float(x["seed"]))))
+        cc_values = [
+            float(observation["cc"])
+            for observation in observations
+        ]
+        lp_values = [
+            float(observation["lp"])
+            for observation in observations
+            if observation["lp"] is not None
+        ]
+        ratio_values = [
+            float(observation["ratio"])
+            for observation in observations
+            if observation["ratio"] is not None
+        ]
+
+        sources = {
+            str(observation["lp_reference_source"])
+            for observation in observations
+        }
+        if len(sources) != 1:
+            raise ValueError(
+                "Inconsistent LP-reference metadata for "
+                f"ego={ego}, p_delete={p_delete}: "
+                + ", ".join(sorted(sources))
+            )
+
+        total_runtime_values = [
+            to_float(observation["lp_total_runtime"])
+            for observation in observations
+        ]
+        if (
+            total_runtime_values
+            and all(
+                value is not None
+                for value in total_runtime_values
+            )
+        ):
+            minmax_lp_runtime = average(total_runtime_values)
         else:
-            best = min(obs, key=lambda x: (x["cc"], int(float(x["seed"]))))
-            worst = max(obs, key=lambda x: (x["cc"], -int(float(x["seed"]))))
+            minmax_lp_runtime = average(
+                observation["lp_runtime"]
+                for observation in observations
+            )
 
         output.append({
             "ego_id": ego,
             "n": metadata[key]["n"],
             "p_delete": p_delete,
-            "graph_variant": "edge_deleted",
             "d_hat": d_hat,
             "lambda": lam,
-            "number_of_seeds": len(obs),
-            "minmaxcc_best": rounded(best["cc"]),
-            "minmaxcc_average": rounded(average(x["cc"] for x in obs)),
-            "minmaxcc_worst": rounded(worst["cc"]),
-            "min_max_lp_cost_best": rounded(best["lp"]),
-            "min_max_lp_cost_average": rounded(average(x["lp"] for x in obs)),
-            "min_max_lp_cost_worst": rounded(worst["lp"]),
-            "minmaxcc_best_to_lp_ratio": rounded(best["ratio"]),
-            "minmaxcc_average_to_lp_ratio": rounded(average(x["ratio"] for x in ratio_obs)),
-            "minmaxcc_worst_to_lp_ratio": rounded(worst["ratio"]),
+            "number_of_seeds": len(observations),
+            "minmaxcc_cost_best": rounded(min(cc_values)),
+            "minmaxcc_cost_average": rounded(
+                average(cc_values)
+            ),
+            "minmaxcc_cost_worst": rounded(max(cc_values)),
+            "min_max_lp_cost_minimum": (
+                rounded(min(lp_values))
+                if lp_values
+                else ""
+            ),
+            "min_max_lp_cost_average": (
+                rounded(average(lp_values))
+                if lp_values
+                else ""
+            ),
+            "min_max_lp_cost_maximum": (
+                rounded(max(lp_values))
+                if lp_values
+                else ""
+            ),
+            "minmaxcc_ratio_best": (
+                rounded(min(ratio_values))
+                if ratio_values
+                else ""
+            ),
+            "minmaxcc_ratio_average": (
+                rounded(average(ratio_values))
+                if ratio_values
+                else ""
+            ),
+            "minmaxcc_ratio_worst": (
+                rounded(max(ratio_values))
+                if ratio_values
+                else ""
+            ),
             "minmaxcc_runtime_seconds_average": rounded(
-                average(x["minmaxcc_runtime"] for x in obs)
+                average(
+                    observation["minmaxcc_runtime"]
+                    for observation in observations
+                )
             ),
             "min_max_lp_runtime_seconds_average": rounded(
-                average(x["lp_runtime"] for x in obs)
+                minmax_lp_runtime
             ),
+            "lp_reference_source": next(iter(sources)),
         })
 
     output.sort(
-        key=lambda r: (
-            int(float(r["n"])),
-            int(float(r["ego_id"])),
-            0 if r["graph_variant"] == "complete" else 1,
-            float(r["p_delete"]),
+        key=lambda row: (
+            int(float(row["n"])),
+            int(float(row["ego_id"])),
+            float(row["p_delete"]),
         )
     )
     return output
 
 
-def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
+def make_cc_table(
+    rows: list[dict[str, str]],
+) -> list[dict[str, Any]]:
     """
     Build the Facebook ordinary correlation-clustering table.
 
-    Complete graph rows:
-      - include every ego graph that has complete Pivot results;
-      - always report Pivot best and average cost;
-      - compute approximation ratios only when a complete LP result exists;
-      - otherwise leave both approximation columns empty.
+    Complete graph
+    --------------
+    There is one graph instance per ego ID:
+    * Pivot best cost is the best result among the 100 Pivot runs.
+    * Pivot average cost is the mean over the 100 Pivot runs.
+    * Both approximation values use the complete-graph LP.
 
-    Edge-deleted rows:
-      - include deletion seed 1 when a paired ordinary Pivot and all-pairs LP
-        result is available;
-      - report Pivot costs and approximation ratios for that same graph.
+    Edge-deleted graphs
+    -------------------
+    For every deletion seed, the stored Pivot best and average costs summarize
+    that seed's 100 Pivot runs. The paper row then aggregates over all
+    available deletion seeds:
+    * pivot_best_cost is the mean of the per-seed best-of-100 costs;
+    * pivot_average_cost is the mean of the per-seed 100-run means;
+    * bestpivot_approximation is the mean of
+      per-seed best-of-100 cost / same-instance LP;
+    * averagepivot_approximation is the mean of
+      per-seed 100-run mean cost / same-instance LP.
 
-    Runtime columns:
-      - are filled when explicit ordinary Pivot/LP runtime columns exist;
-      - otherwise they are left empty.
+    Complete Pivot-only ego graphs remain in the table with empty LP,
+    approximation, and LP-runtime cells.
     """
-
-    def numeric_seed(row: dict[str, str]) -> int | None:
-        value = to_float(row.get("seed"))
-        return None if value is None else int(value)
 
     def set_consistent(
         current: dict[str, Any],
@@ -275,20 +685,36 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             )
 
     complete_rows: dict[str, dict[str, Any]] = {}
-    seed_one_rows: dict[tuple[str, str], dict[str, Any]] = {}
+    edge_groups: dict[
+        tuple[str, str],
+        dict[str, dict[str, Any]],
+    ] = defaultdict(dict)
 
-    complete_pivot_runtime: dict[str, list[float]] = defaultdict(list)
-    complete_lp_runtime: dict[str, list[float]] = defaultdict(list)
-    edge_pivot_runtime: dict[tuple[str, str], list[float]] = defaultdict(list)
-    edge_lp_runtime: dict[tuple[str, str], list[float]] = defaultdict(list)
+    complete_pivot_runtime: dict[
+        str,
+        list[float],
+    ] = defaultdict(list)
+    complete_lp_runtime: dict[
+        str,
+        list[float],
+    ] = defaultdict(list)
+    edge_pivot_runtime: dict[
+        tuple[str, str],
+        list[float],
+    ] = defaultdict(list)
+    edge_lp_runtime: dict[
+        tuple[str, str],
+        list[float],
+    ] = defaultdict(list)
 
     for row in rows:
         ego = str(row.get("ego_id", "")).strip()
         if not ego:
             continue
 
-        p_delete = str(row.get("p_delete", "")).strip()
         n = str(row.get("n", "")).strip()
+        p_delete = str(row.get("p_delete", "")).strip()
+        seed = get_seed(row)
 
         complete = complete_rows.setdefault(
             ego,
@@ -296,7 +722,6 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                 "ego_id": ego,
                 "n": n,
                 "p_delete": 0,
-                "graph_variant": "complete",
                 "pivot_best": None,
                 "pivot_average": None,
                 "lp": None,
@@ -306,13 +731,17 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
         set_consistent(
             complete,
             "pivot_best",
-            to_float(row.get("complete_pivot_best_cost")),
+            to_float(
+                row.get("complete_pivot_best_cost")
+            ),
             f"complete ego={ego}",
         )
         set_consistent(
             complete,
             "pivot_average",
-            to_float(row.get("complete_pivot_average_cost")),
+            to_float(
+                row.get("complete_pivot_average_cost")
+            ),
             f"complete ego={ego}",
         )
         set_consistent(
@@ -329,7 +758,9 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             "complete_pivot_runtime_seconds",
         )
         if complete_pivot_time is not None:
-            complete_pivot_runtime[ego].append(complete_pivot_time)
+            complete_pivot_runtime[ego].append(
+                complete_pivot_time
+            )
 
         complete_lp_time = first_numeric(
             row,
@@ -337,159 +768,182 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             "complete_lp_runtime_seconds",
         )
         if complete_lp_time is not None:
-            complete_lp_runtime[ego].append(complete_lp_time)
-
-        if p_delete:
-            runtime_key = (ego, p_delete)
-
-            edge_pivot_time = first_numeric(
-                row,
-                "edge_pivot_runtime_seconds_average",
-                "edge_pivot_average_runtime_seconds",
-                "edge_pivot_runtime_seconds",
+            complete_lp_runtime[ego].append(
+                complete_lp_time
             )
-            if edge_pivot_time is not None:
-                edge_pivot_runtime[runtime_key].append(edge_pivot_time)
 
-            edge_lp_time = first_numeric(
-                row,
-                "edge_all_pairs_lp_runtime_seconds",
-                "edge_lp_runtime_seconds",
-            )
-            if edge_lp_time is not None:
-                edge_lp_runtime[runtime_key].append(edge_lp_time)
-
-        # Edge-deleted paper rows remain paired at deletion seed 1.
-        if numeric_seed(row) != 1 or not p_delete:
+        if not p_delete:
             continue
 
-        edge_best = to_float(row.get("edge_pivot_best_cost"))
-        edge_average = to_float(row.get("edge_pivot_average_cost"))
-        edge_lp = to_float(row.get("edge_all_pairs_lp_cost"))
+        edge_best = to_float(
+            row.get("edge_pivot_best_cost")
+        )
+        edge_average = to_float(
+            row.get("edge_pivot_average_cost")
+        )
+        edge_lp = to_float(
+            row.get("edge_all_pairs_lp_cost")
+        )
 
-        # Large ego graphs without an ordinary LP do not get edge rows.
+        runtime_key = (ego, p_delete)
+        edge_pivot_time = first_numeric(
+            row,
+            "edge_pivot_runtime_seconds_average",
+            "edge_pivot_average_runtime_seconds",
+            "edge_pivot_runtime_seconds",
+        )
+        if edge_pivot_time is not None:
+            edge_pivot_runtime[runtime_key].append(
+                edge_pivot_time
+            )
+
+        edge_lp_time = first_numeric(
+            row,
+            "edge_all_pairs_lp_runtime_seconds",
+            "edge_lp_runtime_seconds",
+        )
+        if edge_lp_time is not None:
+            edge_lp_runtime[runtime_key].append(
+                edge_lp_time
+            )
+
+        # No edge paper row is possible without a same-instance LP.
         if edge_lp is None:
             continue
-
         if edge_best is None or edge_average is None:
             raise ValueError(
                 "Missing paired edge Pivot result for "
-                f"ego={ego}, p_delete={p_delete}, seed=1."
+                f"ego={ego}, p_delete={p_delete}, "
+                f"seed={seed}."
             )
 
-        key = (ego, p_delete)
-        edge = seed_one_rows.setdefault(
-            key,
-            {
-                "ego_id": ego,
-                "n": n,
-                "p_delete": p_delete,
-                "graph_variant": "edge_deleted",
-                "pivot_best": None,
-                "pivot_average": None,
-                "lp": None,
-            },
-        )
+        observation = {
+            "seed": seed,
+            "n": n,
+            "pivot_best": edge_best,
+            "pivot_average": edge_average,
+            "lp": edge_lp,
+            "best_ratio": ratio(edge_best, edge_lp),
+            "average_ratio": ratio(
+                edge_average,
+                edge_lp,
+            ),
+        }
 
-        set_consistent(
-            edge,
-            "pivot_best",
-            edge_best,
-            f"edge ego={ego}, p_delete={p_delete}, seed=1",
-        )
-        set_consistent(
-            edge,
-            "pivot_average",
-            edge_average,
-            f"edge ego={ego}, p_delete={p_delete}, seed=1",
-        )
-        set_consistent(
-            edge,
-            "lp",
-            edge_lp,
-            f"edge ego={ego}, p_delete={p_delete}, seed=1",
-        )
+        old = edge_groups[runtime_key].get(seed)
+        if old is None:
+            edge_groups[runtime_key][seed] = observation
+        else:
+            for field in (
+                "pivot_best",
+                "pivot_average",
+                "lp",
+            ):
+                if (
+                    abs(
+                        float(old[field])
+                        - float(observation[field])
+                    )
+                    > 1e-8
+                ):
+                    raise ValueError(
+                        f"Conflicting duplicate {field} for "
+                        f"ego={ego}, p_delete={p_delete}, "
+                        f"seed={seed}."
+                    )
 
     output: list[dict[str, Any]] = []
 
-    def append_row(
-        source_row: dict[str, Any],
-        context: str,
-        pivot_times: Iterable[Any],
-        lp_times: Iterable[Any],
-        require_lp: bool,
-    ) -> None:
-        best = source_row["pivot_best"]
-        average_cost = source_row["pivot_average"]
-        lp = source_row["lp"]
+    for ego, source in complete_rows.items():
+        best = source["pivot_best"]
+        average_cost = source["pivot_average"]
+        lp = source["lp"]
 
-        if best is None:
-            raise ValueError(f"Missing best Pivot result for {context}.")
-        if average_cost is None:
-            raise ValueError(f"Missing average Pivot result for {context}.")
-        if require_lp and lp is None:
-            raise ValueError(f"Missing all-pairs LP result for {context}.")
+        if best is None and average_cost is None:
+            continue
+        if best is None or average_cost is None:
+            raise ValueError(
+                f"Incomplete complete Pivot result for ego={ego}."
+            )
 
-        row = {
-            key: value
-            for key, value in source_row.items()
-            if key not in {"pivot_best", "pivot_average", "lp"}
-        }
+        output.append({
+            "ego_id": ego,
+            "n": source["n"],
+            "p_delete": 0,
+            "number_of_seeds": 1,
+            "pivot_best_cost": rounded(best),
+            "pivot_average_cost": rounded(average_cost),
+            "averagepivot_approximation": rounded(
+                ratio(average_cost, lp)
+            ),
+            "bestpivot_approximation": rounded(
+                ratio(best, lp)
+            ),
+            "pivot_runtime_seconds_average": rounded(
+                average(complete_pivot_runtime[ego])
+            ),
+            "lp_runtime_seconds_average": rounded(
+                average(complete_lp_runtime[ego])
+            ),
+        })
 
-        row["pivot_best_cost"] = rounded(best)
-        row["pivot_average_cost"] = rounded(average_cost)
-
-        # For the large complete ego graphs, LP is unavailable, so these
-        # fields intentionally remain empty.
-        row["averagepivot_approximation"] = rounded(
-            ratio(average_cost, lp)
-        )
-        row["bestpivot_approximation"] = rounded(
-            ratio(best, lp)
-        )
-
-        row["pivot_runtime_seconds_average"] = rounded(
-            average(pivot_times)
-        )
-        row["lp_runtime_seconds_average"] = rounded(
-            average(lp_times)
-        )
-        output.append(row)
-
-    for ego, row in complete_rows.items():
-        # Ignore ego graphs for which neither complete Pivot value exists.
-        if (
-            row["pivot_best"] is None
-            and row["pivot_average"] is None
-        ):
+    for key, by_seed in edge_groups.items():
+        ego, p_delete = key
+        observations = list(by_seed.values())
+        if not observations:
             continue
 
-        append_row(
-            row,
-            f"complete ego={ego}",
-            complete_pivot_runtime[ego],
-            complete_lp_runtime[ego],
-            require_lp=False,
-        )
+        best_costs = [
+            observation["pivot_best"]
+            for observation in observations
+        ]
+        average_costs = [
+            observation["pivot_average"]
+            for observation in observations
+        ]
+        best_ratios = [
+            observation["best_ratio"]
+            for observation in observations
+        ]
+        average_ratios = [
+            observation["average_ratio"]
+            for observation in observations
+        ]
 
-    for (ego, p_delete), row in seed_one_rows.items():
-        append_row(
-            row,
-            f"edge ego={ego}, p_delete={p_delete}, seed=1",
-            edge_pivot_runtime[(ego, p_delete)],
-            edge_lp_runtime[(ego, p_delete)],
-            require_lp=True,
-        )
+        output.append({
+            "ego_id": ego,
+            "n": observations[0]["n"],
+            "p_delete": p_delete,
+            "number_of_seeds": len(observations),
+            "pivot_best_cost": rounded(
+                average(best_costs)
+            ),
+            "pivot_average_cost": rounded(
+                average(average_costs)
+            ),
+            "averagepivot_approximation": rounded(
+                average(average_ratios)
+            ),
+            "bestpivot_approximation": rounded(
+                average(best_ratios)
+            ),
+            "pivot_runtime_seconds_average": rounded(
+                average(edge_pivot_runtime[key])
+            ),
+            "lp_runtime_seconds_average": rounded(
+                average(edge_lp_runtime[key])
+            ),
+        })
 
     output.sort(
         key=lambda row: (
             int(float(row["n"])),
             int(float(row["ego_id"])),
-            0 if row["graph_variant"] == "complete" else 1,
             float(row["p_delete"]),
         )
     )
     return output
+
 
 def parse_cluster_sizes(value: Any, file_name: str = "") -> list[int]:
     """
@@ -801,11 +1255,16 @@ def main() -> None:
     cc_output = resolve(args.cc_output)
     clique_input = resolve(args.clique_input)
     clique_cc_output = resolve(args.clique_cc_output)
+    runtime_benchmark = resolve(args.runtime_benchmark)
 
     if not input_path.exists():
         raise FileNotFoundError(f"Input not found: {input_path}")
     if not clique_input.exists():
         raise FileNotFoundError(f"Clique input not found: {clique_input}")
+    if not runtime_benchmark.exists():
+        raise FileNotFoundError(
+            f"Runtime benchmark not found: {runtime_benchmark}"
+        )
 
     all_rows = read_rows(input_path)
     selected_rows = fixed_rows(all_rows, args.d_hat, args.lambda_value)
@@ -813,28 +1272,39 @@ def main() -> None:
     cc_rows = make_cc_table(all_rows)
     clique_rows = read_rows(clique_input)
     clique_cc_rows = make_clique_cc_table(clique_rows)
+    runtime_rows = read_rows(runtime_benchmark)
+    merge_runtime_benchmarks(
+        cc_rows,
+        clique_cc_rows,
+        runtime_rows,
+        allow_missing=args.allow_missing_runtimes,
+    )
 
     minmax_fields = [
-        "ego_id", "n", "p_delete",
-        "minmaxcc_best",
-        "min_max_lp_cost_best",
-        "minmaxcc_best_to_lp_ratio",
-
-        "minmaxcc_average",
+        "ego_id",
+        "n",
+        "p_delete",
+        "d_hat",
+        "lambda",
+        "number_of_seeds",
+        "minmaxcc_cost_best",
+        "minmaxcc_cost_average",
+        "minmaxcc_cost_worst",
+        "min_max_lp_cost_minimum",
         "min_max_lp_cost_average",
-        "minmaxcc_average_to_lp_ratio",
-
-        "minmaxcc_worst",
-        "min_max_lp_cost_worst",
-        "minmaxcc_worst_to_lp_ratio",
+        "min_max_lp_cost_maximum",
+        "minmaxcc_ratio_best",
+        "minmaxcc_ratio_average",
+        "minmaxcc_ratio_worst",
         "minmaxcc_runtime_seconds_average",
         "min_max_lp_runtime_seconds_average",
+        "lp_reference_source",
     ]
     cc_fields = [
         "ego_id",
         "n",
         "p_delete",
-        "graph_variant",
+        "number_of_seeds",
         "pivot_best_cost",
         "pivot_average_cost",
         "averagepivot_approximation",
@@ -863,6 +1333,7 @@ def main() -> None:
     print("Correlation table:", cc_output)
     print("Correlation rows:", len(cc_rows))
     print("Clique input:", clique_input)
+    print("Runtime benchmark:", runtime_benchmark)
     print("Clique correlation table:", clique_cc_output)
     print("Clique correlation rows:", len(clique_cc_rows))
 

@@ -1,0 +1,107 @@
+dataset,ego_id,n,graph_variant,p_delete,algorithm,number_of_runtime_observations,average_runtime_seconds,standard_deviation_seconds,minimum_runtime_seconds,maximum_runtime_seconds,runtime_definition
+clique,,10,complete,0,lp,3,0.000455221,3.3341e-05,0.000424862,0.000490904,Gurobi all-pairs LP solver runtime
+clique,,10,complete,0,pivot,90,9.2348e-05,9.8146e-05,6.1e-05,0.001005875,pure Pivot wall-clock time per run
+clique,,10,edge_deleted,0.05,lp,3,0.002037366,0.002980449,0.0,0.005458117,Gurobi all-pairs LP solver runtime
+clique,,10,edge_deleted,0.05,pivot,90,9.1352e-05,1.6073e-05,6.1459e-05,0.000157375,pure Pivot wall-clock time per run
+clique,,10,edge_deleted,0.15,lp,3,0.000691255,0.000269001,0.000506878,0.000999928,Gurobi all-pairs LP solver runtime
+clique,,10,edge_deleted,0.15,pivot,90,9.3383e-05,1.3034e-05,6.5583e-05,0.000127167,pure Pivot wall-clock time per run
+clique,,10,edge_deleted,0.25,lp,3,0.000510613,0.000455458,0.0,0.000874996,Gurobi all-pairs LP solver runtime
+clique,,10,edge_deleted,0.25,pivot,90,9.3953e-05,1.2102e-05,6.8167e-05,0.000119916,pure Pivot wall-clock time per run
+clique,,10,edge_deleted,0.4,lp,3,0.000335693,0.000291441,0.0,0.000524044,Gurobi all-pairs LP solver runtime
+clique,,10,edge_deleted,0.4,pivot,90,0.000101904,1.1476e-05,7.475e-05,0.00012975,pure Pivot wall-clock time per run
+clique,,15,complete,0,lp,3,0.00169762,0.000927541,0.001096964,0.002765894,Gurobi all-pairs LP solver runtime
+clique,,15,complete,0,pivot,90,8.7734e-05,1.459e-05,5.7333e-05,0.000120584,pure Pivot wall-clock time per run
+clique,,15,edge_deleted,0.05,lp,3,0.001333316,0.000577239,0.000999928,0.001999855,Gurobi all-pairs LP solver runtime
+clique,,15,edge_deleted,0.05,pivot,90,0.00011233,0.000119302,6.5459e-05,0.001221,pure Pivot wall-clock time per run
+clique,,15,edge_deleted,0.15,lp,3,0.001000007,1.37e-07,0.000999928,0.001000166,Gurobi all-pairs LP solver runtime
+clique,,15,edge_deleted,0.15,pivot,90,0.000107494,1.431e-05,7.4833e-05,0.000143167,pure Pivot wall-clock time per run
+clique,,15,edge_deleted,0.25,lp,3,0.001000087,1.37e-07,0.000999928,0.001000166,Gurobi all-pairs LP solver runtime
+clique,,15,edge_deleted,0.25,pivot,90,0.000112181,1.6384e-05,8.0917e-05,0.000167541,pure Pivot wall-clock time per run
+clique,,15,edge_deleted,0.4,lp,3,0.001333316,0.000577446,0.000999928,0.002000093,Gurobi all-pairs LP solver runtime
+clique,,15,edge_deleted,0.4,pivot,90,0.000117178,1.2957e-05,9.2542e-05,0.000162542,pure Pivot wall-clock time per run
+clique,,20,complete,0,lp,3,0.01715072,0.008932477,0.008165121,0.02602911,Gurobi all-pairs LP solver runtime
+clique,,20,complete,0,pivot,90,0.000107456,6.2645e-05,5.7708e-05,0.000460459,pure Pivot wall-clock time per run
+clique,,20,edge_deleted,0.05,lp,3,0.004333258,0.000577308,0.003999949,0.004999876,Gurobi all-pairs LP solver runtime
+clique,,20,edge_deleted,0.05,pivot,90,0.000106852,1.5798e-05,7.0375e-05,0.000144125,pure Pivot wall-clock time per run
+clique,,20,edge_deleted,0.15,lp,3,0.004333417,0.001527519,0.003000021,0.006000042,Gurobi all-pairs LP solver runtime
+clique,,20,edge_deleted,0.15,pivot,90,0.000112446,1.6154e-05,7.6125e-05,0.00014925,pure Pivot wall-clock time per run
+clique,,20,edge_deleted,0.25,lp,3,0.004666726,0.001154686,0.003999949,0.006000042,Gurobi all-pairs LP solver runtime
+clique,,20,edge_deleted,0.25,pivot,90,0.000121027,2.3018e-05,6.6334e-05,0.000217542,pure Pivot wall-clock time per run
+clique,,20,edge_deleted,0.4,lp,3,0.004999956,0.001000047,0.003999949,0.006000042,Gurobi all-pairs LP solver runtime
+clique,,20,edge_deleted,0.4,pivot,90,0.000131932,1.5316e-05,8.9334e-05,0.000170375,pure Pivot wall-clock time per run
+clique,,25,complete,0,lp,4,0.050635159,0.007672122,0.041310787,0.057610989,Gurobi all-pairs LP solver runtime
+clique,,25,complete,0,pivot,120,9.7041e-05,1.5444e-05,6.7375e-05,0.000193291,pure Pivot wall-clock time per run
+clique,,25,edge_deleted,0.05,lp,4,0.032999992,0.006055282,0.02699995,0.040999889,Gurobi all-pairs LP solver runtime
+clique,,25,edge_deleted,0.05,pivot,120,0.000117245,3.3465e-05,6.4375e-05,0.000436458,pure Pivot wall-clock time per run
+clique,,25,edge_deleted,0.15,lp,4,0.034000039,0.008124017,0.022000074,0.039000034,Gurobi all-pairs LP solver runtime
+clique,,25,edge_deleted,0.15,pivot,120,0.000123701,1.2667e-05,9.9541e-05,0.000174166,pure Pivot wall-clock time per run
+clique,,25,edge_deleted,0.25,lp,4,0.038499951,0.005066096,0.031000137,0.041999817,Gurobi all-pairs LP solver runtime
+clique,,25,edge_deleted,0.25,pivot,120,0.000133873,2.6608e-05,9.5625e-05,0.000338583,pure Pivot wall-clock time per run
+clique,,25,edge_deleted,0.4,lp,4,0.038250089,0.005737319,0.032999992,0.045000076,Gurobi all-pairs LP solver runtime
+clique,,25,edge_deleted,0.4,pivot,120,0.000144234,2.2006e-05,0.000108666,0.000321334,pure Pivot wall-clock time per run
+clique,,30,complete,0,lp,4,0.111213505,0.037540486,0.072273016,0.149579048,Gurobi all-pairs LP solver runtime
+clique,,30,complete,0,pivot,120,9.9814e-05,1.314e-05,7.6e-05,0.00018875,pure Pivot wall-clock time per run
+clique,,30,edge_deleted,0.05,lp,4,0.064499974,0.013102251,0.055999994,0.084000111,Gurobi all-pairs LP solver runtime
+clique,,30,edge_deleted,0.05,pivot,120,0.000115081,1.3577e-05,8.8458e-05,0.000169875,pure Pivot wall-clock time per run
+clique,,30,edge_deleted,0.15,lp,4,0.078500032,0.032171345,0.048000097,0.119999886,Gurobi all-pairs LP solver runtime
+clique,,30,edge_deleted,0.15,pivot,120,0.000127725,1.8547e-05,8.3125e-05,0.000180875,pure Pivot wall-clock time per run
+clique,,30,edge_deleted,0.25,lp,4,0.075749934,0.021531104,0.057999849,0.107000113,Gurobi all-pairs LP solver runtime
+clique,,30,edge_deleted,0.25,pivot,120,0.000127133,1.5963e-05,9.3125e-05,0.000181333,pure Pivot wall-clock time per run
+clique,,30,edge_deleted,0.4,lp,4,0.094999969,0.042902968,0.059000015,0.145999908,Gurobi all-pairs LP solver runtime
+clique,,30,edge_deleted,0.4,pivot,120,0.000142804,1.6152e-05,0.000100584,0.000188666,pure Pivot wall-clock time per run
+clique,,100,complete,0,lp,3,1.675835053,0.589274928,1.157809973,2.316924095,Gurobi all-pairs LP solver runtime
+clique,,100,complete,0,pivot,90,0.000192751,4.466e-05,0.000123167,0.000324583,pure Pivot wall-clock time per run
+clique,,100,edge_deleted,0.05,lp,3,1.460666736,0.47821778,0.912000179,1.789000034,Gurobi all-pairs LP solver runtime
+clique,,100,edge_deleted,0.05,pivot,90,0.000212113,4.8993e-05,0.000130583,0.000360167,pure Pivot wall-clock time per run
+clique,,100,edge_deleted,0.15,lp,3,1.709999958,0.677165389,0.930999994,2.157999992,Gurobi all-pairs LP solver runtime
+clique,,100,edge_deleted,0.15,pivot,90,0.000227231,4.5745e-05,0.000158583,0.000333791,pure Pivot wall-clock time per run
+clique,,100,edge_deleted,0.25,lp,3,2.168333371,1.247928818,0.874000072,3.364000082,Gurobi all-pairs LP solver runtime
+clique,,100,edge_deleted,0.25,pivot,90,0.000257868,5.0404e-05,0.000182333,0.000398583,pure Pivot wall-clock time per run
+clique,,100,edge_deleted,0.4,lp,3,2.940666596,1.72102762,1.023000002,4.350999832,Gurobi all-pairs LP solver runtime
+clique,,100,edge_deleted,0.4,pivot,90,0.000291252,5.7197e-05,0.000224042,0.000413583,pure Pivot wall-clock time per run
+facebook,3980,52,complete,0,lp,1,0.221086025,0.0,0.221086025,0.221086025,Gurobi all-pairs LP solver runtime
+facebook,3980,52,complete,0,pivot,30,0.000261833,1.9545e-05,0.000223125,0.00029975,pure Pivot wall-clock time per run
+facebook,3980,52,edge_deleted,0.05,lp,1,0.207879782,0.0,0.207879782,0.207879782,Gurobi all-pairs LP solver runtime
+facebook,3980,52,edge_deleted,0.05,pivot,30,0.00025769,1.8813e-05,0.000212833,0.000304917,pure Pivot wall-clock time per run
+facebook,3980,52,edge_deleted,0.15,lp,1,0.208842039,0.0,0.208842039,0.208842039,Gurobi all-pairs LP solver runtime
+facebook,3980,52,edge_deleted,0.15,pivot,30,0.000267203,2.0229e-05,0.000235417,0.000340959,pure Pivot wall-clock time per run
+facebook,3980,52,edge_deleted,0.25,lp,1,0.193918943,0.0,0.193918943,0.193918943,Gurobi all-pairs LP solver runtime
+facebook,3980,52,edge_deleted,0.25,pivot,30,0.000284393,2.2022e-05,0.000232291,0.000317708,pure Pivot wall-clock time per run
+facebook,3980,52,edge_deleted,0.4,lp,1,0.235026121,0.0,0.235026121,0.235026121,Gurobi all-pairs LP solver runtime
+facebook,3980,52,edge_deleted,0.4,pivot,30,0.000338268,2.2179e-05,0.0002915,0.000389167,pure Pivot wall-clock time per run
+facebook,698,61,complete,0,lp,1,0.386044025,0.0,0.386044025,0.386044025,Gurobi all-pairs LP solver runtime
+facebook,698,61,complete,0,pivot,30,0.000228532,5.46e-05,0.000171917,0.00042725,pure Pivot wall-clock time per run
+facebook,698,61,edge_deleted,0.05,lp,1,0.334884167,0.0,0.334884167,0.334884167,Gurobi all-pairs LP solver runtime
+facebook,698,61,edge_deleted,0.05,pivot,30,0.00022205,2.4716e-05,0.000173708,0.000272917,pure Pivot wall-clock time per run
+facebook,698,61,edge_deleted,0.15,lp,1,0.287170887,0.0,0.287170887,0.287170887,Gurobi all-pairs LP solver runtime
+facebook,698,61,edge_deleted,0.15,pivot,30,0.000240367,2.711e-05,0.000174375,0.000287834,pure Pivot wall-clock time per run
+facebook,698,61,edge_deleted,0.25,lp,1,0.32207799,0.0,0.32207799,0.32207799,Gurobi all-pairs LP solver runtime
+facebook,698,61,edge_deleted,0.25,pivot,30,0.000279329,5.1169e-05,0.00022825,0.000526292,pure Pivot wall-clock time per run
+facebook,698,61,edge_deleted,0.4,lp,1,0.393528938,0.0,0.393528938,0.393528938,Gurobi all-pairs LP solver runtime
+facebook,698,61,edge_deleted,0.4,pivot,30,0.000547122,0.001276595,0.000271208,0.007303666,pure Pivot wall-clock time per run
+facebook,414,150,complete,0,lp,1,72.274648905,0.0,72.274648905,72.274648905,Gurobi all-pairs LP solver runtime
+facebook,414,150,complete,0,pivot,30,0.000519206,8.902e-05,0.000414416,0.000813958,pure Pivot wall-clock time per run
+facebook,414,150,edge_deleted,0.05,lp,1,64.522030115,0.0,64.522030115,64.522030115,Gurobi all-pairs LP solver runtime
+facebook,414,150,edge_deleted,0.05,pivot,30,0.000500306,4.5685e-05,0.000410708,0.0005905,pure Pivot wall-clock time per run
+facebook,414,150,edge_deleted,0.15,lp,1,78.817059994,0.0,78.817059994,78.817059994,Gurobi all-pairs LP solver runtime
+facebook,414,150,edge_deleted,0.15,pivot,30,0.000551871,6.1658e-05,0.000445417,0.000716416,pure Pivot wall-clock time per run
+facebook,414,150,edge_deleted,0.25,lp,1,118.908200979,0.0,118.908200979,118.908200979,Gurobi all-pairs LP solver runtime
+facebook,414,150,edge_deleted,0.25,pivot,30,0.000592376,5.4471e-05,0.000509583,0.000712417,pure Pivot wall-clock time per run
+facebook,414,150,edge_deleted,0.4,lp,1,120.320521116,0.0,120.320521116,120.320521116,Gurobi all-pairs LP solver runtime
+facebook,414,150,edge_deleted,0.4,pivot,30,0.000673728,7.8269e-05,0.000563834,0.00093375,pure Pivot wall-clock time per run
+facebook,686,168,complete,0,lp,1,50.083256006,0.0,50.083256006,50.083256006,Gurobi all-pairs LP solver runtime
+facebook,686,168,complete,0,pivot,30,0.000747667,8.8452e-05,0.000567417,0.001015,pure Pivot wall-clock time per run
+facebook,686,168,edge_deleted,0.05,lp,1,67.853109121,0.0,67.853109121,67.853109121,Gurobi all-pairs LP solver runtime
+facebook,686,168,edge_deleted,0.05,pivot,30,0.000773444,7.9214e-05,0.000638,0.000963583,pure Pivot wall-clock time per run
+facebook,686,168,edge_deleted,0.15,lp,1,79.530363798,0.0,79.530363798,79.530363798,Gurobi all-pairs LP solver runtime
+facebook,686,168,edge_deleted,0.15,pivot,30,0.00081075,5.4724e-05,0.000701541,0.000905625,pure Pivot wall-clock time per run
+facebook,686,168,edge_deleted,0.25,lp,1,87.076514006,0.0,87.076514006,87.076514006,Gurobi all-pairs LP solver runtime
+facebook,686,168,edge_deleted,0.25,pivot,30,0.000868054,5.819e-05,0.000739959,0.000960542,pure Pivot wall-clock time per run
+facebook,686,168,edge_deleted,0.4,lp,1,119.092505932,0.0,119.092505932,119.092505932,Gurobi all-pairs LP solver runtime
+facebook,686,168,edge_deleted,0.4,pivot,30,0.001027739,8.9575e-05,0.000891333,0.00122825,pure Pivot wall-clock time per run
+facebook,348,224,complete,0,pivot,30,0.000858196,8.1599e-05,0.00061225,0.000998792,pure Pivot wall-clock time per run
+facebook,0,333,complete,0,pivot,30,0.003761026,0.00410434,0.002255584,0.02348225,pure Pivot wall-clock time per run
+facebook,3437,534,complete,0,pivot,30,0.004372454,0.000277879,0.00373025,0.004886,pure Pivot wall-clock time per run
+facebook,1912,747,complete,0,pivot,30,0.003223826,0.000225978,0.002649333,0.0037645,pure Pivot wall-clock time per run
+facebook,1684,786,complete,0,pivot,30,0.005869183,0.000376757,0.005173833,0.006571,pure Pivot wall-clock time per run
+facebook,107,1034,complete,0,pivot,30,0.008297026,0.000612807,0.00701875,0.009665875,pure Pivot wall-clock time per run

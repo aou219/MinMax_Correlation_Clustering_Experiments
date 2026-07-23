@@ -1,4 +1,23 @@
-Hardware:
+Runtime machine specifications
+==============================
+created_utc: 2026-07-23T01:07:29.484685+00:00
+hostname: Air-van-Amira-3
+platform: macOS-13.3-arm64-arm-64bit
+os: Darwin
+os_release: 22.4.0
+architecture: arm64
+processor: arm
+logical_cpu_count: 8
+python: 3.11.8
+git_commit: af2a3770781cf35b1d3ba3fee98db7f01e65b653
+git_branch: main
+numpy: 2.4.6
+gurobipy: 13.0.2
+gurobi: 13.0.2
+cpu_brand: Apple M2
+memory_bytes: 8589934592
+memory_gib: 8.0
+hardware_overview: Hardware:
 
     Hardware Overview:
 
@@ -14,8 +33,7 @@ Hardware:
       Hardware UUID: 17498FF0-975F-5BC9-B12B-1F92DC2078A8
       Provisioning UDID: 00008112-0002296A0ADBC01E
       Activation Lock Status: Enabled
-
-Software:
+software_overview: Software:
 
     System Software Overview:
 
@@ -27,8 +45,4 @@ Software:
       User Name: Amira Ouchene (amiraouchene)
       Secure Virtual Memory: Enabled
       System Integrity Protection: Enabled
-      Time since boot: 13 uur en 5 minuten
-
-Python 3.11.8
-NumPy 2.4.6
-Gurobi (13, 0, 2)
+      Time since boot: 42 minuten en 50 seconden

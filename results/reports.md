@@ -1,105 +1,165 @@
-# All-pairs Pivot Approximation Outliers
+# Paper Table and Figure Definitions
 
-This report summarizes cases where the average Pivot cost is more than 3 times the all-pairs ILP optimum:
+This document describes the three generated paper tables, the meaning of every
+column, the aggregation rules, and the columns used by the Facebook MinMax
+figures.
 
-```text
-pivot_all_pairs_ratio = edge_pivot_average_cost / edge_all_pairs_ilp_cost
+## General conventions
+
+- `p_delete = 0` denotes the complete graph.
+- `p_delete > 0` denotes an edge-deleted graph.
+- Empty cells mean that the value was unavailable or was not computed.
+- Costs and approximation ratios are aggregated separately. A seed attaining
+  the best cost does not necessarily attain the best ratio.
+- For Facebook edge-deletion experiments, a deletion seed defines a distinct
+  graph instance.
+- For Pivot, each graph instance is run with 100 Pivot seeds. Thus, each
+  deletion seed has a best-of-100 Pivot cost and a mean-of-100 Pivot cost.
+
+---
+
+## `facebook_correlation_clustering_table.csv`
+
+Ordinary correlation clustering results for the Facebook ego graphs.
+
+### Row definition
+
+- A row with `p_delete = 0` represents one complete ego graph.
+- A row with `p_delete > 0` aggregates all available deletion seeds for one
+  ego graph and one deletion probability.
+- Complete ego graphs for which only Pivot was run remain in the table. Their
+  LP, approximation-ratio, and LP-runtime cells are empty.
+
+### Columns
+
+| Column | Definition |
+|---|---|
+| `ego_id` | Facebook ego-network identifier. |
+| `n` | Number of vertices after corrected preprocessing. Only vertices occurring as endpoints in the `.edges` file are included. |
+| `p_delete` | Edge-deletion probability. Zero means the complete graph. |
+| `number_of_seeds` | Number of deletion seeds represented by the row. This is `1` for a complete graph and normally `30` for an edge-deleted row. |
+| `pivot_best_cost` | Complete row: minimum cost among the 100 Pivot runs. Edge row: arithmetic mean, over deletion seeds, of each seed's best-of-100 Pivot cost. |
+| `pivot_average_cost` | Complete row: arithmetic mean cost of the 100 Pivot runs. Edge row: arithmetic mean, over deletion seeds, of each seed's mean cost across its 100 Pivot runs. |
+| `averagepivot_approximation` | Complete row: `pivot_average_cost / complete LP`. Edge row: arithmetic mean over deletion seeds of `(per-seed mean-of-100 Pivot cost) / (same-instance LP)`. It is not computed as a ratio of two aggregated means. |
+| `bestpivot_approximation` | Complete row: `pivot_best_cost / complete LP`. Edge row: arithmetic mean over deletion seeds of `(per-seed best-of-100 Pivot cost) / (same-instance LP)`. |
+| `pivot_runtime_seconds_average` | Runtime imported from `normal_cc_runtime_benchmarks.csv`. Pivot timing measures one Pivot call; graph construction and cost evaluation are outside the timer. The current Facebook edge benchmark uses deletion seed 1 for each `ego_id, p_delete` combination. |
+| `lp_runtime_seconds_average` | Runtime imported from `normal_cc_runtime_benchmarks.csv`. The benchmark summary uses Gurobi solver runtime when available. It is empty when no ordinary LP was benchmarked. |
+
+---
+
+## `clique_correlation_clustering_table.csv`
+
+Ordinary correlation clustering results for the synthetic clique graphs.
+
+### Row definition
+
+There is one row for each pair `(n, p_delete)`. Balanced and unbalanced clique
+instances, graph configurations, and available graph seeds in that group are
+merged.
+
+### Columns
+
+| Column | Definition |
+|---|---|
+| `n` | Number of vertices in the clique graph. |
+| `p_delete` | Edge-deletion probability. Zero means the complete graph. |
+| `averagepivot_approximation` | Arithmetic mean across the grouped clique instances of `(instance mean Pivot cost) / (same-instance ordinary LP)`. |
+| `bestpivot_approximation` | Arithmetic mean across the grouped clique instances of `(instance best Pivot cost) / (same-instance ordinary LP)`. It is not the single most favorable ratio from the group. |
+| `pivot_runtime_seconds_average` | Average Pivot runtime for the corresponding `n, p_delete` benchmark group, imported from `normal_cc_runtime_benchmarks.csv`. |
+| `lp_runtime_seconds_average` | Average ordinary LP solver runtime for the corresponding `n, p_delete` benchmark group, imported from `normal_cc_runtime_benchmarks.csv`. |
+
+---
+
+## `facebook_minmax_table.csv`
+
+MinMaxCC results and MinMaxLP-reference comparisons for the Facebook ego
+graphs.
+
+### Row definition
+
+- A row with `p_delete = 0` represents the complete ego graph.
+- A row with `p_delete > 0` aggregates the available deletion seeds, normally
+  30.
+- MinMaxCC costs, MinMaxLP-reference values, and approximation ratios are
+  summarized independently.
+
+### Columns
+
+| Column | Definition |
+|---|---|
+| `ego_id` | Facebook ego-network identifier. |
+| `n` | Number of vertices after corrected `.edges`-endpoint preprocessing. |
+| `p_delete` | Edge-deletion probability. Zero means the complete graph. |
+| `d_hat` | `d_hat` parameter used by MinMaxCC. |
+| `lambda` | `lambda` parameter used by MinMaxCC. |
+| `number_of_seeds` | Number of deletion seeds represented by the row. This is `1` for complete graphs and normally `30` for edge-deleted rows. |
+| `minmaxcc_cost_best` | Minimum MinMaxCC objective value over the represented deletion seeds. |
+| `minmaxcc_cost_average` | Arithmetic mean MinMaxCC objective value over the represented deletion seeds. |
+| `minmaxcc_cost_worst` | Maximum MinMaxCC objective value over the represented deletion seeds. |
+| `min_max_lp_cost_minimum` | Minimum available MinMaxLP-reference value over the represented seeds. |
+| `min_max_lp_cost_average` | Arithmetic mean of the available MinMaxLP-reference values over the represented seeds. |
+| `min_max_lp_cost_maximum` | Maximum available MinMaxLP-reference value over the represented seeds. |
+| `minmaxcc_ratio_best` | Minimum of the per-seed ratios `MinMaxCC(seed) / MinMaxLP-reference(seed)`. |
+| `minmaxcc_ratio_average` | Arithmetic mean of the per-seed ratios `MinMaxCC(seed) / MinMaxLP-reference(seed)`. This is not `average cost / average LP`. |
+| `minmaxcc_ratio_worst` | Maximum of the per-seed ratios `MinMaxCC(seed) / MinMaxLP-reference(seed)`. |
+| `minmaxcc_runtime_seconds_average` | Complete row: runtime of the complete MinMaxCC run. Edge row: arithmetic mean of the MinMaxCC runtimes over deletion seeds. |
+| `min_max_lp_runtime_seconds_average` | For locally computed MinMaxLP results, the table uses total runtime when all required total-runtime values are present; otherwise it falls back to LP-solve runtime. The value is empty for external or unavailable LP references. Until the LP-plus-rounding rerun is complete, this column may therefore represent LP-only runtime. |
+| `lp_reference_source` | Origin and comparability of the LP reference. Values are described below. |
+
+### `lp_reference_source` values
+
+| Value | Meaning |
+|---|---|
+| `computed_complete_same_instance` | MinMaxLP was solved locally on the same complete graph instance. |
+| `computed_edge_same_instance` | MinMaxLP was solved locally on the same edge-deleted graph instance. |
+| `davies2023_complete_graph_lp` | The complete-graph LP objective reported by Davies et al. is used as an external reference. For edge-deleted rows this is not a same-instance LP. |
+| `unavailable` | No valid MinMaxLP objective was available; LP and ratio cells are empty. |
+
+### Important interpretation rule
+
+The cost and ratio columns are deliberately independent. For example, the seed
+with the smallest MinMaxCC cost can differ from the seed with the smallest
+MinMaxCC/MinMaxLP ratio because the LP denominator also varies by seed.
+
+---
+
+## Facebook MinMax figures
+
+The current figure scripts are compatible with the current
+`facebook_minmax_table.csv`.
+
+### Detailed figures 1–6
+
+`make_facebook_minmax_figures.py` uses:
+
+- average figures: `minmaxcc_ratio_average`
+- worst figures: `minmaxcc_ratio_worst`
+- best figures: `minmaxcc_ratio_best`
+
+### Range figures 7–8
+
+`make_facebook_approximation_range_figures.py` uses:
+
+- line: aggregated mean of `minmaxcc_ratio_average`
+- lower band: aggregated minimum of `minmaxcc_ratio_best`
+- upper band: aggregated maximum of `minmaxcc_ratio_worst`
+
+By default, both scripts include only rows whose `lp_reference_source` begins
+with `computed_`. Therefore, figures use locally solved, same-instance LP
+comparisons and exclude Davies external-reference and unavailable rows.
+
+Do not pass `--include-external-reference-rows` for the final paper figures.
+
+---
+
+## Generation commands
+
+```bash
+python scripts/make_paper_tables.py \
+  --d-hat 8 \
+  --lambda-value 5
+
+python scripts/make_facebook_minmax_figures.py
+python scripts/make_facebook_approximation_range_figures.py
 ```
 
-## Overall summary
-
-| Metric | Value |
-| --- | --- |
-| Total outlier cases | 491 |
-| Clique outlier cases | 463 |
-| Random outlier cases | 28 |
-| Mean ratio among outliers | 3.60 |
-| Maximum ratio | 12.97 |
-| Worst case | `clq_n15_8_7.json`, seed `37`, `p_delete=0.40` |
-
-## Outliers by edge deletion probability
-
-| `p_delete` | Outlier cases |
-| --- | --- |
-| 0.05 | 13 |
-| 0.15 | 70 |
-| 0.25 | 164 |
-| 0.40 | 244 |
-
-## Clique balance summary
-
-| Category | Hits | Total clique runs | Hit rate | Mean outlier ratio | Max outlier ratio |
-| --- | --- | --- | --- | --- | --- |
-| balanced | 184 | 1390 | 13.2% | 3.70 | 5.76 |
-| near_balanced | 109 | 1000 | 10.9% | 3.71 | 12.97 |
-| imbalanced | 170 | 1295 | 13.1% | 3.44 | 6.24 |
-
-## Clique structure detail
-
-| File | Category | Hits | Total runs | Hit rate | Mean outlier ratio | Max outlier ratio |
-| --- | --- | --- | --- | --- | --- | --- |
-| `clq_n30_20_5_5.json` | imbalanced | 69 | 200 | 34.5% | 3.41 | 4.46 |
-| `clq_n30_2x15.json` | balanced | 64 | 200 | 32.0% | 3.50 | 4.73 |
-| `clq_n100_60_25_10_5.json` | imbalanced | 28 | 95 | 29.5% | 3.23 | 3.54 |
-| `clq_n20_2x10.json` | balanced | 58 | 200 | 29.0% | 3.60 | 5.71 |
-| `clq_n25_13_12.json` | near_balanced | 52 | 200 | 26.0% | 3.53 | 5.76 |
-| `clq_n10_2x5.json` | balanced | 45 | 200 | 22.5% | 4.10 | 5.75 |
-| `clq_n15_8_7.json` | near_balanced | 33 | 200 | 16.5% | 4.12 | 12.97 |
-| `clq_n10_5_3_2.json` | imbalanced | 25 | 200 | 12.5% | 3.73 | 5.84 |
-| `clq_n30_15_10_5.json` | imbalanced | 19 | 200 | 9.5% | 3.26 | 3.72 |
-| `clq_n25_12_7_6.json` | imbalanced | 13 | 200 | 6.5% | 3.14 | 3.38 |
-| `clq_n20_7_7_6.json` | near_balanced | 12 | 200 | 6.0% | 3.44 | 4.28 |
-| `clq_n25_10_10_5.json` | imbalanced | 9 | 200 | 4.5% | 3.33 | 3.65 |
-| `clq_n15_3x5.json` | balanced | 8 | 200 | 4.0% | 3.91 | 5.76 |
-| `clq_n10_4_3_3.json` | near_balanced | 7 | 200 | 3.5% | 4.01 | 5.17 |
-| `clq_n15_5_5_3_2.json` | imbalanced | 7 | 200 | 3.5% | 4.61 | 6.24 |
-| `clq_n30_3x10.json` | balanced | 7 | 200 | 3.5% | 3.25 | 3.72 |
-| `clq_n25_9_8_8.json` | near_balanced | 5 | 200 | 2.5% | 3.23 | 3.35 |
-| `clq_n20_4x5.json` | balanced | 2 | 200 | 1.0% | 4.87 | 5.20 |
-| `clq_n100_10x10.json` | balanced | 0 | 95 | 0.0% | 0.00 | 0.00 |
-| `clq_n100_4x25.json` | balanced | 0 | 95 | 0.0% | 0.00 | 0.00 |
-
-## Interpretation
-
-The outliers are concentrated in clique-based instances: 463 of the 491 cases are clique graphs.
-
-Balanced two-clique instances can show many high-ratio cases, but the effect is not limited to balanced cliques. The safer conclusion is that high Pivot/all-pairs ILP ratios are common in clique-structured instances, especially after substantial edge deletion.
-
-<!-- SPARSE_REAL_ILP_TABLES_START -->
-## Sparse ILP versus real all-pairs ILP
-
-This section compares the sparse ILP objective value against the real all-pairs ILP objective value on the same edge-deleted graph. The comparison is made both without and with the additional 4-cycle constraints.
-
-### Overall comparison
-
-| Comparison | Comparable runs | Different runs | Different % | Same runs | Same % |
-| --- | --- | --- | --- | --- | --- |
-| Sparse ILP without 4-cycle constraints | 12097 | 994 | 8.22% | 11103 | 91.78% |
-| Sparse ILP with 4-cycle constraints | 12097 | 31 | 0.26% | 12066 | 99.74% |
-
-### Comparison by graph family
-
-| Graph family | Comparable runs | Different without 4-cycles | Different without 4-cycles % | Different with 4-cycles | Different with 4-cycles % |
-| --- | --- | --- | --- | --- | --- |
-| clique | 3685 | 218 | 5.92% | 10 | 0.27% |
-| facebook | 12 | 4 | 33.33% | 0 | 0.00% |
-| random | 8400 | 772 | 9.19% | 21 | 0.25% |
-
-### Effect of adding 4-cycle constraints
-
-| Quantity | Value |
-| --- | --- |
-| Discrepancies without 4-cycle constraints | 994 |
-| Discrepancies with 4-cycle constraints | 31 |
-| Discrepancies removed by adding 4-cycle constraints | 963 |
-| Relative reduction | 96.88% |
-
-### Difference magnitudes
-
-| Comparison | Mean absolute difference among different runs | Max absolute difference | Sparse ILP cost at max difference | Real ILP cost at max difference | File | Seed | `p_delete` |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Sparse ILP without 4-cycle constraints | 1.2726 | 5 | 21 | 26 | random_n30_p05.json | 19 | 0.40 |
-| Sparse ILP with 4-cycle constraints | 1 | 1 | 1 | 2 | clq_n10_2x5.json | 20 | 0.40 |
-
-Interpretation: adding the 4-cycle constraints makes the sparse ILP much closer to the real all-pairs ILP. The sparse formulation without those constraints differs more often, while the formulation with 4-cycle constraints differs only in rare cases.
-<!-- SPARSE_REAL_ILP_TABLES_END -->
