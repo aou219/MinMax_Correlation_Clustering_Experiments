@@ -1,165 +1,130 @@
-# Paper Table and Figure Definitions
+# Table and Figure Guide
 
-This document describes the three generated paper tables, the meaning of every
-column, the aggregation rules, and the columns used by the Facebook MinMax
-figures.
+This file explains what every table column means and how the values are
+calculated.
 
-## General conventions
+## General notes
 
-- `p_delete = 0` denotes the complete graph.
-- `p_delete > 0` denotes an edge-deleted graph.
-- Empty cells mean that the value was unavailable or was not computed.
-- Costs and approximation ratios are aggregated separately. A seed attaining
-  the best cost does not necessarily attain the best ratio.
-- For Facebook edge-deletion experiments, a deletion seed defines a distinct
-  graph instance.
-- For Pivot, each graph instance is run with 100 Pivot seeds. Thus, each
-  deletion seed has a best-of-100 Pivot cost and a mean-of-100 Pivot cost.
-
----
+- `p_delete = 0` means the complete graph.
+- `p_delete > 0` means an edge-deleted graph.
+- An empty cell means that the value was not available or was not calculated.
+- Costs and ratios are summarized separately.
+- A deletion seed creates a different graph instance.
+- Pivot is run 100 times on every Facebook graph instance.
 
 ## `facebook_correlation_clustering_table.csv`
 
-Ordinary correlation clustering results for the Facebook ego graphs.
+This table contains the ordinary correlation-clustering results for the
+Facebook graphs.
 
-### Row definition
+For complete graphs, there is one row per ego ID.
 
-- A row with `p_delete = 0` represents one complete ego graph.
-- A row with `p_delete > 0` aggregates all available deletion seeds for one
-  ego graph and one deletion probability.
-- Complete ego graphs for which only Pivot was run remain in the table. Their
-  LP, approximation-ratio, and LP-runtime cells are empty.
+For edge-deleted graphs, one row combines the available deletion seeds for one
+ego ID and one `p_delete` value.
 
-### Columns
-
-| Column | Definition |
+| Column | Meaning |
 |---|---|
-| `ego_id` | Facebook ego-network identifier. |
-| `n` | Number of vertices after corrected preprocessing. Only vertices occurring as endpoints in the `.edges` file are included. |
-| `p_delete` | Edge-deletion probability. Zero means the complete graph. |
-| `number_of_seeds` | Number of deletion seeds represented by the row. This is `1` for a complete graph and normally `30` for an edge-deleted row. |
-| `pivot_best_cost` | Complete row: minimum cost among the 100 Pivot runs. Edge row: arithmetic mean, over deletion seeds, of each seed's best-of-100 Pivot cost. |
-| `pivot_average_cost` | Complete row: arithmetic mean cost of the 100 Pivot runs. Edge row: arithmetic mean, over deletion seeds, of each seed's mean cost across its 100 Pivot runs. |
-| `averagepivot_approximation` | Complete row: `pivot_average_cost / complete LP`. Edge row: arithmetic mean over deletion seeds of `(per-seed mean-of-100 Pivot cost) / (same-instance LP)`. It is not computed as a ratio of two aggregated means. |
-| `bestpivot_approximation` | Complete row: `pivot_best_cost / complete LP`. Edge row: arithmetic mean over deletion seeds of `(per-seed best-of-100 Pivot cost) / (same-instance LP)`. |
-| `pivot_runtime_seconds_average` | Runtime imported from `normal_cc_runtime_benchmarks.csv`. Pivot timing measures one Pivot call; graph construction and cost evaluation are outside the timer. The current Facebook edge benchmark uses deletion seed 1 for each `ego_id, p_delete` combination. |
-| `lp_runtime_seconds_average` | Runtime imported from `normal_cc_runtime_benchmarks.csv`. The benchmark summary uses Gurobi solver runtime when available. It is empty when no ordinary LP was benchmarked. |
+| `ego_id` | Facebook ego-network ID. |
+| `n` | Number of vertices after keeping only endpoints from the `.edges` file. |
+| `p_delete` | Edge-deletion probability. `0` means complete graph. |
+| `number_of_seeds` | Number of deletion seeds used in the row. |
+| `pivot_best_cost` | Complete graph: best cost from 100 Pivot runs. Edge-deleted graph: average over deletion seeds of each seed's best-of-100 Pivot cost. |
+| `pivot_average_cost` | Complete graph: average cost from 100 Pivot runs. Edge-deleted graph: average over deletion seeds of each seed's mean-of-100 Pivot cost. |
+| `averagepivot_approximation` | Complete graph: average Pivot cost divided by the complete LP. Edge-deleted graph: average of the per-seed mean-Pivot/LP ratios. |
+| `bestpivot_approximation` | Complete graph: best Pivot cost divided by the complete LP. Edge-deleted graph: average of the per-seed best-Pivot/LP ratios. |
+| `pivot_runtime_seconds_average` | Pivot runtime from `normal_cc_runtime_benchmarks.csv`. |
+| `lp_runtime_seconds_average` | Ordinary LP runtime from `normal_cc_runtime_benchmarks.csv`. Empty when no LP was benchmarked. |
 
----
+For edge-deleted rows, the ratio is always calculated using Pivot and LP values
+from the same deletion seed.
 
 ## `clique_correlation_clustering_table.csv`
 
-Ordinary correlation clustering results for the synthetic clique graphs.
+This table contains ordinary correlation-clustering results for the synthetic
+clique graphs.
 
-### Row definition
+Rows are grouped by `n` and `p_delete`.
 
-There is one row for each pair `(n, p_delete)`. Balanced and unbalanced clique
-instances, graph configurations, and available graph seeds in that group are
-merged.
-
-### Columns
-
-| Column | Definition |
+| Column | Meaning |
 |---|---|
-| `n` | Number of vertices in the clique graph. |
-| `p_delete` | Edge-deletion probability. Zero means the complete graph. |
-| `averagepivot_approximation` | Arithmetic mean across the grouped clique instances of `(instance mean Pivot cost) / (same-instance ordinary LP)`. |
-| `bestpivot_approximation` | Arithmetic mean across the grouped clique instances of `(instance best Pivot cost) / (same-instance ordinary LP)`. It is not the single most favorable ratio from the group. |
-| `pivot_runtime_seconds_average` | Average Pivot runtime for the corresponding `n, p_delete` benchmark group, imported from `normal_cc_runtime_benchmarks.csv`. |
-| `lp_runtime_seconds_average` | Average ordinary LP solver runtime for the corresponding `n, p_delete` benchmark group, imported from `normal_cc_runtime_benchmarks.csv`. |
-
----
+| `n` | Number of vertices. |
+| `p_delete` | Edge-deletion probability. `0` means complete graph. |
+| `averagepivot_approximation` | Average across the grouped clique instances of `(average Pivot cost) / LP`. |
+| `bestpivot_approximation` | Average across the grouped clique instances of `(best Pivot cost) / LP`. |
+| `pivot_runtime_seconds_average` | Average Pivot runtime for that `n, p_delete` group. |
+| `lp_runtime_seconds_average` | Average ordinary LP runtime for that `n, p_delete` group. |
 
 ## `facebook_minmax_table.csv`
 
-MinMaxCC results and MinMaxLP-reference comparisons for the Facebook ego
-graphs.
+This table contains the Facebook MinMaxCC and MinMaxLP results.
 
-### Row definition
+A complete row has `p_delete = 0`.
 
-- A row with `p_delete = 0` represents the complete ego graph.
-- A row with `p_delete > 0` aggregates the available deletion seeds, normally
-  30.
-- MinMaxCC costs, MinMaxLP-reference values, and approximation ratios are
-  summarized independently.
+An edge-deleted row combines the available deletion seeds, normally 30.
 
-### Columns
-
-| Column | Definition |
+| Column | Meaning |
 |---|---|
-| `ego_id` | Facebook ego-network identifier. |
-| `n` | Number of vertices after corrected `.edges`-endpoint preprocessing. |
-| `p_delete` | Edge-deletion probability. Zero means the complete graph. |
-| `d_hat` | `d_hat` parameter used by MinMaxCC. |
-| `lambda` | `lambda` parameter used by MinMaxCC. |
-| `number_of_seeds` | Number of deletion seeds represented by the row. This is `1` for complete graphs and normally `30` for edge-deleted rows. |
-| `minmaxcc_cost_best` | Minimum MinMaxCC objective value over the represented deletion seeds. |
-| `minmaxcc_cost_average` | Arithmetic mean MinMaxCC objective value over the represented deletion seeds. |
-| `minmaxcc_cost_worst` | Maximum MinMaxCC objective value over the represented deletion seeds. |
-| `min_max_lp_cost_minimum` | Minimum available MinMaxLP-reference value over the represented seeds. |
-| `min_max_lp_cost_average` | Arithmetic mean of the available MinMaxLP-reference values over the represented seeds. |
-| `min_max_lp_cost_maximum` | Maximum available MinMaxLP-reference value over the represented seeds. |
-| `minmaxcc_ratio_best` | Minimum of the per-seed ratios `MinMaxCC(seed) / MinMaxLP-reference(seed)`. |
-| `minmaxcc_ratio_average` | Arithmetic mean of the per-seed ratios `MinMaxCC(seed) / MinMaxLP-reference(seed)`. This is not `average cost / average LP`. |
-| `minmaxcc_ratio_worst` | Maximum of the per-seed ratios `MinMaxCC(seed) / MinMaxLP-reference(seed)`. |
-| `minmaxcc_runtime_seconds_average` | Complete row: runtime of the complete MinMaxCC run. Edge row: arithmetic mean of the MinMaxCC runtimes over deletion seeds. |
-| `min_max_lp_runtime_seconds_average` | For locally computed MinMaxLP results, the table uses total runtime when all required total-runtime values are present; otherwise it falls back to LP-solve runtime. The value is empty for external or unavailable LP references. Until the LP-plus-rounding rerun is complete, this column may therefore represent LP-only runtime. |
-| `lp_reference_source` | Origin and comparability of the LP reference. Values are described below. |
+| `ego_id` | Facebook ego-network ID. |
+| `n` | Number of vertices after the corrected preprocessing. |
+| `p_delete` | Edge-deletion probability. `0` means complete graph. |
+| `d_hat` | Final `d_hat` used by MinMaxCC. |
+| `lambda` | Final `lambda` used by MinMaxCC. |
+| `number_of_seeds` | Number of deletion seeds represented by the row. |
+| `minmaxcc_cost_best` | Minimum MinMaxCC cost over the represented seeds. |
+| `minmaxcc_cost_average` | Average MinMaxCC cost over the represented seeds. |
+| `minmaxcc_cost_worst` | Maximum MinMaxCC cost over the represented seeds. |
+| `min_max_lp_cost_minimum` | Minimum available MinMaxLP value over the represented seeds. |
+| `min_max_lp_cost_average` | Average available MinMaxLP value over the represented seeds. |
+| `min_max_lp_cost_maximum` | Maximum available MinMaxLP value over the represented seeds. |
+| `minmaxcc_ratio_best` | Minimum per-seed `MinMaxCC / MinMaxLP` ratio. |
+| `minmaxcc_ratio_average` | Average of the per-seed `MinMaxCC / MinMaxLP` ratios. |
+| `minmaxcc_ratio_worst` | Maximum per-seed `MinMaxCC / MinMaxLP` ratio. |
+| `minmaxcc_runtime_seconds_average` | Complete graph: runtime of that MinMaxCC run. Edge-deleted graph: average MinMaxCC runtime over deletion seeds. |
+| `min_max_lp_runtime_seconds_average` | Average total MinMaxLP runtime. Total runtime is LP runtime plus rounding runtime. Empty for external or unavailable LP values. |
+| `lp_reference_source` | Shows where the LP value came from. |
 
-### `lp_reference_source` values
+### `lp_reference_source`
 
 | Value | Meaning |
 |---|---|
-| `computed_complete_same_instance` | MinMaxLP was solved locally on the same complete graph instance. |
-| `computed_edge_same_instance` | MinMaxLP was solved locally on the same edge-deleted graph instance. |
-| `davies2023_complete_graph_lp` | The complete-graph LP objective reported by Davies et al. is used as an external reference. For edge-deleted rows this is not a same-instance LP. |
-| `unavailable` | No valid MinMaxLP objective was available; LP and ratio cells are empty. |
+| `computed_complete_same_instance` | LP was solved locally on the same complete graph. |
+| `computed_edge_same_instance` | LP was solved locally on the same edge-deleted graph. |
+| `davies2023_complete_graph_lp` | LP value came from Davies et al. |
+| `unavailable` | No valid LP value was available. |
 
-### Important interpretation rule
+Costs and ratios are independent. The seed with the lowest cost can be
+different from the seed with the lowest ratio.
 
-The cost and ratio columns are deliberately independent. For example, the seed
-with the smallest MinMaxCC cost can differ from the seed with the smallest
-MinMaxCC/MinMaxLP ratio because the LP denominator also varies by seed.
+## Figures
 
----
-
-## Facebook MinMax figures
-
-The current figure scripts are compatible with the current
-`facebook_minmax_table.csv`.
-
-### Detailed figures 1–6
+### Figures 1-6
 
 `make_facebook_minmax_figures.py` uses:
 
-- average figures: `minmaxcc_ratio_average`
-- worst figures: `minmaxcc_ratio_worst`
-- best figures: `minmaxcc_ratio_best`
+- average: `minmaxcc_ratio_average`
+- worst: `minmaxcc_ratio_worst`
+- best: `minmaxcc_ratio_best`
 
-### Range figures 7–8
+### Figures 7-8
 
 `make_facebook_approximation_range_figures.py` uses:
 
-- line: aggregated mean of `minmaxcc_ratio_average`
-- lower band: aggregated minimum of `minmaxcc_ratio_best`
-- upper band: aggregated maximum of `minmaxcc_ratio_worst`
+- line: average of `minmaxcc_ratio_average`
+- lower band: minimum of `minmaxcc_ratio_best`
+- upper band: maximum of `minmaxcc_ratio_worst`
 
-By default, both scripts include only rows whose `lp_reference_source` begins
-with `computed_`. Therefore, figures use locally solved, same-instance LP
-comparisons and exclude Davies external-reference and unavailable rows.
+The figure scripts only use rows where `lp_reference_source` starts with
+`computed_`. This means the final figures only use local LP values from the
+same graph instances.
 
-Do not pass `--include-external-reference-rows` for the final paper figures.
-
----
-
-## Generation commands
+## Commands
 
 ```bash
-python scripts/make_paper_tables.py \
-  --d-hat 8 \
-  --lambda-value 5
+python scripts/make_paper_tables.py   --d-hat 8   --lambda-value 5
 
 python scripts/make_facebook_minmax_figures.py
 python scripts/make_facebook_approximation_range_figures.py
 ```
 
+`make_paper_tables.py` already adds the ordinary runtimes. Do not run
+`apply_runtime_benchmarks.py` afterward.
