@@ -8,7 +8,7 @@ calculated.
 - `p_delete = 0` means the complete graph.
 - `p_delete > 0` means an edge-deleted graph.
 - An empty cell means that the value was not available or was not calculated.
-- Costs and ratios are summarized separately.
+- The final MinMax table reports ratios instead of repeating raw costs.
 - A deletion seed creates a different graph instance.
 - Pivot is run 100 times on every Facebook graph instance.
 
@@ -44,6 +44,15 @@ results/research_tables/minmax_facebook_grid_runs_flat.csv
 
 The final `make_paper_tables.py` reads both sources and writes the runtime
 columns into the three paper tables.
+
+A clearly interrupted MinMaxLP runtime can be excluded from only the runtime
+average with:
+
+```text
+--exclude-minmax-runtime-above 4000
+```
+
+This does not remove the run's objective, clustering, rounding result, or ratio.
 
 ### Why some runtime cells are empty
 
@@ -103,32 +112,53 @@ Rows are grouped by `n` and `p_delete`.
 
 ## `facebook_minmax_table.csv`
 
-This table contains the Facebook MinMaxCC and MinMaxLP results.
+This table contains the final Facebook MinMax comparisons.
 
-A complete row has `p_delete = 0`.
+A complete row has `p_delete = 0`. An edge-deleted row combines the available
+deletion seeds, normally 30. The fixed MinMaxCC setting is `d_hat = 8` and
+`lambda = 5`; these values are documented in the README instead of being
+repeated in every row.
 
-An edge-deleted row combines the available deletion seeds, normally 30.
+The table does not include raw MinMaxCC costs, raw LP objectives, raw rounding
+costs, or `number_of_seeds`. Those values remain available in
+`minmax_facebook_grid_runs_flat.csv`.
 
 | Column | Meaning |
 |---|---|
 | `ego_id` | Facebook ego-network ID. |
 | `n` | Number of vertices after the corrected preprocessing. |
 | `p_delete` | Edge-deletion probability. `0` means complete graph. |
-| `d_hat` | Final `d_hat` used by MinMaxCC. |
-| `lambda` | Final `lambda` used by MinMaxCC. |
-| `number_of_seeds` | Number of deletion seeds represented by the row. |
-| `minmaxcc_cost_best` | Minimum MinMaxCC cost over the represented seeds. |
-| `minmaxcc_cost_average` | Average MinMaxCC cost over the represented seeds. |
-| `minmaxcc_cost_worst` | Maximum MinMaxCC cost over the represented seeds. |
-| `min_max_lp_cost_minimum` | Minimum available MinMaxLP value over the represented seeds. |
-| `min_max_lp_cost_average` | Average available MinMaxLP value over the represented seeds. |
-| `min_max_lp_cost_maximum` | Maximum available MinMaxLP value over the represented seeds. |
-| `minmaxcc_ratio_best` | Minimum per-seed `MinMaxCC / MinMaxLP` ratio. |
-| `minmaxcc_ratio_average` | Average of the per-seed `MinMaxCC / MinMaxLP` ratios. |
-| `minmaxcc_ratio_worst` | Maximum per-seed `MinMaxCC / MinMaxLP` ratio. |
-| `minmaxcc_runtime_seconds_average` | Complete graph: runtime of that MinMaxCC run. Edge-deleted graph: average MinMaxCC runtime over deletion seeds. |
-| `min_max_lp_runtime_seconds_average` | Average total MinMaxLP runtime. Total runtime is LP runtime plus rounding runtime. Empty for external or unavailable LP values. |
-| `lp_reference_source` | Shows where the LP value came from. |
+| `minmaxcc_ratio_best` | Minimum per-seed ratio `MinMaxCC objective / MinMaxLP objective`. |
+| `minmaxcc_ratio_average` | Average of the per-seed ratios `MinMaxCC objective / MinMaxLP objective`. |
+| `minmaxcc_ratio_worst` | Maximum per-seed ratio `MinMaxCC objective / MinMaxLP objective`. |
+| `minmaxcc_to_lp_rounding_clustering_ratio_best` | Minimum per-seed ratio `MinMaxCC objective / LP-rounding clustering cost`. |
+| `minmaxcc_to_lp_rounding_clustering_ratio_average` | Average of the per-seed ratios `MinMaxCC objective / LP-rounding clustering cost`. |
+| `minmaxcc_to_lp_rounding_clustering_ratio_worst` | Maximum per-seed ratio `MinMaxCC objective / LP-rounding clustering cost`. |
+| `minmaxcc_runtime_seconds_average` | Complete graph: runtime of the MinMaxCC run. Edge-deleted graph: average MinMaxCC runtime over deletion seeds. |
+| `min_max_lp_runtime_seconds_average` | Complete graph: local LP-plus-rounding total runtime. Edge-deleted graph: average local total runtime over deletion seeds after any explicitly excluded interrupted runtime sample. |
+| `lp_reference_source` | Shows where the LP value used in the first ratio came from. |
+
+### How to read the two ratios
+
+The LP ratio uses the fractional MinMaxLP objective as a lower bound.
+
+The LP-rounding ratio compares two actual clusterings:
+
+```text
+MinMaxCC objective / LP-rounding clustering cost
+```
+
+For this ratio:
+
+- below `1`: MinMaxCC has the lower maximum-disagreement cost;
+- above `1`: the LP-rounding clustering has the lower cost;
+- equal to `1`: both clusterings have the same cost.
+
+For both ratio families, `best` is the minimum ratio, `average` is the
+arithmetic mean, and `worst` is the maximum ratio over deletion seeds.
+
+The LP-rounding ratio is only available where LP rounding was run locally. It
+is blank for external Davies-reference rows.
 
 ### `lp_reference_source`
 
@@ -136,11 +166,9 @@ An edge-deleted row combines the available deletion seeds, normally 30.
 |---|---|
 | `computed_complete_same_instance` | LP was solved locally on the same complete graph. |
 | `computed_edge_same_instance` | LP was solved locally on the same edge-deleted graph. |
-| `davies2023_complete_graph_lp` | LP value came from Davies et al. |
+| `davies2023_complete_graph_lp` | LP value came from Davies et al.; no local rounding comparison is available. |
 | `unavailable` | No valid LP value was available. |
 
-Costs and ratios are independent. The seed with the lowest cost can be
-different from the seed with the lowest ratio.
 
 ## Figures
 
@@ -164,10 +192,17 @@ The figure scripts only use rows where `lp_reference_source` starts with
 `computed_`. This means the final figures only use local LP values from the
 same graph instances.
 
+The current figures use `minmaxcc_ratio_best`, `minmaxcc_ratio_average`, and
+`minmaxcc_ratio_worst`. The LP-rounding comparison columns are added to the
+table but are not automatically plotted by the existing figure scripts.
+
 ## Commands
 
 ```bash
-python scripts/make_paper_tables.py   --d-hat 8   --lambda-value 5
+python scripts/make_paper_tables.py \
+  --d-hat 8 \
+  --lambda-value 5 \
+  --exclude-minmax-runtime-above 4000
 
 python scripts/make_facebook_minmax_figures.py
 python scripts/make_facebook_approximation_range_figures.py

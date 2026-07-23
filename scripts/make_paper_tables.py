@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """
-Generate the Facebook MinMax, Facebook ordinary correlation-clustering,
-and clique ordinary correlation-clustering paper tables.
+Generate only the Facebook MinMax paper table.
 
-This version keeps make_paper_tables_corrected.py as the baseline and changes
-only the requested aggregation/output rules:
-- no graph_variant or include_in_figures columns;
-- MinMaxCC costs and ratios are summarized independently;
-- ordinary Facebook Pivot edge rows aggregate the 30 deletion seeds using
-  per-seed best-of-100 and mean-of-100 Pivot summaries;
-- clique approximation logic remains unchanged;
-- ordinary Facebook/clique runtimes are merged directly from the separate
-  runtime benchmark, so the generated tables are never silently blank.
+This script reads:
+    results/research_tables/minmax_facebook_grid_runs_flat.csv
+
+and writes only:
+    results/research_tables/facebook_minmax_table.csv
+
+It does not read or modify:
+- facebook_correlation_clustering_table.csv
+- clique_correlation_clustering_table.csv
+- archive/all_runs_flat.csv
+- normal_cc_runtime_benchmarks.csv
 """
 from __future__ import annotations
 
@@ -359,18 +360,16 @@ def make_minmax_table(
 
     Aggregation over deletion seeds
     --------------------------------
-    Costs and approximation ratios are summarized independently:
+    The paper table reports ratios rather than raw costs:
 
-    * minmaxcc_cost_best/average/worst are the minimum, arithmetic mean,
-      and maximum MinMaxCC objective values over the deletion seeds.
-    * minmaxcc_ratio_best/average/worst are the minimum, arithmetic mean,
-      and maximum of the per-seed ratios
-      MinMaxCC(seed) / MinMaxLP-reference(seed).
-    * MinMaxLP cost columns independently report the minimum, arithmetic
-      mean, and maximum LP-reference values.
+    * minmaxcc_ratio_best/average/worst summarize the per-seed ratios
+      MinMaxCC(seed) / MinMaxLP(seed).
+    * minmaxcc_to_lp_rounding_clustering_ratio_best/average/worst summarize
+      the per-seed ratios
+      MinMaxCC(seed) / LP-rounding-clustering-cost(seed).
 
-    Consequently, the seed attaining the best cost does not need to be the
-    seed attaining the best ratio.
+    For both ratio families, best is the minimum ratio, average is the
+    arithmetic mean, and worst is the maximum ratio over deletion seeds.
 
     LP-reference policy
     -------------------
@@ -420,7 +419,13 @@ def make_minmax_table(
         new: dict[str, Any],
         context: str,
     ) -> None:
-        for field in ("cc", "lp", "rounding_cost", "ratio"):
+        for field in (
+            "cc",
+            "lp",
+            "rounding_cost",
+            "ratio",
+            "rounding_ratio",
+        ):
             old_value = to_float(old.get(field))
             new_value = to_float(new.get(field))
             if old_value is None and new_value is None:
@@ -476,6 +481,7 @@ def make_minmax_table(
             "lp": lp,
             "rounding_cost": rounding_cost,
             "ratio": ratio(cc, lp),
+            "rounding_ratio": ratio(cc, rounding_cost),
             "lp_reference_source": lp_source,
             "minmaxcc_runtime": row.get(
                 "edge_min_max_cc_runtime_seconds",
@@ -532,6 +538,7 @@ def make_minmax_table(
             if lp_source == "computed_complete_same_instance"
             else None
         )
+        rounding_ratio = ratio(cc, rounding_cost)
         complete_runtime = (
             accepted_runtime(
                 first_numeric(
@@ -550,27 +557,18 @@ def make_minmax_table(
             "ego_id": ego,
             "n": str(row.get("n", "")).strip(),
             "p_delete": 0,
-            "d_hat": d_hat,
-            "lambda": lam,
-            "number_of_seeds": 1,
-            "minmaxcc_cost_best": rounded(cc),
-            "minmaxcc_cost_average": rounded(cc),
-            "minmaxcc_cost_worst": rounded(cc),
-            "min_max_lp_cost_minimum": rounded(lp),
-            "min_max_lp_cost_average": rounded(lp),
-            "min_max_lp_cost_maximum": rounded(lp),
-            "min_max_lp_rounding_clustering_cost_best": rounded(
-                rounding_cost
-            ),
-            "min_max_lp_rounding_clustering_cost_average": rounded(
-                rounding_cost
-            ),
-            "min_max_lp_rounding_clustering_cost_worst": rounded(
-                rounding_cost
-            ),
             "minmaxcc_ratio_best": rounded(approximation),
             "minmaxcc_ratio_average": rounded(approximation),
             "minmaxcc_ratio_worst": rounded(approximation),
+            "minmaxcc_to_lp_rounding_clustering_ratio_best": rounded(
+                rounding_ratio
+            ),
+            "minmaxcc_to_lp_rounding_clustering_ratio_average": rounded(
+                rounding_ratio
+            ),
+            "minmaxcc_to_lp_rounding_clustering_ratio_worst": rounded(
+                rounding_ratio
+            ),
             "minmaxcc_runtime_seconds_average": rounded(
                 to_float(
                     row.get(
@@ -606,6 +604,11 @@ def make_minmax_table(
             float(observation["ratio"])
             for observation in observations
             if observation["ratio"] is not None
+        ]
+        rounding_ratio_values = [
+            float(observation["rounding_ratio"])
+            for observation in observations
+            if observation["rounding_ratio"] is not None
         ]
 
         sources = {
@@ -656,44 +659,6 @@ def make_minmax_table(
             "ego_id": ego,
             "n": metadata[key]["n"],
             "p_delete": p_delete,
-            "d_hat": d_hat,
-            "lambda": lam,
-            "number_of_seeds": len(observations),
-            "minmaxcc_cost_best": rounded(min(cc_values)),
-            "minmaxcc_cost_average": rounded(
-                average(cc_values)
-            ),
-            "minmaxcc_cost_worst": rounded(max(cc_values)),
-            "min_max_lp_cost_minimum": (
-                rounded(min(lp_values))
-                if lp_values
-                else ""
-            ),
-            "min_max_lp_cost_average": (
-                rounded(average(lp_values))
-                if lp_values
-                else ""
-            ),
-            "min_max_lp_cost_maximum": (
-                rounded(max(lp_values))
-                if lp_values
-                else ""
-            ),
-            "min_max_lp_rounding_clustering_cost_best": (
-                rounded(min(rounding_cost_values))
-                if rounding_cost_values
-                else ""
-            ),
-            "min_max_lp_rounding_clustering_cost_average": (
-                rounded(average(rounding_cost_values))
-                if rounding_cost_values
-                else ""
-            ),
-            "min_max_lp_rounding_clustering_cost_worst": (
-                rounded(max(rounding_cost_values))
-                if rounding_cost_values
-                else ""
-            ),
             "minmaxcc_ratio_best": (
                 rounded(min(ratio_values))
                 if ratio_values
@@ -707,6 +672,21 @@ def make_minmax_table(
             "minmaxcc_ratio_worst": (
                 rounded(max(ratio_values))
                 if ratio_values
+                else ""
+            ),
+            "minmaxcc_to_lp_rounding_clustering_ratio_best": (
+                rounded(min(rounding_ratio_values))
+                if rounding_ratio_values
+                else ""
+            ),
+            "minmaxcc_to_lp_rounding_clustering_ratio_average": (
+                rounded(average(rounding_ratio_values))
+                if rounding_ratio_values
+                else ""
+            ),
+            "minmaxcc_to_lp_rounding_clustering_ratio_worst": (
+                rounded(max(rounding_ratio_values))
+                if rounding_ratio_values
                 else ""
             ),
             "minmaxcc_runtime_seconds_average": rounded(
@@ -1344,92 +1324,53 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
 
 def main() -> None:
     args = parse_args()
+
     input_path = resolve(args.input)
     minmax_output = resolve(args.minmax_output)
-    cc_output = resolve(args.cc_output)
-    clique_input = resolve(args.clique_input)
-    clique_cc_output = resolve(args.clique_cc_output)
-    runtime_benchmark = resolve(args.runtime_benchmark)
 
     if not input_path.exists():
         raise FileNotFoundError(f"Input not found: {input_path}")
-    if not clique_input.exists():
-        raise FileNotFoundError(f"Clique input not found: {clique_input}")
-    if not runtime_benchmark.exists():
-        raise FileNotFoundError(
-            f"Runtime benchmark not found: {runtime_benchmark}"
-        )
 
     all_rows = read_rows(input_path)
-    selected_rows = fixed_rows(all_rows, args.d_hat, args.lambda_value)
+    selected_rows = fixed_rows(
+        all_rows,
+        args.d_hat,
+        args.lambda_value,
+    )
     minmax_rows = make_minmax_table(
         selected_rows,
         args.d_hat,
         args.lambda_value,
         args.exclude_minmax_runtime_above,
     )
-    cc_rows = make_cc_table(all_rows)
-    clique_rows = read_rows(clique_input)
-    clique_cc_rows = make_clique_cc_table(clique_rows)
-    runtime_rows = read_rows(runtime_benchmark)
-    merge_runtime_benchmarks(
-        cc_rows,
-        clique_cc_rows,
-        runtime_rows,
-        allow_missing=args.allow_missing_runtimes,
-    )
 
     minmax_fields = [
         "ego_id",
         "n",
         "p_delete",
-        "d_hat",
-        "lambda",
-        "number_of_seeds",
-        "minmaxcc_cost_best",
-        "minmaxcc_cost_average",
-        "minmaxcc_cost_worst",
-        "min_max_lp_cost_minimum",
-        "min_max_lp_cost_average",
-        "min_max_lp_cost_maximum",
-        "min_max_lp_rounding_clustering_cost_best",
-        "min_max_lp_rounding_clustering_cost_average",
-        "min_max_lp_rounding_clustering_cost_worst",
         "minmaxcc_ratio_best",
         "minmaxcc_ratio_average",
         "minmaxcc_ratio_worst",
+        "minmaxcc_to_lp_rounding_clustering_ratio_best",
+        "minmaxcc_to_lp_rounding_clustering_ratio_average",
+        "minmaxcc_to_lp_rounding_clustering_ratio_worst",
         "minmaxcc_runtime_seconds_average",
         "min_max_lp_runtime_seconds_average",
         "lp_reference_source",
     ]
-    cc_fields = [
-        "ego_id",
-        "n",
-        "p_delete",
-        "number_of_seeds",
-        "pivot_best_cost",
-        "pivot_average_cost",
-        "averagepivot_approximation",
-        "bestpivot_approximation",
-        "pivot_runtime_seconds_average",
-        "lp_runtime_seconds_average",
-    ]
-    clique_cc_fields = [
-        "n",
-        "p_delete",
-        "averagepivot_approximation",
-        "bestpivot_approximation",
-        "pivot_runtime_seconds_average",
-        "lp_runtime_seconds_average",
-    ]
 
-    write_rows(minmax_output, minmax_rows, minmax_fields)
-    write_rows(cc_output, cc_rows, cc_fields)
-    write_rows(clique_cc_output, clique_cc_rows, clique_cc_fields)
+    write_rows(
+        minmax_output,
+        minmax_rows,
+        minmax_fields,
+    )
 
     print("Input:", input_path)
     print("Input rows:", len(all_rows))
-    print(f"Fixed parameters: d_hat={args.d_hat}, lambda={args.lambda_value}")
+    print(
+        f"Fixed parameters: d_hat={args.d_hat}, "
+        f"lambda={args.lambda_value}"
+    )
     print(
         "MinMaxLP runtime exclusion threshold:",
         (
@@ -1440,12 +1381,9 @@ def main() -> None:
     )
     print("MinMax table:", minmax_output)
     print("MinMax rows:", len(minmax_rows))
-    print("Correlation table:", cc_output)
-    print("Correlation rows:", len(cc_rows))
-    print("Clique input:", clique_input)
-    print("Runtime benchmark:", runtime_benchmark)
-    print("Clique correlation table:", clique_cc_output)
-    print("Clique correlation rows:", len(clique_cc_rows))
+    print(
+        "Facebook ordinary CC and clique tables were not read or changed."
+    )
 
 
 if __name__ == "__main__":
