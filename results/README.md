@@ -257,8 +257,6 @@ python scripts/make_facebook_approximation_range_figures.py
 `make_paper_tables.py` already adds the ordinary Pivot and LP runtimes from
 `normal_cc_runtime_benchmarks.csv`.
 
-Do not run `apply_runtime_benchmarks.py` afterward.
-
 The final tables are:
 
 ```text
