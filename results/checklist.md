@@ -17,12 +17,12 @@ yes
 ### 4.5. All source code required for conducting and analyzing the experiments will be made publicly available upon publication of the paper with a license that allows free usage for research purposes.  
 partial
 
-**Explanation:** The code is in the GitHub repository, but there is no license file yet. SHOULD add a license before changing this answer to `yes`.
+**Explanation:** The code is in the GitHub repository, but there is no license file yet. SHOULD ADD A LICENSE FILE BEFORE CHANGING THE ANSWER TO `yes`
 
 ### 4.6. All source code implementing new methods has comments detailing the implementation, with references to the paper where each step comes from.  
-partial
+no
 
-**Explanation:** The code has comments, but not every step has a direct reference to the matching section or algorithm in the paper.
+**Explanation:** The code has comments, but not every step has a direct reference to the matching section or algorithm in the paper. ALSO SHOULD ADD COMMENTS
 
 ### 4.7. If an algorithm depends on randomness, the method used for setting seeds is described in a way sufficient to allow replication of results.  
 yes

@@ -62,6 +62,17 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Write tables even if an expected ordinary CC runtime is missing.",
     )
+    p.add_argument(
+        "--exclude-minmax-runtime-above",
+        type=float,
+        default=None,
+        help=(
+            "Exclude local MinMaxLP runtime samples strictly above this "
+            "number of seconds. This only affects the reported runtime "
+            "average; objectives, rounding costs, clusters, and ratios are "
+            "not changed."
+        ),
+    )
     p.add_argument("--d-hat", type=int, default=8)
     p.add_argument("--lambda-value", type=int, default=5)
     return p.parse_args()
@@ -109,6 +120,25 @@ def first_numeric(
         if value is not None:
             return value
     return None
+
+
+def accepted_runtime(
+    value: Any,
+    maximum_seconds: float | None,
+    *,
+    context: str,
+) -> float | None:
+    """Return a valid runtime or exclude an explicitly marked bad sample."""
+    runtime = to_float(value)
+    if runtime is None:
+        return None
+    if maximum_seconds is not None and runtime > maximum_seconds:
+        print(
+            "Excluded MinMaxLP runtime sample:",
+            f"{runtime:.6f}s ({context})",
+        )
+        return None
+    return runtime
 
 
 def get_seed(row: dict[str, str]) -> str:
@@ -322,6 +352,7 @@ def make_minmax_table(
     rows: list[dict[str, str]],
     d_hat: int,
     lam: int,
+    max_minmax_runtime_seconds: float | None = None,
 ) -> list[dict[str, Any]]:
     """
     Build the Facebook MinMaxCC table.
@@ -389,7 +420,7 @@ def make_minmax_table(
         new: dict[str, Any],
         context: str,
     ) -> None:
-        for field in ("cc", "lp", "ratio"):
+        for field in ("cc", "lp", "rounding_cost", "ratio"):
             old_value = to_float(old.get(field))
             new_value = to_float(new.get(field))
             if old_value is None and new_value is None:
@@ -434,10 +465,16 @@ def make_minmax_table(
             continue
 
         lp, lp_source = edge_reference(ego, row)
+        rounding_cost = (
+            to_float(row.get("edge_min_max_lp_rounding_cost"))
+            if lp_source == "computed_edge_same_instance"
+            else None
+        )
         observation = {
             "seed": seed,
             "cc": cc,
             "lp": lp,
+            "rounding_cost": rounding_cost,
             "ratio": ratio(cc, lp),
             "lp_reference_source": lp_source,
             "minmaxcc_runtime": row.get(
@@ -488,6 +525,26 @@ def make_minmax_table(
 
         lp, lp_source = complete_reference(ego, row)
         approximation = ratio(cc, lp)
+        rounding_cost = (
+            to_float(
+                row.get("complete_min_max_lp_rounding_cost")
+            )
+            if lp_source == "computed_complete_same_instance"
+            else None
+        )
+        complete_runtime = (
+            accepted_runtime(
+                first_numeric(
+                    row,
+                    "complete_min_max_lp_total_runtime_seconds",
+                    "complete_min_max_lp_runtime_seconds",
+                ),
+                max_minmax_runtime_seconds,
+                context=f"complete ego={ego}",
+            )
+            if lp_source == "computed_complete_same_instance"
+            else None
+        )
 
         output.append({
             "ego_id": ego,
@@ -502,6 +559,15 @@ def make_minmax_table(
             "min_max_lp_cost_minimum": rounded(lp),
             "min_max_lp_cost_average": rounded(lp),
             "min_max_lp_cost_maximum": rounded(lp),
+            "min_max_lp_rounding_clustering_cost_best": rounded(
+                rounding_cost
+            ),
+            "min_max_lp_rounding_clustering_cost_average": rounded(
+                rounding_cost
+            ),
+            "min_max_lp_rounding_clustering_cost_worst": rounded(
+                rounding_cost
+            ),
             "minmaxcc_ratio_best": rounded(approximation),
             "minmaxcc_ratio_average": rounded(approximation),
             "minmaxcc_ratio_worst": rounded(approximation),
@@ -513,14 +579,7 @@ def make_minmax_table(
                 )
             ),
             "min_max_lp_runtime_seconds_average": rounded(
-                first_numeric(
-                    row,
-                    "complete_min_max_lp_total_runtime_seconds",
-                    "complete_min_max_lp_runtime_seconds",
-                )
-                if lp_source
-                == "computed_complete_same_instance"
-                else None
+                complete_runtime
             ),
             "lp_reference_source": lp_source,
         })
@@ -537,6 +596,11 @@ def make_minmax_table(
             float(observation["lp"])
             for observation in observations
             if observation["lp"] is not None
+        ]
+        rounding_cost_values = [
+            float(observation["rounding_cost"])
+            for observation in observations
+            if observation["rounding_cost"] is not None
         ]
         ratio_values = [
             float(observation["ratio"])
@@ -556,22 +620,37 @@ def make_minmax_table(
             )
 
         total_runtime_values = [
-            to_float(observation["lp_total_runtime"])
+            accepted_runtime(
+                observation["lp_total_runtime"],
+                max_minmax_runtime_seconds,
+                context=(
+                    f"edge ego={ego}, p_delete={p_delete}, "
+                    f"seed={observation['seed']}, total"
+                ),
+            )
             for observation in observations
         ]
-        if (
-            total_runtime_values
-            and all(
-                value is not None
-                for value in total_runtime_values
-            )
-        ):
-            minmax_lp_runtime = average(total_runtime_values)
+        valid_total_runtimes = [
+            value
+            for value in total_runtime_values
+            if value is not None
+        ]
+
+        if valid_total_runtimes:
+            minmax_lp_runtime = average(valid_total_runtimes)
         else:
-            minmax_lp_runtime = average(
-                observation["lp_runtime"]
+            lp_runtime_values = [
+                accepted_runtime(
+                    observation["lp_runtime"],
+                    max_minmax_runtime_seconds,
+                    context=(
+                        f"edge ego={ego}, p_delete={p_delete}, "
+                        f"seed={observation['seed']}, LP"
+                    ),
+                )
                 for observation in observations
-            )
+            ]
+            minmax_lp_runtime = average(lp_runtime_values)
 
         output.append({
             "ego_id": ego,
@@ -598,6 +677,21 @@ def make_minmax_table(
             "min_max_lp_cost_maximum": (
                 rounded(max(lp_values))
                 if lp_values
+                else ""
+            ),
+            "min_max_lp_rounding_clustering_cost_best": (
+                rounded(min(rounding_cost_values))
+                if rounding_cost_values
+                else ""
+            ),
+            "min_max_lp_rounding_clustering_cost_average": (
+                rounded(average(rounding_cost_values))
+                if rounding_cost_values
+                else ""
+            ),
+            "min_max_lp_rounding_clustering_cost_worst": (
+                rounded(max(rounding_cost_values))
+                if rounding_cost_values
                 else ""
             ),
             "minmaxcc_ratio_best": (
@@ -1268,7 +1362,12 @@ def main() -> None:
 
     all_rows = read_rows(input_path)
     selected_rows = fixed_rows(all_rows, args.d_hat, args.lambda_value)
-    minmax_rows = make_minmax_table(selected_rows, args.d_hat, args.lambda_value)
+    minmax_rows = make_minmax_table(
+        selected_rows,
+        args.d_hat,
+        args.lambda_value,
+        args.exclude_minmax_runtime_above,
+    )
     cc_rows = make_cc_table(all_rows)
     clique_rows = read_rows(clique_input)
     clique_cc_rows = make_clique_cc_table(clique_rows)
@@ -1293,6 +1392,9 @@ def main() -> None:
         "min_max_lp_cost_minimum",
         "min_max_lp_cost_average",
         "min_max_lp_cost_maximum",
+        "min_max_lp_rounding_clustering_cost_best",
+        "min_max_lp_rounding_clustering_cost_average",
+        "min_max_lp_rounding_clustering_cost_worst",
         "minmaxcc_ratio_best",
         "minmaxcc_ratio_average",
         "minmaxcc_ratio_worst",
@@ -1328,6 +1430,14 @@ def main() -> None:
     print("Input:", input_path)
     print("Input rows:", len(all_rows))
     print(f"Fixed parameters: d_hat={args.d_hat}, lambda={args.lambda_value}")
+    print(
+        "MinMaxLP runtime exclusion threshold:",
+        (
+            "none"
+            if args.exclude_minmax_runtime_above is None
+            else f">{args.exclude_minmax_runtime_above:g} seconds"
+        ),
+    )
     print("MinMax table:", minmax_output)
     print("MinMax rows:", len(minmax_rows))
     print("Correlation table:", cc_output)
