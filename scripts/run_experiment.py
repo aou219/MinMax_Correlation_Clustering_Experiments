@@ -91,7 +91,7 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
 
-SCRIPT_VERSION = "2026-07-21-corrected-facebook-lp-minmax-v1"
+SCRIPT_VERSION = "2026-07-23-minmax-lp-rounding-clustering-v3"
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TABLE = (
@@ -105,9 +105,9 @@ DEFAULT_MINMAX_CC_EGOS = "all"
 
 DEFAULT_D_HAT = 8
 DEFAULT_LAMBDA = 5
-DEFAULT_MINMAX_LP_R = 0.7
-DEFAULT_MINMAX_LP_R2 = 0.7
-DEFAULT_MINMAX_LP_METHOD = 3
+DEFAULT_MINMAX_LP_R = 0.4
+DEFAULT_MINMAX_LP_R2 = 0.4
+DEFAULT_MINMAX_LP_METHOD = 2
 
 KEY_COLUMNS = ["ego_id", "p_delete", "seed"]
 
@@ -150,6 +150,7 @@ MINMAX_LP_COMPLETE_COLUMNS = [
     "complete_min_max_lp_rounding_cost",
     "complete_min_max_lp_max_disagreement_vertex",
     "complete_min_max_lp_cluster_count",
+    "complete_min_max_lp_clustering_json",
     "complete_min_max_lp_r",
     "complete_min_max_lp_r2",
     "complete_min_max_lp_method",
@@ -165,6 +166,7 @@ MINMAX_LP_EDGE_COLUMNS = [
     "edge_min_max_lp_rounding_cost",
     "edge_min_max_lp_max_disagreement_vertex",
     "edge_min_max_lp_cluster_count",
+    "edge_min_max_lp_clustering_json",
     "edge_min_max_lp_r",
     "edge_min_max_lp_r2",
     "edge_min_max_lp_method",
@@ -173,6 +175,11 @@ MINMAX_LP_EDGE_COLUMNS = [
     "edge_min_max_lp_rounding_runtime_seconds",
     "edge_min_max_lp_total_runtime_seconds",
 ]
+
+OPTIONAL_OUTPUT_COLUMNS = {
+    "complete_min_max_lp_clustering_json",
+    "edge_min_max_lp_clustering_json",
+}
 
 REQUIRED_COLUMNS = set(
     KEY_COLUMNS
@@ -183,8 +190,16 @@ REQUIRED_COLUMNS = set(
     + NORMAL_EDGE_COLUMNS
     + MINMAX_CC_COMPLETE_COLUMNS
     + MINMAX_CC_EDGE_COLUMNS
-    + MINMAX_LP_COMPLETE_COLUMNS
-    + MINMAX_LP_EDGE_COLUMNS
+    + [
+        column
+        for column in MINMAX_LP_COMPLETE_COLUMNS
+        if column not in OPTIONAL_OUTPUT_COLUMNS
+    ]
+    + [
+        column
+        for column in MINMAX_LP_EDGE_COLUMNS
+        if column not in OPTIONAL_OUTPUT_COLUMNS
+    ]
 )
 
 
@@ -427,7 +442,8 @@ def parse_ego_spec(
     if text == "all":
         return sorted(available_set, key=int)
 
-    values: set[str] = set()
+    values: list[str] = []
+    seen: set[str] = set()
 
     for part in split_csv(text):
         if "-" in part:
@@ -438,18 +454,23 @@ def parse_ego_spec(
             if stop < start:
                 raise ValueError(f"Invalid descending range: {part}")
 
-            values.update(str(value) for value in range(start, stop + 1))
+            expanded = [str(value) for value in range(start, stop + 1)]
         else:
-            values.add(str(int(part)))
+            expanded = [str(int(part))]
 
-    missing = sorted(values.difference(available_set), key=int)
+        for value in expanded:
+            if value not in seen:
+                values.append(value)
+                seen.add(value)
+
+    missing = sorted(set(values).difference(available_set), key=int)
     if missing:
         raise ValueError(
             "Requested ego IDs not present in the table: "
             + ", ".join(missing)
         )
 
-    return sorted(values, key=int)
+    return values
 
 
 def parse_minmax_components(raw: str) -> set[str]:
@@ -581,6 +602,10 @@ def read_table(
                 "The table is missing required columns: "
                 + ", ".join(missing)
             )
+
+        for column in sorted(OPTIONAL_OUTPUT_COLUMNS):
+            if column not in fieldnames:
+                fieldnames.append(column)
 
         rows = [
             {
@@ -774,7 +799,7 @@ def algorithm_signature(
             "r2": args.min_max_lp_r2,
             "method": args.min_max_lp_method,
             "norm": "inf",
-            "rounding_required": False,
+            "rounding_required": True,
         },
     }
 
@@ -1002,7 +1027,7 @@ def locate_edges_file(ego_id: str) -> Path:
 def construct_complete_matrix(
     ego_id: str,
     facebook_modules: tuple[Any, Any],
-) -> tuple[Any, Path]:
+) -> tuple[Any, Path, dict[int, Any]]:
     (
         load_facebook_ego_edges,
         build_complete_signed_matrix_from_facebook_sample,
@@ -1016,14 +1041,18 @@ def construct_complete_matrix(
     # Corrected preprocessing: do not union with circle-only nodes.
     ordered_nodes = sorted(edge_nodes)
 
-    matrix, _, _, _ = (
+    matrix, node_to_index, _, _ = (
         build_complete_signed_matrix_from_facebook_sample(
             ordered_nodes,
             facebook_edges,
         )
     )
+    index_to_node = {
+        int(index): node
+        for node, index in node_to_index.items()
+    }
 
-    return matrix, edge_file
+    return matrix, edge_file, index_to_node
 
 
 # =============================================================================
@@ -1086,8 +1115,34 @@ def run_minmax_lp(
     if not result.get("computed", False):
         raise RuntimeError("MinMaxLP was not computed.")
 
-    if result.get("lp_cost") is None:
-        raise RuntimeError("MinMaxLP returned no LP cost.")
+    required_values = {
+        "lp_cost": result.get("lp_cost"),
+        "rounding_cost": result.get("rounding_cost"),
+        "max_disagreement_vertex": result.get(
+            "max_disagreement_vertex"
+        ),
+        "cluster_count": result.get("cluster_count"),
+        "clustering": result.get("clustering"),
+        "lp_runtime_seconds": result.get(
+            "lp_runtime_seconds"
+        ),
+        "rounding_runtime_seconds": result.get(
+            "rounding_runtime_seconds"
+        ),
+        "total_runtime_seconds": result.get(
+            "total_runtime_seconds"
+        ),
+    }
+    missing = [
+        key
+        for key, value in required_values.items()
+        if value is None
+    ]
+    if missing:
+        raise RuntimeError(
+            "MinMaxLP/rounding returned missing values: "
+            + ", ".join(missing)
+        )
 
     return result
 
@@ -1140,6 +1195,33 @@ def update_minmax_cc_result(
             row[field] = csv_value(value)
 
 
+def clustering_as_node_ids_json(
+    clustering: Any,
+    index_to_node: Mapping[int, Any],
+) -> str:
+    """Serialize clusters using original Facebook node IDs."""
+    if clustering is None:
+        return ""
+
+    converted: list[list[Any]] = []
+    for cluster_values in clustering:
+        converted_cluster: list[Any] = []
+        for raw_index in cluster_values:
+            index = int(raw_index)
+            if index not in index_to_node:
+                raise ValueError(
+                    f"Clustering contains unknown matrix index {index}."
+                )
+            converted_cluster.append(index_to_node[index])
+        converted.append(converted_cluster)
+
+    return json.dumps(
+        converted,
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+
+
 def first_present(
     result: Mapping[str, Any],
     *keys: str,
@@ -1155,6 +1237,7 @@ def update_minmax_lp_result(
     scope: str,
     result: Mapping[str, Any],
     args: argparse.Namespace,
+    index_to_node: Mapping[int, Any],
 ) -> None:
     prefix = f"{scope}_min_max_lp"
 
@@ -1198,6 +1281,10 @@ def update_minmax_lp_result(
         f"{prefix}_cluster_count": first_present(
             result,
             "cluster_count",
+        ),
+        f"{prefix}_clustering_json": clustering_as_node_ids_json(
+            first_present(result, "clustering"),
+            index_to_node,
         ),
         f"{prefix}_r": result.get("r", args.min_max_lp_r),
         f"{prefix}_r2": result.get("r2", args.min_max_lp_r2),
@@ -1253,6 +1340,7 @@ def apply_component_result(
     target_rows: Sequence[dict[str, str]],
     result: Mapping[str, Any],
     args: argparse.Namespace,
+    index_to_node: Mapping[int, Any],
 ) -> None:
     if component == "normal_lp":
         update_normal_result(target_rows, scope, result)
@@ -1264,6 +1352,7 @@ def apply_component_result(
             scope,
             result,
             args,
+            index_to_node,
         )
     else:
         raise ValueError(f"Unknown component: {component}")
@@ -1498,7 +1587,11 @@ def main() -> None:
             )
             print("=" * 78)
 
-            complete_matrix, edge_file = construct_complete_matrix(
+            (
+                complete_matrix,
+                edge_file,
+                index_to_node,
+            ) = construct_complete_matrix(
                 ego_id,
                 facebook_modules,
             )
@@ -1568,6 +1661,7 @@ def main() -> None:
                         ego_rows,
                         result,
                         args,
+                        index_to_node,
                     )
 
                     ensure_backup()
@@ -1689,6 +1783,7 @@ def main() -> None:
                             [row],
                             result,
                             args,
+                            index_to_node,
                         )
 
                         ensure_backup()

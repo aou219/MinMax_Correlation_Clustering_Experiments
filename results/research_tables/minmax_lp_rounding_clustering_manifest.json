@@ -1,0 +1,103 @@
+{
+  "backup": "/Users/amiraouchene/Desktop/cs/cs_programming/GitHub/MinMax_Correlation_Clustering_Experiments/results/research_tables/minmax_facebook_grid_runs_flat_before_corrected_lp_minmax_20260723_054221.csv",
+  "completed_tasks": 484,
+  "component_egos": {
+    "minmax_lp": [
+      "414",
+      "686",
+      "698",
+      "3980"
+    ]
+  },
+  "components": [
+    "minmax_lp"
+  ],
+  "failures": 0,
+  "finished_utc": "2026-07-23T14:50:03.249402+00:00",
+  "mode": "minmax",
+  "preserved_columns": [
+    "complete_ilp_cost",
+    "complete_pivot_average_cost",
+    "complete_pivot_best_cost",
+    "edge_all_pairs_ilp_cost",
+    "edge_pivot_average_cost",
+    "edge_pivot_best_cost"
+  ],
+  "progress": "/Users/amiraouchene/Desktop/cs/cs_programming/GitHub/MinMax_Correlation_Clustering_Experiments/results/research_tables/minmax_lp_rounding_clustering_progress.json",
+  "remaining_requested_tasks": 0,
+  "script_version": "2026-07-23-minmax-lp-rounding-clustering-v3",
+  "selected_egos": [
+    "3980",
+    "698",
+    "414",
+    "686"
+  ],
+  "selected_p_delete_values": [
+    0.05,
+    0.15,
+    0.25,
+    0.4
+  ],
+  "selected_seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "signature": {
+    "components": [
+      "minmax_lp"
+    ],
+    "edge_deletion": "src.edge_deletion.delete_edges(matrix, p_delete, seed)",
+    "graph_preprocessing": "Only endpoints occurring in each Facebook .edges file; circle-only nodes excluded.",
+    "minmax_cc": {
+      "d_hat": 8,
+      "enabled": false,
+      "lambda": 5
+    },
+    "minmax_lp": {
+      "enabled": true,
+      "method": 2,
+      "norm": "inf",
+      "r": 0.4,
+      "r2": 0.4,
+      "rounding_required": true
+    },
+    "normal_lp": {
+      "compute_ilp": false,
+      "compute_lp": true,
+      "enabled": false,
+      "time_limit": null
+    },
+    "script_version": "2026-07-23-minmax-lp-rounding-clustering-v3"
+  },
+  "started_utc": "2026-07-23T04:42:20.409829+00:00",
+  "status": "complete",
+  "table": "/Users/amiraouchene/Desktop/cs/cs_programming/GitHub/MinMax_Correlation_Clustering_Experiments/results/research_tables/minmax_facebook_grid_runs_flat.csv"
+}

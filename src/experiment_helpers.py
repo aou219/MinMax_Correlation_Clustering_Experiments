@@ -25,7 +25,7 @@ try:
     from .cost import calculate_clustering_cost
     from .edge_deletion import delete_edges
     from .min_max import max_disagreement, min_max_cc
-    from .min_max_lp import MinMaxLP
+    from .min_max_lp import DegreeDist, LocalObj, MinMaxLP, cluster
     from .pivot import run_pivot
 except ImportError:
     # Works when running directly with: python src/experiment_facebook.py
@@ -33,7 +33,7 @@ except ImportError:
     from cost import calculate_clustering_cost
     from edge_deletion import delete_edges
     from min_max import max_disagreement, min_max_cc
-    from min_max_lp import MinMaxLP
+    from min_max_lp import DegreeDist, LocalObj, MinMaxLP, cluster
     from pivot import run_pivot
 
 
@@ -41,7 +41,7 @@ DEFAULT_D_HAT = 8
 DEFAULT_LAMBDA = 5
 DEFAULT_MIN_MAX_LP_R = 0.4
 DEFAULT_MIN_MAX_LP_R2 = 0.4
-DEFAULT_MIN_MAX_LP_METHOD = 0
+DEFAULT_MIN_MAX_LP_METHOD = 2
 
 # The current experiment_facebook.py may still pass these old switches.
 # False values are accepted temporarily so that script does not break.
@@ -458,14 +458,7 @@ def compute_min_max_lp_data(
     method: int = DEFAULT_MIN_MAX_LP_METHOD,
     norm: Any = np.inf,
 ) -> dict[str, Any]:
-    """Run only MinMaxLP.
-
-    The rounding algorithm is intentionally not run. The LP is used as
-    the lower bound for the MinMaxCC approximation ratio.
-
-    ``norm`` remains as an accepted argument for compatibility with the
-    existing experiment script, but is not used by MinMaxLP itself.
-    """
+    """Solve MinMaxLP and run its rounding algorithm."""
     matrix = validate_signed_matrix(S)
     norm_for_json = "inf" if norm == np.inf else norm
 
@@ -473,31 +466,72 @@ def compute_min_max_lp_data(
         return {
             "computed": False,
             "lp_cost": None,
+            "clustering": None,
+            "cluster_count": None,
+            "disagreement_vector": None,
+            "rounding_cost": None,
+            "max_disagreement_vertex": None,
             "r": r,
             "r2": r2,
             "method": method,
             "norm": norm_for_json,
             "lp_runtime_seconds": None,
+            "rounding_runtime_seconds": None,
+            "total_runtime_seconds": None,
         }
 
     (
         lp_cost,
-        _distances,
-        _l_t_values,
-        _neighbors_r,
-        _neighbors_r2,
+        distances,
+        l_t_values,
+        neighbors_r,
+        neighbors_r2,
         lp_runtime,
     ) = MinMaxLP(matrix, r, r2, method)
 
+    clustering, rounding_runtime = cluster(
+        distances,
+        l_t_values,
+        neighbors_r,
+        neighbors_r2,
+        r,
+        r2,
+    )
+
+    positive_degrees = DegreeDist(matrix)
+    (
+        disagreement_vector,
+        rounding_cost,
+        max_disagreement_vertex,
+    ) = LocalObj(
+        matrix,
+        clustering,
+        positive_degrees,
+        norm,
+    )
+
+    lp_runtime_value = float(lp_runtime)
+    rounding_runtime_value = float(rounding_runtime)
+
     return {
         "computed": True,
-        "lp_cost": lp_cost,
+        "lp_cost": float(lp_cost),
+        "clustering": clustering,
+        "cluster_count": len(clustering),
+        "disagreement_vector": disagreement_vector,
+        "rounding_cost": float(rounding_cost),
+        "max_disagreement_vertex": int(max_disagreement_vertex),
         "r": r,
         "r2": r2,
         "method": method,
         "norm": norm_for_json,
-        "lp_runtime_seconds": round(
-            float(lp_runtime),
+        "lp_runtime_seconds": round(lp_runtime_value, 6),
+        "rounding_runtime_seconds": round(
+            rounding_runtime_value,
+            6,
+        ),
+        "total_runtime_seconds": round(
+            lp_runtime_value + rounding_runtime_value,
             6,
         ),
     }
@@ -699,13 +733,28 @@ def _saveable_min_max_lp(
     return {
         "computed": result["computed"],
         "lp_cost": result["lp_cost"],
+        "clustering": result.get("clustering"),
+        "cluster_count": result.get("cluster_count"),
+        "disagreement_vector": result.get(
+            "disagreement_vector"
+        ),
+        "rounding_cost": result.get("rounding_cost"),
+        "max_disagreement_vertex": result.get(
+            "max_disagreement_vertex"
+        ),
         "r": result["r"],
         "r2": result["r2"],
         "method": result["method"],
         "norm": result["norm"],
-        "lp_runtime_seconds": result[
+        "lp_runtime_seconds": result.get(
             "lp_runtime_seconds"
-        ],
+        ),
+        "rounding_runtime_seconds": result.get(
+            "rounding_runtime_seconds"
+        ),
+        "total_runtime_seconds": result.get(
+            "total_runtime_seconds"
+        ),
     }
 
 
