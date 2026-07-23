@@ -1,0 +1,67 @@
+{
+  "backup": "/Users/amiraouchene/Desktop/cs/cs_programming/GitHub/MinMax_Correlation_Clustering_Experiments/results/research_tables/reproducibility_blank_test_before_corrected_lp_minmax_20260722_114143.csv",
+  "completed_tasks": 4,
+  "component_egos": {
+    "normal_lp": [
+      "3980"
+    ]
+  },
+  "components": [
+    "normal_lp"
+  ],
+  "failures": 0,
+  "finished_utc": "2026-07-22T10:41:46.476069+00:00",
+  "mode": "normal",
+  "preserved_columns": [
+    "complete_ilp_cost",
+    "complete_pivot_average_cost",
+    "complete_pivot_best_cost",
+    "edge_all_pairs_ilp_cost",
+    "edge_pivot_average_cost",
+    "edge_pivot_best_cost"
+  ],
+  "progress": "/Users/amiraouchene/Desktop/cs/cs_programming/GitHub/MinMax_Correlation_Clustering_Experiments/results/research_tables/reproducibility_blank_test_normal_lp_progress.json",
+  "remaining_requested_tasks": 0,
+  "script_version": "2026-07-21-corrected-facebook-lp-minmax-v1",
+  "selected_egos": [
+    "3980"
+  ],
+  "selected_p_delete_values": [
+    0.05
+  ],
+  "selected_seeds": [
+    1,
+    2,
+    3
+  ],
+  "signature": {
+    "components": [
+      "normal_lp"
+    ],
+    "edge_deletion": "src.edge_deletion.delete_edges(matrix, p_delete, seed)",
+    "graph_preprocessing": "Only endpoints occurring in each Facebook .edges file; circle-only nodes excluded.",
+    "minmax_cc": {
+      "d_hat": 8,
+      "enabled": false,
+      "lambda": 5
+    },
+    "minmax_lp": {
+      "enabled": false,
+      "method": 3,
+      "norm": "inf",
+      "r": 0.7,
+      "r2": 0.7,
+      "rounding_required": false
+    },
+    "normal_lp": {
+      "compute_ilp": false,
+      "compute_lp": true,
+      "enabled": true,
+      "time_limit": null
+    },
+    "script_version": "2026-07-21-corrected-facebook-lp-minmax-v1"
+  },
+  "started_utc": "2026-07-22T10:41:42.443695+00:00",
+  "status": "complete",
+  "table": "/Users/amiraouchene/Desktop/cs/cs_programming/GitHub/MinMax_Correlation_Clustering_Experiments/results/research_tables/reproducibility_blank_test.csv"
+}

@@ -61,6 +61,18 @@ def ratio(cc: Any, lp: Any) -> float | None:
     return cc_num / lp_num
 
 
+def first_numeric(
+    row: dict[str, str],
+    *columns: str,
+) -> float | None:
+    """Return the first available numeric value from candidate columns."""
+    for column in columns:
+        value = to_float(row.get(column))
+        if value is not None:
+            return value
+    return None
+
+
 def get_seed(row: dict[str, str]) -> str:
     seed = str(row.get("seed", "")).strip()
     return seed or "1"
@@ -224,33 +236,25 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     """
     Build the Facebook ordinary correlation-clustering table.
 
-    Only ego graphs with an all-pairs LP result are included.
+    Complete graph rows:
+      - include every ego graph that has complete Pivot results;
+      - always report Pivot best and average cost;
+      - compute approximation ratios only when a complete LP result exists;
+      - otherwise leave both approximation columns empty.
 
-    Complete graph:
-        Use one complete Pivot/LP result per eligible ego graph.
+    Edge-deleted rows:
+      - include deletion seed 1 when a paired ordinary Pivot and all-pairs LP
+        result is available;
+      - report Pivot costs and approximation ratios for that same graph.
 
-    Edge-deleted graph:
-        Use deletion seed 1 so Pivot and LP refer to the same deleted graph.
-
-    Output contains approximation ratios only:
-        averagepivot_approximation =
-            pivot_average_cost / LP cost
-        bestpivot_approximation =
-            pivot_best_cost / LP cost
+    Runtime columns:
+      - are filled when explicit ordinary Pivot/LP runtime columns exist;
+      - otherwise they are left empty.
     """
 
     def numeric_seed(row: dict[str, str]) -> int | None:
         value = to_float(row.get("seed"))
         return None if value is None else int(value)
-
-    def has_standard_cc_lp(row: dict[str, str]) -> bool:
-        return any(
-            to_float(row.get(column)) is not None
-            for column in (
-                "complete_lp_cost",
-                "edge_all_pairs_lp_cost",
-            )
-        )
 
     def set_consistent(
         current: dict[str, Any],
@@ -270,19 +274,17 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                 f"{old} versus {value}"
             )
 
-    eligible_egos = {
-        str(row.get("ego_id", "")).strip()
-        for row in rows
-        if str(row.get("ego_id", "")).strip()
-        and has_standard_cc_lp(row)
-    }
-
     complete_rows: dict[str, dict[str, Any]] = {}
     seed_one_rows: dict[tuple[str, str], dict[str, Any]] = {}
 
+    complete_pivot_runtime: dict[str, list[float]] = defaultdict(list)
+    complete_lp_runtime: dict[str, list[float]] = defaultdict(list)
+    edge_pivot_runtime: dict[tuple[str, str], list[float]] = defaultdict(list)
+    edge_lp_runtime: dict[tuple[str, str], list[float]] = defaultdict(list)
+
     for row in rows:
         ego = str(row.get("ego_id", "")).strip()
-        if not ego or ego not in eligible_egos:
+        if not ego:
             continue
 
         p_delete = str(row.get("p_delete", "")).strip()
@@ -320,6 +322,44 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             f"complete ego={ego}",
         )
 
+        complete_pivot_time = first_numeric(
+            row,
+            "complete_pivot_runtime_seconds_average",
+            "complete_pivot_average_runtime_seconds",
+            "complete_pivot_runtime_seconds",
+        )
+        if complete_pivot_time is not None:
+            complete_pivot_runtime[ego].append(complete_pivot_time)
+
+        complete_lp_time = first_numeric(
+            row,
+            "complete_all_pairs_lp_runtime_seconds",
+            "complete_lp_runtime_seconds",
+        )
+        if complete_lp_time is not None:
+            complete_lp_runtime[ego].append(complete_lp_time)
+
+        if p_delete:
+            runtime_key = (ego, p_delete)
+
+            edge_pivot_time = first_numeric(
+                row,
+                "edge_pivot_runtime_seconds_average",
+                "edge_pivot_average_runtime_seconds",
+                "edge_pivot_runtime_seconds",
+            )
+            if edge_pivot_time is not None:
+                edge_pivot_runtime[runtime_key].append(edge_pivot_time)
+
+            edge_lp_time = first_numeric(
+                row,
+                "edge_all_pairs_lp_runtime_seconds",
+                "edge_lp_runtime_seconds",
+            )
+            if edge_lp_time is not None:
+                edge_lp_runtime[runtime_key].append(edge_lp_time)
+
+        # Edge-deleted paper rows remain paired at deletion seed 1.
         if numeric_seed(row) != 1 or not p_delete:
             continue
 
@@ -327,8 +367,15 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
         edge_average = to_float(row.get("edge_pivot_average_cost"))
         edge_lp = to_float(row.get("edge_all_pairs_lp_cost"))
 
-        if edge_best is None and edge_average is None and edge_lp is None:
+        # Large ego graphs without an ordinary LP do not get edge rows.
+        if edge_lp is None:
             continue
+
+        if edge_best is None or edge_average is None:
+            raise ValueError(
+                "Missing paired edge Pivot result for "
+                f"ego={ego}, p_delete={p_delete}, seed=1."
+            )
 
         key = (ego, p_delete)
         edge = seed_one_rows.setdefault(
@@ -365,44 +412,73 @@ def make_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
 
     output: list[dict[str, Any]] = []
 
-    def append_row(source: dict[str, Any], context: str) -> None:
-        best = source["pivot_best"]
-        average_cost = source["pivot_average"]
-        lp = source["lp"]
+    def append_row(
+        source_row: dict[str, Any],
+        context: str,
+        pivot_times: Iterable[Any],
+        lp_times: Iterable[Any],
+        require_lp: bool,
+    ) -> None:
+        best = source_row["pivot_best"]
+        average_cost = source_row["pivot_average"]
+        lp = source_row["lp"]
 
         if best is None:
             raise ValueError(f"Missing best Pivot result for {context}.")
         if average_cost is None:
             raise ValueError(f"Missing average Pivot result for {context}.")
-        if lp is None:
+        if require_lp and lp is None:
             raise ValueError(f"Missing all-pairs LP result for {context}.")
 
         row = {
             key: value
-            for key, value in source.items()
+            for key, value in source_row.items()
             if key not in {"pivot_best", "pivot_average", "lp"}
         }
+
+        row["pivot_best_cost"] = rounded(best)
+        row["pivot_average_cost"] = rounded(average_cost)
+
+        # For the large complete ego graphs, LP is unavailable, so these
+        # fields intentionally remain empty.
         row["averagepivot_approximation"] = rounded(
             ratio(average_cost, lp)
         )
         row["bestpivot_approximation"] = rounded(
             ratio(best, lp)
         )
+
+        row["pivot_runtime_seconds_average"] = rounded(
+            average(pivot_times)
+        )
+        row["lp_runtime_seconds_average"] = rounded(
+            average(lp_times)
+        )
         output.append(row)
 
     for ego, row in complete_rows.items():
+        # Ignore ego graphs for which neither complete Pivot value exists.
         if (
             row["pivot_best"] is None
             and row["pivot_average"] is None
-            and row["lp"] is None
         ):
             continue
-        append_row(row, f"complete ego={ego}")
+
+        append_row(
+            row,
+            f"complete ego={ego}",
+            complete_pivot_runtime[ego],
+            complete_lp_runtime[ego],
+            require_lp=False,
+        )
 
     for (ego, p_delete), row in seed_one_rows.items():
         append_row(
             row,
             f"edge ego={ego}, p_delete={p_delete}, seed=1",
+            edge_pivot_runtime[(ego, p_delete)],
+            edge_lp_runtime[(ego, p_delete)],
+            require_lp=True,
         )
 
     output.sort(
@@ -469,18 +545,10 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
     Balanced and unbalanced clique instances are merged. The output contains
     one row per combination of n and p_delete.
 
-    Complete results are deduplicated by graph file and graph seed because
-    they repeat across deletion probabilities.
-
-    For every individual instance:
-        averagepivot_approximation =
-            pivot_average_cost / LP cost
-        bestpivot_approximation =
-            integer pivot_best_cost / LP cost
-
-    The per-instance ratios are then averaged within each n, p_delete group.
-    LP-zero instances are omitted from ratio averages because the ratio is
-    undefined.
+    Runtime columns are averaged over every available instance in the group.
+    The current all_runs_flat.csv already contains
+    ``edge_all_pairs_lp_runtime_seconds``. Pivot runtime and complete LP
+    runtime are included whenever explicit runtime columns are present.
     """
 
     def graph_identity(row: dict[str, str]) -> str:
@@ -520,7 +588,7 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
 
     complete_by_graph_seed: dict[
         tuple[str, str, int],
-        dict[str, float | None],
+        dict[str, Any],
     ] = {}
 
     edge_groups: dict[
@@ -546,6 +614,8 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                 "best": None,
                 "average": None,
                 "lp": None,
+                "pivot_runtime_samples": [],
+                "lp_runtime_samples": [],
             },
         )
 
@@ -567,6 +637,27 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             to_float(row.get("complete_lp_cost")),
             f"complete clique graph={graph_id}, seed={seed}",
         )
+
+        complete_pivot_time = first_numeric(
+            row,
+            "complete_pivot_runtime_seconds_average",
+            "complete_pivot_average_runtime_seconds",
+            "complete_pivot_runtime_seconds",
+        )
+        if complete_pivot_time is not None:
+            complete["pivot_runtime_samples"].append(
+                complete_pivot_time
+            )
+
+        complete_lp_time = first_numeric(
+            row,
+            "complete_all_pairs_lp_runtime_seconds",
+            "complete_lp_runtime_seconds",
+        )
+        if complete_lp_time is not None:
+            complete["lp_runtime_samples"].append(
+                complete_lp_time
+            )
 
         p_delete = str(row.get("p_delete", "")).strip()
         edge_best = to_float(row.get("edge_pivot_best_cost"))
@@ -592,10 +683,24 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                 f"clique graph={graph_id}, p_delete={p_delete}, seed={seed}."
             )
 
+        edge_pivot_time = first_numeric(
+            row,
+            "edge_pivot_runtime_seconds_average",
+            "edge_pivot_average_runtime_seconds",
+            "edge_pivot_runtime_seconds",
+        )
+        edge_lp_time = first_numeric(
+            row,
+            "edge_all_pairs_lp_runtime_seconds",
+            "edge_lp_runtime_seconds",
+        )
+
         edge_groups[(n, p_delete)].append(
             {
                 "average_ratio": ratio(edge_average, edge_lp),
                 "best_ratio": ratio(edge_best, edge_lp),
+                "pivot_runtime": edge_pivot_time,
+                "lp_runtime": edge_lp_time,
             }
         )
 
@@ -619,6 +724,12 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
             {
                 "average_ratio": ratio(average_cost, lp),
                 "best_ratio": ratio(best, lp),
+                "pivot_runtime": average(
+                    values["pivot_runtime_samples"]
+                ),
+                "lp_runtime": average(
+                    values["lp_runtime_samples"]
+                ),
             }
         )
 
@@ -653,6 +764,18 @@ def make_clique_cc_table(rows: list[dict[str, str]]) -> list[dict[str, Any]]:
                     rounded(average(best_ratios))
                     if best_ratios
                     else ""
+                ),
+                "pivot_runtime_seconds_average": rounded(
+                    average(
+                        obs["pivot_runtime"]
+                        for obs in observations
+                    )
+                ),
+                "lp_runtime_seconds_average": rounded(
+                    average(
+                        obs["lp_runtime"]
+                        for obs in observations
+                    )
                 ),
             }
         )
@@ -712,14 +835,20 @@ def main() -> None:
         "n",
         "p_delete",
         "graph_variant",
+        "pivot_best_cost",
+        "pivot_average_cost",
         "averagepivot_approximation",
         "bestpivot_approximation",
+        "pivot_runtime_seconds_average",
+        "lp_runtime_seconds_average",
     ]
     clique_cc_fields = [
         "n",
         "p_delete",
         "averagepivot_approximation",
         "bestpivot_approximation",
+        "pivot_runtime_seconds_average",
+        "lp_runtime_seconds_average",
     ]
 
     write_rows(minmax_output, minmax_rows, minmax_fields)

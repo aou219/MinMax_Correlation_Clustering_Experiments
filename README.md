@@ -1,271 +1,359 @@
-# Correlation Clustering under Random Edge Deletion
+# MinMax Correlation Clustering Experiments
 
-This repository contains the code and experiment data for a BSc thesis on the
-robustness of correlation clustering methods when signed edges are deleted.
-It compares the randomized Pivot algorithm, integer and linear programming
-formulations, and lower bounds based on bad triangles. It also studies whether
-bad 4-cycle constraints recover information that is lost after edge deletion.
+Code for the experiments on ordinary correlation clustering and MinMax
+correlation clustering on Facebook ego networks and synthetic clique graphs.
 
-The experiments cover three graph families:
+The repository contains the experiment implementations, the processed result
+tables used by the paper, and the scripts that turn those results into paper
+tables and figures.
 
-- independently signed random complete graphs;
-- synthetic graphs with planted clique structure;
-- Facebook ego-networks from the SNAP Facebook social-circles dataset.
-
-## Problem
-
-For a signed graph `G = (V, E+ union E-)`, correlation clustering seeks a
-partition of the vertices that minimizes disagreements:
-
-- a positive edge whose endpoints are assigned to different clusters;
-- a negative edge whose endpoints are assigned to the same cluster.
-
-Let `x_ij = 0` when vertices `i` and `j` are in the same cluster and
-`x_ij = 1` otherwise. The objective is:
+## Experiment flow
 
 ```text
-minimize
-    sum(x_ij                 for each positive edge (i,j))
-  + sum(1 - x_ij             for each negative edge (i,j))
+Facebook .edges files / synthetic clique parameters
+                    |
+                    v
+       experiment and Pivot scripts
+                    |
+                    v
+results/research_tables/minmax_facebook_grid_runs_flat.csv
+                    |
+                    v
+        scripts/make_paper_tables.py
+                    |
+                    v
+  paper tables in results/research_tables/
+                    |
+                    v
+             figure scripts
+                    |
+                    v
+ figures in results/figures/research_figures/
 ```
 
-Random edge deletion changes an observed edge to a missing edge. The tested
-deletion probabilities are `0.05`, `0.15`, `0.25`, and `0.40`.
+The Facebook flat table is the main source of truth. Solver and Pivot scripts
+update this table, and the table-generation scripts derive the paper outputs
+from it.
 
-## Methods
+## Setup
 
-### Pivot
-
-Pivot selects an unclustered vertex and clusters it with its observed positive
-neighbours. Because its output depends on the pivot order, each instance is run
-with 100 pivot seeds. Both the best and average disagreement costs are stored.
-
-### Full ILP and LP
-
-The all-pairs formulation contains a variable for every vertex pair. Triangle
-inequalities enforce a valid clustering. Binary variables give the Full ILP
-optimum; variables in the interval `[0, 1]` give the LP lower bound.
-
-### Observed-edge formulations
-
-The sparse formulations use only observed edges. They are evaluated both
-without and with constraints for induced bad 4-cycles: cycles with three
-positive edges, one negative edge, and two missing diagonals.
-
-### Bad-triangle lower bound
-
-A bad triangle contains two positive edges and one negative edge. Every valid
-clustering must disagree with at least one of its edges. A greedy set of
-edge-disjoint bad triangles therefore gives a lower bound on the optimum.
-
-## Experimental Data
-
-### Random signed graphs
-
-- graph sizes `n = 5, 10, 15, 20, 25, 30`
-- positive-edge probabilities `p_pos = 0.2, 0.3, ..., 0.8`
-- 50 graph seeds per `(n, p_pos)` setting
-- 2,100 complete instances and 8,400 edge-deleted runs
-
-### Planted-clique graphs
-
-- graph sizes `n = 10, 15, 20, 25, 30, 100`
-- positive-edge probability 0.9 inside planted cliques
-- positive-edge probability 0.1 between planted cliques
-- balanced and unbalanced clique-size decompositions
-- 50 seeds for `n <= 30` and 20 seeds for `n = 100`
-- 910 complete instances and 3,640 edge-deleted runs
-
-### Facebook ego-networks
-
-- ego IDs 414, 686, 698, and 3980
-- an observed friendship is positive;
-- a missing friendship between included vertices is negative;
-- the ego vertex itself is excluded;
-- 4 complete instances and 16 edge-deleted runs.
-
-Full optimization results are available for three ego-networks, giving 12
-Facebook runs for analyses that require an ILP optimum.
-
-## Repository Layout
-
-```text
-.
-├── data/facebook/                         SNAP ego-network input files
-├── results/
-│   ├── experiments_results_random/        raw random-graph JSON results
-│   ├── experiments_results_clique/        raw planted-clique JSON results
-│   ├── experiments_results_facebook/      raw Facebook JSON results
-│   └── processed/
-│       ├── all_runs_flat.csv               combined analysis table
-│       ├── figures/                        generated thesis figures
-│       └── tables/                         generated summary tables
-├── scripts/
-│   ├── make_all_runs_flat.py               JSON-to-CSV processing
-│   ├── make_general_pdelete_figures.py     aggregate family figures
-│   └── make_specific_pdelete_figures.py    parameter-specific figures
-└── src/
-    ├── all_pairs_solver.py                 Full ILP and LP formulations
-    ├── bad_triangles.py                    bad-triangle routines
-    ├── edge_deletion.py                    random edge deletion
-    ├── experiment_helpers.py               shared experiment pipeline
-    ├── experiment_random.py                one random instance
-    ├── experiment_clique.py                one planted-clique instance
-    ├── experiment_facebook.py              one Facebook instance
-    ├── graph_generation.py                 synthetic graph generators
-    ├── ilp_solver.py                       observed-edge formulations
-    ├── lp_formulations.py                  LP routines
-    └── pivot.py                            Pivot implementation
-```
-
-The repository contains additional analysis scripts used during development.
-The three scripts listed above form the shortest route from the stored JSON
-experiments to the main processed dataset and figures.
-
-## Installation
-
-Python 3.11 or a compatible recent Python version is recommended. Create a
-virtual environment from the repository root:
+Run commands from the repository root.
 
 ```bash
+git clone https://github.com/aou219/MinMax_Correlation_Clustering_Experiments.git
+cd MinMax_Correlation_Clustering_Experiments
+
 python3 -m venv .venv
 source .venv/bin/activate
+
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install numpy scipy networkx pandas matplotlib gurobipy
 ```
 
-The optimization code uses `gurobipy`. Running the ILP and LP experiments
-requires a working Gurobi installation and license. Academic licenses are
-available separately from Gurobi.
-
-## Running One Instance
-
-The files in `src/experiment_random.py`, `src/experiment_clique.py`, and
-`src/experiment_facebook.py` contain a parameter block near the top of their
-main section. Set the graph parameters there and run the file from the
-repository root:
+The LP experiments require a working Gurobi installation and license.
 
 ```bash
-python src/experiment_random.py
-python src/experiment_clique.py
-python src/experiment_facebook.py
+python -c "import gurobipy as gp; print(gp.gurobi.version())"
 ```
 
-These entry points are intended for inspecting or testing one configuration.
-Large instances, especially the all-pairs ILP and bad 4-cycle computations,
-can require substantial time and memory. Set `draw_graph = False` when figures
-for an individual run are not needed.
+On macOS, long commands can be prefixed with `caffeinate -i` to prevent the
+machine from sleeping.
 
-## Rebuilding the Processed Dataset
+## Data
 
-The raw experiment records are stored as JSON below the three
-`results/experiments_results_*` directories. Rebuild the combined CSV with:
+Facebook ego-network edge files are read from either of these locations:
+
+```text
+data/facebook/<ego_id>.edges
+data/facebook/facebook_3/<ego_id>.edges
+```
+
+The experiments use the following ego IDs:
+
+```text
+0, 107, 348, 414, 686, 698, 1684, 1912, 3437, 3980
+```
+
+For each ego graph, the vertex set is the sorted set of endpoints appearing in
+the `.edges` file. Friendship edges are encoded as `+1`, non-edges as `-1`,
+and deleted edges as `0`.
+
+## Reproducing the Facebook experiments
+
+The scripts below update:
+
+```text
+results/research_tables/minmax_facebook_grid_runs_flat.csv
+```
+
+The reported experiments use:
+
+```text
+p_delete:       0.05, 0.15, 0.25, 0.4
+deletion seeds: 1-30
+Pivot seeds:    1-100
+```
+
+### 1. Pivot on the LP-sized ego graphs
+
+This runs complete and edge-deleted Pivot experiments for the four ego graphs
+used in the ordinary LP comparison.
 
 ```bash
-python scripts/make_all_runs_flat.py
+caffeinate -i python scripts/update_pivot_results_all_egos.py \
+  --table results/research_tables/minmax_facebook_grid_runs_flat.csv \
+  --ego-ids 414,686,698,3980 \
+  --pivot-seeds 1-100 \
+  --restart
 ```
 
-This writes:
+### 2. Pivot on the remaining complete ego graphs
 
-```text
-results/processed/all_runs_flat.csv
-```
-
-If that file already exists, the script first creates
-`results/processed/all_runs_flat.csv.bak`.
-
-For the dataset used in the thesis, the command should report:
-
-```text
-random:   8400 rows
-clique:   3640 rows
-facebook:   16 rows
-total:   12056 rows
-```
-
-Only 12 Facebook rows contain comparable Full ILP values.
-
-## Rebuilding the Main Figures
-
-After rebuilding `all_runs_flat.csv`, generate the aggregate and detailed
-edge-deletion figures with:
+The larger ego graphs are evaluated with Pivot on the complete graph only.
 
 ```bash
-python scripts/make_general_pdelete_figures.py
-python scripts/make_specific_pdelete_figures.py
+caffeinate -i python scripts/update_complete_pivot_big_egos.py \
+  --table results/research_tables/minmax_facebook_grid_runs_flat.csv \
+  --pivot-seeds 1-100 \
+  --restart
 ```
 
-The outputs are written to:
-
-```text
-results/processed/figures/p_delete_effect/general/
-results/processed/figures/p_delete_effect/specific/
-```
-
-Both scripts accept a different input CSV when needed:
+### 3. Ordinary correlation-clustering LP
 
 ```bash
-python scripts/make_general_pdelete_figures.py --csv path/to/results.csv
+caffeinate -i python scripts/run_experiment.py \
+  --table results/research_tables/minmax_facebook_grid_runs_flat.csv \
+  --mode normal \
+  --ego-ids 414,686,698,3980 \
+  --normal-lp-egos 414,686,698,3980 \
+  --p-delete-values 0.05,0.15,0.25,0.4 \
+  --seeds 1-30 \
+  --progress results/research_tables/normal_lp_progress.json \
+  --manifest results/research_tables/normal_lp_manifest.json \
+  --restart \
+  --continue-on-error \
+  --memory-cleanup gurobi
 ```
 
-The general plots first average within each graph size and then across graph
-sizes. This prevents graph sizes with more tested configurations from receiving
-more weight. The specific plots retain distinctions such as
-`p_pos`, clique balance, graph size, and Facebook ego ID.
+### 4. MinMaxCC
 
-## Interpreting the Main Ratios
+```bash
+caffeinate -i python scripts/run_experiment.py \
+  --table results/research_tables/minmax_facebook_grid_runs_flat.csv \
+  --mode minmax \
+  --minmax-components cc \
+  --ego-ids all \
+  --minmax-cc-egos all \
+  --p-delete-values 0.05,0.15,0.25,0.4 \
+  --seeds 1-30 \
+  --d-hat 8 \
+  --lambda-value 5 \
+  --progress results/research_tables/minmax_cc_progress.json \
+  --manifest results/research_tables/minmax_cc_manifest.json \
+  --restart \
+  --continue-on-error
+```
 
-### Best-Pivot approximation ratio
+### 5. MinMaxLP and rounding
+
+```bash
+caffeinate -i python scripts/run_experiment.py \
+  --table results/research_tables/minmax_facebook_grid_runs_flat.csv \
+  --mode minmax \
+  --minmax-components lp \
+  --ego-ids 414,686,698,3980 \
+  --minmax-lp-egos 414,686,698,3980 \
+  --p-delete-values 0.05,0.15,0.25,0.4 \
+  --seeds 1-30 \
+  --min-max-lp-r 0.4 \
+  --min-max-lp-r2 0.4 \
+  --min-max-lp-method 2 \
+  --progress results/research_tables/minmax_lp_progress.json \
+  --manifest results/research_tables/minmax_lp_manifest.json \
+  --restart \
+  --continue-on-error \
+  --memory-cleanup gurobi
+```
+
+## Using `run_experiment.py`
+
+The experiment runner updates ordinary LP, MinMaxCC, and MinMaxLP results.
+Pivot is handled by the two Pivot updater scripts above.
+
+Show all options with:
+
+```bash
+python scripts/run_experiment.py --help
+```
+
+The main modes are:
+
+| Command | Runs |
+|---|---|
+| `--mode normal` | ordinary all-pairs LP |
+| `--mode minmax --minmax-components cc` | MinMaxCC |
+| `--mode minmax --minmax-components lp` | MinMaxLP and rounding |
+| `--mode minmax --minmax-components cc,lp` | both MinMax methods |
+| `--mode all` | ordinary LP and selected MinMax methods |
+
+Useful options:
+
+| Option | Purpose |
+|---|---|
+| `--dry-run` | print the planned work without solving |
+| `--restart` | recompute the selected configuration from the beginning |
+| `--progress PATH` | checkpoint completed tasks |
+| `--manifest PATH` | record parameters, hashes, versions, and failures |
+| `--continue-on-error` | continue after a failed task |
+| `--limit N` | run only the first `N` new edge-deleted instances |
+| `--memory-cleanup gurobi` | dispose the Gurobi environment between solves |
+
+A small dry run is useful before starting a full job:
+
+```bash
+python scripts/run_experiment.py \
+  --mode minmax \
+  --minmax-components cc \
+  --ego-ids 3980 \
+  --minmax-cc-egos 3980 \
+  --p-delete-values 0.05 \
+  --seeds 1 \
+  --d-hat 8 \
+  --lambda-value 5 \
+  --dry-run
+```
+
+## Interrupting and resuming
+
+The runner saves the table and progress after every completed task.
+
+To resume an interrupted `run_experiment.py` job, run the same command again
+without `--restart`. Keep the same input table, parameters, progress path, and
+manifest path.
+
+Use `--restart` only when the selected results should be recomputed and
+overwritten.
+
+## Building the paper tables
+
+After the experiment table has been updated, run:
+
+```bash
+python scripts/make_paper_tables.py \
+  --d-hat 8 \
+  --lambda-value 5
+```
+
+This produces:
 
 ```text
-best Pivot cost over 100 runs / Full ILP cost
+results/research_tables/facebook_minmax_table.csv
+results/research_tables/facebook_correlation_clustering_table.csv
+results/research_tables/clique_correlation_clustering_table.csv
 ```
 
-A value of 1 means that the best Pivot run found an optimal cost. A value of
-1.2 means that its cost was 20% above the optimum. Lower is better.
+The ordinary correlation-clustering tables report Pivot costs and, when an LP
+lower bound is available, Pivot-to-LP approximation ratios. The MinMax table
+contains the best, average, and worst MinMaxCC results over the deletion seeds,
+together with the corresponding MinMaxLP values and ratios.
 
-### LP integrality ratio
+## Building the figures
+
+```bash
+python scripts/make_facebook_minmax_figures.py
+python scripts/make_facebook_approximation_range_figures.py
+```
+
+Figures are written to:
 
 ```text
-LP lower bound / Full ILP cost
+results/figures/research_figures/
 ```
 
-A value close to 1 indicates a tight LP relaxation. Lower values indicate a
-larger gap between the LP lower bound and the integer optimum.
+The approximation-range figures show the average value as a line and the
+best-to-worst range as a shaded band.
 
-### Greedy bad-triangle bound ratio
+## Runtime measurements
+
+MinMaxCC and MinMaxLP runtimes are stored by `run_experiment.py`. Ordinary
+Pivot and LP runtimes are measured separately so the runtime benchmark does
+not change the experiment results.
+
+```bash
+python scripts/capture_machine_specifications.py
+
+caffeinate -i python scripts/benchmark_normal_cc_runtimes.py \
+  --dataset all \
+  --algorithms pivot \
+  --pivot-runs 30 \
+  --restart
+
+caffeinate -i python scripts/benchmark_normal_cc_runtimes.py \
+  --dataset all \
+  --algorithms lp \
+  --lp-repetitions 1
+
+python scripts/apply_runtime_benchmarks.py
+```
+
+Run runtime benchmarks when no other experiment is using the machine.
+
+## Why the experiments are reproducible
+
+The experiment pipeline fixes the parts that can otherwise change between
+runs:
+
+- Facebook vertices are taken only from sorted `.edges` endpoints.
+- Edge deletion uses recorded probabilities and seeds.
+- Pivot uses NumPy `default_rng`, fixed seeds, and sorted active vertices.
+- The selected parameters are passed explicitly in the reproduction commands.
+- Long runs use progress files and atomic CSV checkpoints.
+- Manifests record the configuration, graph and code hashes, software versions,
+  Git information, completed tasks, and failures.
+- Paper tables and figures are generated from saved CSV results rather than
+  copied manually.
+- Machine and software details can be saved with
+  `capture_machine_specifications.py`.
+
+## Repository structure
 
 ```text
-number of greedily selected edge-disjoint bad triangles / Full ILP cost
+data/facebook/
+    Facebook ego-network files
+
+src/
+    algorithm implementations and graph utilities
+
+scripts/run_experiment.py
+    ordinary LP, MinMaxCC, and MinMaxLP experiment runner
+
+scripts/update_pivot_results_all_egos.py
+    complete and edge-deleted Pivot experiments
+
+scripts/update_complete_pivot_big_egos.py
+    complete-only Pivot experiments for larger ego graphs
+
+scripts/make_paper_tables.py
+    creates the paper tables from the flat result tables
+
+scripts/make_facebook_minmax_figures.py
+scripts/make_facebook_approximation_range_figures.py
+    creates the Facebook figures
+
+results/research_tables/
+    raw, processed, progress, manifest, and runtime tables
+
+results/figures/research_figures/
+    generated paper figures
 ```
 
-A value close to 1 means that this local lower bound accounts for most of the
-optimal cost. Because the implementation is greedy, it need not find the
-largest possible edge-disjoint set.
+## Main outputs
 
-### Observed-edge ILP ratio
-
-```text
-observed-edge ILP objective / Full ILP objective
-```
-
-A value of 1 denotes equal objective values. The experiments compare this
-ratio before and after adding bad 4-cycle constraints.
-
-## Reproducibility Notes
-
-- Graph generation and edge deletion use stored integer seeds.
-- Each deletion probability is applied separately to its corresponding
-  complete graph instance.
-- Raw JSON files retain the graph parameters and results used to construct the
-  processed CSV.
-- Gurobi version, hardware, and available threads can affect runtime, but an
-  optimal solve should not change the reported objective value.
-- Facebook ego 686 is retained in the dataset but excluded from comparisons
-  that require an available Full ILP optimum.
-
-## Citation
-
-This repository accompanies the BSc thesis *Robustness of Pivot, LP, and ILP
-Correlation Clustering under Random Edge Deletion* by Amira Ouchene. A formal
-citation can be added here after the final thesis version is archived.
+| File | Description |
+|---|---|
+| `minmax_facebook_grid_runs_flat.csv` | full Facebook experiment grid |
+| `facebook_minmax_table.csv` | MinMax paper table |
+| `facebook_correlation_clustering_table.csv` | Facebook Pivot/LP paper table |
+| `clique_correlation_clustering_table.csv` | synthetic clique paper table |
+| `*_progress.json` | resumable task state |
+| `*_manifest.json` | experiment configuration and verification metadata |
