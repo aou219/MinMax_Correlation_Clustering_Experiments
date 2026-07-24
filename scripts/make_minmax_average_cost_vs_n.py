@@ -2,13 +2,13 @@
 """
 Plot average MinMax costs versus graph size.
 
-The plot contains exactly four lines:
+The plot contains exactly three lines:
 1. MinMaxCC average clustering cost.
 2. MinMaxLP average objective value.
-3. MinMaxLP-rounding average clustering cost.
-4. sqrt(n) size reference.
+3. 48*sqrt(n) size reference.
 
 Costs are averaged over the selected edge-deletion probabilities and seeds.
+Transparent bands show the full observed minimum-to-maximum range.
 The input CSV is only read and is never modified.
 """
 
@@ -143,7 +143,6 @@ def main() -> None:
         "edge_min_max_cc_lambda",
         "edge_min_max_cc_max_disagreement",
         "edge_min_max_lp_cost",
-        "edge_min_max_lp_rounding_cost",
         "edge_min_max_lp_r",
         "edge_min_max_lp_r2",
         "edge_min_max_lp_method",
@@ -213,10 +212,6 @@ def main() -> None:
         lp_rows,
         "edge_min_max_lp_cost",
     )
-    rounding_data = average_by_n(
-        lp_rows,
-        "edge_min_max_lp_rounding_cost",
-    )
 
     if cc_data.empty:
         raise ValueError(
@@ -227,7 +222,6 @@ def main() -> None:
         sorted(
             set(cc_data["n"])
             | set(lp_data["n"])
-            | set(rounding_data["n"])
         ),
         dtype=float,
     )
@@ -249,16 +243,6 @@ def main() -> None:
             lp_data["minimum"],
             lp_data["maximum"],
             color="#EA4335",
-            alpha=0.16,
-            linewidth=0,
-        )
-
-    if not rounding_data.empty:
-        ax.fill_between(
-            rounding_data["n"],
-            rounding_data["minimum"],
-            rounding_data["maximum"],
-            color="#34A853",
             alpha=0.16,
             linewidth=0,
         )
@@ -286,33 +270,23 @@ def main() -> None:
             label="MinMaxLP",
         )
 
-    if not rounding_data.empty:
-        ax.plot(
-            rounding_data["n"],
-            rounding_data["mean"],
-            marker="o",
-            linestyle=":",
-            linewidth=1.9,
-            markersize=5.2,
-            color="#34A853",
-            label="MinMaxLP rounding",
-        )
-
     ax.plot(
         all_n,
-        np.sqrt(all_n),
+        48 * np.sqrt(all_n),
         marker="o",
         linestyle=":",
         linewidth=1.9,
         markersize=5.5,
         color="#FF6D01",
-        label="√n",
+        label="48√n",
     )
 
     ax.set_xlabel("Number of vertices, n")
     ax.set_ylabel(
         "Average maximum-disagreement cost"
     )
+
+    ax.set_yscale("log")
 
     ax.grid(
         axis="y",
@@ -323,7 +297,7 @@ def main() -> None:
 
     ax.legend(
         frameon=False,
-        ncols=4,
+        ncols=3,
         loc="upper center",
         bbox_to_anchor=(0.5, 1.18),
         handlelength=1.4,
