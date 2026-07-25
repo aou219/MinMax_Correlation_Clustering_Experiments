@@ -291,5 +291,4 @@ The MinMax figures only use local same-instance LP comparisons by default.
 | Gurobi Method, Crossover | `2`, `0` |
 | Local Facebook LP ego IDs | `414,686,698,3980` |
 
-The runs use fixed seeds and sorted vertex order. Long runs also save progress
-files, manifests, checkpoints and matrix hashes.
+The runs use fixed seeds and sorted vertex order.

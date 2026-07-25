@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 """
-Create two grouped MinMax ratio bar plots:
+Create two grouped MinMax ratio bar plots.
 
-1. MinMaxCC / MinMaxLP.
-2. MinMaxCC / LP-rounding clustering cost.
-
-The script writes two PNG files and two PDF files.
+Only ego IDs 3980, 698, 414, and 686 are included by default.
 """
 
 from __future__ import annotations
@@ -24,7 +21,7 @@ DEFAULT_INPUT = (
 )
 DEFAULT_OUTPUT = (
     ROOT
-    / "results/figures/research_figures"
+    / "results/figures/research_figures/minmax/ratios"
     / "facebook_minmax_average_ratio_grouped_bars"
 )
 
@@ -50,6 +47,11 @@ def parse_args() -> argparse.Namespace:
         "--q-values",
         default="0,0.05,0.15,0.25,0.4",
     )
+    parser.add_argument(
+        "--ego-ids",
+        default="3980,698,414,686",
+        help="Comma-separated Facebook ego IDs.",
+    )
     parser.add_argument("--dpi", type=int, default=300)
     return parser.parse_args()
 
@@ -65,14 +67,14 @@ def prepare_data(
 ) -> pd.DataFrame:
     data = frame.copy()
 
-    for column in ["n", "p_delete", ratio_column]:
+    for column in ["ego_id", "n", "p_delete", ratio_column]:
         data[column] = pd.to_numeric(
             data[column],
             errors="coerce",
         )
 
     data = data.dropna(
-        subset=["n", "p_delete", ratio_column]
+        subset=["ego_id", "n", "p_delete", ratio_column]
     )
     data = data[data["p_delete"].isin(q_values)]
 
@@ -92,7 +94,6 @@ def save_grouped_bar_plot(
     output_path: Path,
     ylabel: str,
     dpi: int,
-    add_equal_cost_line: bool,
 ) -> None:
     if plot_data.empty:
         print(f"SKIP {output_path.name}: no values for {ratio_column}")
@@ -114,9 +115,7 @@ def save_grouped_bar_plot(
 
     for index, q in enumerate(q_values):
         values = (
-            plot_data[
-                np.isclose(plot_data["p_delete"], q)
-            ]
+            plot_data[np.isclose(plot_data["p_delete"], q)]
             .set_index("n")[ratio_column]
             .reindex(n_values)
         )
@@ -131,15 +130,6 @@ def save_grouped_bar_plot(
             width=width,
             color=colors.get(q),
             label=f"q={q:g}",
-        )
-
-    if add_equal_cost_line:
-        ax.axhline(
-            1.0,
-            color="black",
-            linestyle="--",
-            linewidth=1.5,
-            label="Equal clustering cost",
         )
 
     ax.set_xticks(x)
@@ -190,6 +180,7 @@ def main() -> None:
     frame = pd.read_csv(input_path, encoding="utf-8-sig")
 
     required = {
+        "ego_id",
         "n",
         "p_delete",
         args.lp_ratio_column,
@@ -206,6 +197,17 @@ def main() -> None:
         for value in args.q_values.split(",")
         if value.strip()
     ]
+    ego_ids = {
+        int(value.strip())
+        for value in args.ego_ids.split(",")
+        if value.strip()
+    }
+
+    frame["ego_id"] = pd.to_numeric(
+        frame["ego_id"],
+        errors="coerce",
+    )
+    frame = frame[frame["ego_id"].isin(ego_ids)].copy()
 
     lp_data = prepare_data(
         frame,
@@ -223,6 +225,7 @@ def main() -> None:
     )
 
     print("Input:", input_path)
+    print("Ego IDs:", sorted(ego_ids))
 
     save_grouped_bar_plot(
         plot_data=lp_data,
@@ -234,7 +237,6 @@ def main() -> None:
             "(MinMaxCC / MinMaxLP)"
         ),
         dpi=args.dpi,
-        add_equal_cost_line=False,
     )
 
     save_grouped_bar_plot(
@@ -247,7 +249,6 @@ def main() -> None:
             "(MinMaxCC / LP rounding)"
         ),
         dpi=args.dpi,
-        add_equal_cost_line=False,
     )
 
 
