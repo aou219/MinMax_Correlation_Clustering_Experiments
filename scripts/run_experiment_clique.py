@@ -17,7 +17,7 @@ from src.graph_generation import generate_clique_signed_graph
 
 
 OUTPUT_TABLE = (
-    ROOT / "results/research_tables/clique_reproduction.csv"
+    ROOT / "results/output_tables/clique_output.csv"
 )
 
 # Experiment settings

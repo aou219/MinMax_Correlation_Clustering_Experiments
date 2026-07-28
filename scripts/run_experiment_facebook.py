@@ -20,7 +20,7 @@ from src.facebook_sampling import (
 
 
 OUTPUT_TABLE = (
-    ROOT / "results/research_tables/facebook_reproduction.csv"
+    ROOT / "results/output_tables/facebook_output.csv"
 )
 
 # Experiment settings
