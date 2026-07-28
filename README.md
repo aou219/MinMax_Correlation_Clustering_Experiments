@@ -164,29 +164,26 @@ then reports the average of those per-seed ratios.
 
 The MinMaxCC objective is the largest number of disagreements at any vertex.
 
-The final MinMax table reports two comparisons:
+The approximation ratio is:
 
 ```text
 MinMaxCC objective / MinMaxLP objective
-MinMaxCC objective / LP-rounding clustering cost
 ```
 
-For both comparisons, the ratio is calculated separately for every deletion
-seed. The table then reports the minimum, average, and maximum ratio.
+Costs and ratios are summarized separately:
 
-The first ratio compares MinMaxCC with the LP lower bound. The second ratio
-compares MinMaxCC with the feasible clustering produced by LP rounding.
+```text
+minmaxcc_cost_best     = minimum cost
+minmaxcc_cost_average  = average cost
+minmaxcc_cost_worst    = maximum cost
 
-For the rounding comparison:
+minmaxcc_ratio_best    = minimum per-seed ratio
+minmaxcc_ratio_average = average per-seed ratio
+minmaxcc_ratio_worst   = maximum per-seed ratio
+```
 
-- below `1`: MinMaxCC has the lower maximum-disagreement cost;
-- above `1`: the LP-rounding clustering has the lower cost;
-- equal to `1`: both have the same cost.
-
-Raw MinMaxCC, LP, and rounding costs stay in
-`minmax_facebook_grid_runs_flat.csv`, but they are not repeated in the final
-paper table. The fixed `d_hat = 8` and `lambda = 5` are written here instead of
-being repeated in every row.
+The seed with the best cost does not always have the best ratio, because the LP
+value can also change between deletion seeds.
 
 More details about every output column are in `results/reports.md`.
 
@@ -202,7 +199,6 @@ This saves:
 - rounding cost;
 - maximum-disagreement vertex;
 - cluster count;
-- the clustering itself, using the original Facebook node IDs;
 - LP runtime;
 - rounding runtime;
 - total runtime;
@@ -252,22 +248,14 @@ system, Python, NumPy, Gurobi and Git information.
 ## Create the final tables and figures
 
 ```bash
-python scripts/make_paper_tables.py \
-  --d-hat 8 \
-  --lambda-value 5 \
-  --exclude-minmax-runtime-above 4000
+python scripts/make_paper_tables.py   --d-hat 8   --lambda-value 5
 
 python scripts/make_facebook_minmax_figures.py
 python scripts/make_facebook_approximation_range_figures.py
 ```
 
 `make_paper_tables.py` already adds the ordinary Pivot and LP runtimes from
-`normal_cc_runtime_benchmarks.csv`. MinMax runtimes come from the main grid
-CSV. The `--exclude-minmax-runtime-above 4000` option only removes clearly
-interrupted runtime samples above 4000 seconds from the runtime average. It
-does not remove their objectives, clusterings, or ratios.
-
-Do not run `apply_runtime_benchmarks.py` afterward.
+`normal_cc_runtime_benchmarks.csv`.
 
 The final tables are:
 
@@ -276,11 +264,6 @@ results/research_tables/facebook_correlation_clustering_table.csv
 results/research_tables/clique_correlation_clustering_table.csv
 results/research_tables/facebook_minmax_table.csv
 ```
-
-`facebook_minmax_table.csv` contains only the graph identifiers, the two ratio
-families, best/average/worst summaries, runtimes, and the LP-reference source.
-It does not repeat raw costs, `number_of_seeds`, `d_hat`, or `lambda`.
-
 
 The figures are saved in:
 
@@ -308,5 +291,4 @@ The MinMax figures only use local same-instance LP comparisons by default.
 | Gurobi Method, Crossover | `2`, `0` |
 | Local Facebook LP ego IDs | `414,686,698,3980` |
 
-The runs use fixed seeds and sorted vertex order. Long runs also save progress
-files, manifests, checkpoints and matrix hashes.
+The runs use fixed seeds and sorted vertex order.
