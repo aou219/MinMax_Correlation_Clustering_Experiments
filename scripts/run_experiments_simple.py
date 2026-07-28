@@ -25,7 +25,7 @@ from src.facebook_sampling import (
 ROOT = Path(__file__).resolve().parents[1]
 TABLE = ROOT / "results/research_tables/minmax_facebook_grid_runs_flat.csv"
 
-# Smallest n first.
+
 EGO_IDS = ["3980", "698", "414", "686"]
 P_DELETE = [0.05, 0.15, 0.25, 0.4]
 SEEDS = range(1, 31)
@@ -85,13 +85,6 @@ def write_csv(fields, rows):
         except FileNotFoundError:
             pass
         raise
-
-
-def backup():
-    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    path = TABLE.with_name(f"{TABLE.stem}_backup_{stamp}.csv")
-    shutil.copy2(TABLE, path)
-    print("Backup:", path)
 
 
 def filled(rows, columns):
@@ -284,7 +277,6 @@ def cleanup():
 
 def main():
     fields, rows = read_csv()
-    backup()
 
     enabled = [(name, function) for name, on, function in ALGORITHMS if on]
     print("Enabled:", ", ".join(name for name, _ in enabled))
