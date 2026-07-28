@@ -1,5 +1,4 @@
 from graph_generation import generate_clique_signed_graph, matrix_to_graph
-from draw_graphs_clique import draw_clique_graphs
 
 from experiment_helpers import (
     save_results_append,

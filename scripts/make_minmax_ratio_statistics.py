@@ -24,7 +24,6 @@ OUTPUT = (
 
 Q_VALUES = [0.05, 0.15, 0.25, 0.40]
 
-
 def summarize(values: pd.Series) -> dict[str, float | int]:
     """Calculate mean, sample SD, and a two-sided 95% t-interval."""
 
